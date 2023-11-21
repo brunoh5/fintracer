@@ -1,3 +1,12 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "@rocketseat/eslint-config/react"
+  ],
+  "plugins": [
+    "simple-import-sort"
+  ],
+  "rules": {
+    "camelcase": "off"
+  }
 }
