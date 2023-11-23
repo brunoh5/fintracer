@@ -5,7 +5,7 @@ import Cookie from 'js-cookie'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { api } from '@/lib/api'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 type Transactions = {
   id: string
@@ -15,7 +15,7 @@ type Transactions = {
   amount: number
   created_at: Date
   type: string
-  method: string
+  payment_method: string
 }
 
 const transactionType = {
@@ -46,7 +46,7 @@ export function BalanceAccountTransactionsList({
 
   useEffect(() => {
     api
-      .get(`/transactions/account/${accountId}`, {
+      .get(`/transactions/${accountId}/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -70,7 +70,7 @@ export function BalanceAccountTransactionsList({
             {transactionType[transaction.type as Type]}
           </TableCell>
           <TableCell className="text-center">
-            {paymentMethods[transaction.method as Method]}
+            {paymentMethods[transaction.payment_method as Method]}
           </TableCell>
           <TableCell className="text-center font-bold">
             {new Intl.NumberFormat('pt-BR', {

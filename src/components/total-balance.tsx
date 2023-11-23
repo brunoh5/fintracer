@@ -1,12 +1,12 @@
 'use client'
 
-import Link from 'next/link'
 import Cookies from 'js-cookie'
+import Link from 'next/link'
 
-import { TotalBalanceAccountList } from './total-balance-account-list'
 import { api } from '@/lib/api'
-import { useState, useEffect } from 'react'
 import { formatPrice } from '@/lib/formatPrice'
+import { useEffect, useState } from 'react'
+import { TotalBalanceAccountList } from './total-balance-account-list'
 
 type Account = {
   type: string
@@ -31,7 +31,7 @@ export function TotalBalance() {
         const { accounts } = res.data
         const totalBalance = accounts.reduce(
           (acc: number, account: Account) => {
-            return (acc += account.balance)
+            return (acc += Number(account.balance))
           },
           0,
         )
@@ -43,14 +43,14 @@ export function TotalBalance() {
 
   return (
     <div className="w-full">
-      <h2 className="mb-2 text-[22px] text-gray-500">Total Balance</h2>
+      <h2 className="mb-2 text-[22px] text-gray-500">Balanço Geral</h2>
       <div className="flex h-[232px] w-full flex-col gap-3 rounded-lg bg-white px-6 py-5">
         <div className="flex items-center justify-between border-b border-[#F3F3F3] pb-3">
           <span className="text-[22px] font-bold text-eerie-black-900">
             {formatPrice(totalBalance)}
           </span>
           <Link href="/balances" className="text-xs text-gray-900">
-            All Accounts
+            Todas as contas
           </Link>
         </div>
 

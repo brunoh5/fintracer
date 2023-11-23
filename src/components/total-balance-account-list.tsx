@@ -1,11 +1,12 @@
 'use client'
 
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 
 import mastercardIcon from '@/assets/Mastercard-Logo 1.png'
-import { useState } from 'react'
 import { formatPrice } from '@/lib/formatPrice'
+import { useState } from 'react'
+import { Pagination } from './ui/pagination'
 
 type Account = {
   type: string
@@ -20,7 +21,7 @@ interface TotalBalanceAccountListProps {
 export function TotalBalanceAccountList({
   accounts,
 }: TotalBalanceAccountListProps) {
-  const [totalPage] = useState(accounts.length - 1)
+  const [totalPage] = useState(accounts.length)
   const [currentIndex, setCurrentIndex] = useState(0)
 
   return (
@@ -65,7 +66,7 @@ export function TotalBalanceAccountList({
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <button
+        {/* <button
           onClick={() => {
             if (currentIndex === 0) return
             setCurrentIndex(currentIndex - 1)
@@ -75,11 +76,12 @@ export function TotalBalanceAccountList({
         >
           <ChevronLeft size={16} />
           Previous
-        </button>
-        <span>...</span>
-        <button
+        </button> */}
+        {/* <span>...</span> */}
+        <Pagination />
+        {/* <button
           onClick={() => {
-            if (currentIndex === totalPage) return
+            if (currentIndex + 1 === totalPage) return
             setCurrentIndex(currentIndex + 1)
           }}
           className="flex items-center justify-center"
@@ -87,7 +89,7 @@ export function TotalBalanceAccountList({
         >
           Next
           <ChevronRight size={16} className="text-eerie-black-900" />
-        </button>
+        </button> */}
       </div>
     </>
   )

@@ -9,8 +9,8 @@ import {
 } from 'lucide-react'
 
 import { Navigation } from './Navigation'
-import { SidebarProfile } from './sidebar-profile'
 import { LogoutButton } from './logout-button'
+import { SidebarProfile } from './sidebar-profile'
 
 export function Sidebar() {
   return (
@@ -20,8 +20,8 @@ export function Sidebar() {
     >
       <div>
         <h1 className="mb-6 w-full text-center text-xl text-zinc-50 uppercase">
-          Fine
-          <span className="lowercase font-normal">bank.</span>
+          Fin
+          <span className="lowercase font-normal">track.</span>
           IO
         </h1>
 
@@ -32,27 +32,27 @@ export function Sidebar() {
           </Navigation.Root>
           <Navigation.Root href="/balances" shouldMatchExactHref={true}>
             <Navigation.Icon icon={Wallet} />
-            Balances
+            Contas
           </Navigation.Root>
           <Navigation.Root href="/transactions" shouldMatchExactHref={true}>
             <Navigation.Icon icon={ArrowRightLeft} />
-            Transactions
+            Transações
           </Navigation.Root>
           <Navigation.Root href="/bills" shouldMatchExactHref={true}>
             <Navigation.Icon icon={Receipt} />
-            Bills
+            Despesas
           </Navigation.Root>
           <Navigation.Root href="/expenses" shouldMatchExactHref={true}>
             <Navigation.Icon icon={CreditCard} />
-            Expenses
+            Gastos
           </Navigation.Root>
           <Navigation.Root href="/goals" shouldMatchExactHref={true}>
             <Navigation.Icon icon={Crosshair} />
-            Goals
+            Objetivos
           </Navigation.Root>
           <Navigation.Root href="/settings/account">
             <Navigation.Icon icon={Settings} />
-            Settings
+            Configurações
           </Navigation.Root>
         </nav>
 

@@ -1,27 +1,35 @@
+'use client'
+
+import { api } from '@/lib/api'
+import Cookie from 'js-cookie'
 import { MoreVertical, UserCircleIcon } from 'lucide-react'
 import Image from 'next/image'
-import Cookie from 'js-cookie'
+import { useEffect, useState } from 'react'
 
 type User = {
   name: string
-  avatar_url?: string | null
+  avatar_url: null
 }
 
 export function SidebarProfile() {
-  const userCookies = Cookie.get('user')
-  let user: User
+  const token = Cookie.get('token')
+  const [user, setUser] = useState<User>()
 
-  if (userCookies) {
-    user = JSON.parse(userCookies)
-  } else {
-    user = {
-      name: 'Desconhecido',
-    }
-  }
+  useEffect(() => {
+    api
+      .get('/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data.user)
+      })
+  }, [token])
 
   return (
     <div className="flex items-center py-8">
-      {user.avatar_url ? (
+      {user?.avatar_url ? (
         <Image
           src={user.avatar_url ? user.avatar_url : ''}
           alt="Profile Picture"

@@ -1,15 +1,15 @@
 'use client'
 
+import Cookie from 'js-cookie'
 import { Check } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FormEvent } from 'react'
-import Cookie from 'js-cookie'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { api, AxiosError, isAxiosError } from '@/lib/api'
-import { Input } from '../ui/Input'
 import { Button } from '../ui/button'
+import { Input } from '../ui/Input'
 import { useToast } from '../ui/use-toast'
 
 export function LoginForm() {
@@ -22,7 +22,7 @@ export function LoginForm() {
     const formData = new FormData(event.currentTarget)
 
     try {
-      const response = await api.post('/users/session', {
+      const response = await api.post('/sessions', {
         email: formData.get('email'),
         password: formData.get('password'),
         remember: formData.get('remember'),
