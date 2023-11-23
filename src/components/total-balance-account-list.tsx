@@ -1,18 +1,11 @@
 'use client'
 
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
-import mastercardIcon from '@/assets/Mastercard-Logo 1.png'
 import { formatPrice } from '@/lib/formatPrice'
 import { useState } from 'react'
-import { Pagination } from './ui/pagination'
-
-type Account = {
-  type: string
-  number: string
-  balance: number
-}
+import { Account } from './total-balance'
 
 interface TotalBalanceAccountListProps {
   accounts: Account[]
@@ -21,8 +14,13 @@ interface TotalBalanceAccountListProps {
 export function TotalBalanceAccountList({
   accounts,
 }: TotalBalanceAccountListProps) {
-  const [totalPage] = useState(accounts.length)
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [totalPages] = useState(accounts.length + 1)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pages] = useState<number[]>([])
+
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i)
+  }
 
   return (
     <>
@@ -30,20 +28,22 @@ export function TotalBalanceAccountList({
         {accounts.length !== 0 ? (
           accounts.map((account, index) => (
             <div
-              key={index}
-              data-index={currentIndex === index}
+              key={account.id}
+              data-index={currentPage === index + 1}
               className="items-center justify-between rounded bg-persian-green p-4 hidden data-[index=true]:flex"
             >
               {/* Account */}
               <div className="flex flex-col">
-                <span className="text-white/70">Account Type</span>
+                <span className="text-white/70">Tipo de conta</span>
                 <p className="text-white">{account.type}</p>
                 <span className="text-white/70">{account.number}</span>
               </div>
               <div className="flex flex-col justify-between">
                 <Image
-                  src={mastercardIcon}
+                  src="/mastercard.png"
                   alt="Mastercard"
+                  width={12}
+                  height={12}
                   className="self-end"
                 />
                 <div className="self flex items-center justify-between">
@@ -66,30 +66,42 @@ export function TotalBalanceAccountList({
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        {/* <button
+        <button
           onClick={() => {
-            if (currentIndex === 0) return
-            setCurrentIndex(currentIndex - 1)
+            if (currentPage === 0) return
+            setCurrentPage(currentPage - 1)
           }}
           className="flex items-center justify-center text-[#D1D1D1]"
           aria-label="previous account view"
         >
           <ChevronLeft size={16} />
           Previous
-        </button> */}
-        {/* <span>...</span> */}
-        <Pagination />
-        {/* <button
+        </button>
+        <span>
+          {pages.map((page) => (
+            <p
+              key={page}
+              className="w-2 h-2 rounded-full bg-zinc-400 data-[active=true]:bg-green-700"
+              data-active={page === currentPage}
+              onClick={() => {
+                if (currentPage !== page) {
+                  setCurrentPage(page)
+                }
+              }}
+            />
+          ))}
+        </span>
+        <button
           onClick={() => {
-            if (currentIndex + 1 === totalPage) return
-            setCurrentIndex(currentIndex + 1)
+            if (currentPage === totalPages) return
+            setCurrentPage(currentPage + 1)
           }}
           className="flex items-center justify-center"
           aria-label="next account view"
         >
           Next
           <ChevronRight size={16} className="text-eerie-black-900" />
-        </button> */}
+        </button>
       </div>
     </>
   )

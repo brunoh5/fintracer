@@ -8,7 +8,8 @@ import { formatPrice } from '@/lib/formatPrice'
 import { useEffect, useState } from 'react'
 import { TotalBalanceAccountList } from './total-balance-account-list'
 
-type Account = {
+export type Account = {
+  id: string
   type: string
   number: string
   balance: number
