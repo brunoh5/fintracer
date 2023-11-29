@@ -31,7 +31,7 @@ export function LoginForm() {
       Cookie.set('token', response.data.token)
       Cookie.set('user', JSON.stringify(response.data.user))
 
-      router.push('/dashboard')
+      router.push('/overview')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any | AxiosError) {
       if (!isAxiosError(error)) {

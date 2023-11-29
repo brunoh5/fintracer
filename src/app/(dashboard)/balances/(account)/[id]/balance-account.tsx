@@ -1,9 +1,9 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { api } from '@/lib/api'
 import Cookie from 'js-cookie'
-import { useState, useEffect } from 'react'
-import { Button } from './ui/button'
+import { useEffect, useState } from 'react'
 
 type Account = {
   id: string

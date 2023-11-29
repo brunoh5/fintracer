@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { RecentTransactionsList } from './recent-transactions-list'
+import { RecentTransactionsList } from '../../../components/recent-transactions-list'
 
 export function RecentTransaction() {
   return (

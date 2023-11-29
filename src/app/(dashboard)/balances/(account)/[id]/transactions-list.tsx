@@ -35,11 +35,7 @@ const paymentMethods = {
 type Type = keyof typeof transactionType
 type Method = keyof typeof paymentMethods
 
-export function BalanceAccountTransactionsList({
-  accountId,
-}: {
-  accountId: string
-}) {
+export function TransactionsList({ accountId }: { accountId: string }) {
   const token = Cookie.get('token')
 
   const [transactions, setTransactions] = useState<Transactions[]>([])

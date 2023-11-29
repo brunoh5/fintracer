@@ -7,10 +7,9 @@ import {
   Settings,
   Wallet,
 } from 'lucide-react'
-
-import { Navigation } from './Navigation'
-import { LogoutButton } from './logout-button'
-import { SidebarProfile } from './sidebar-profile'
+import { Navigation } from './ui/Navigation'
+import { LogoutButton } from './ui/logout-button'
+import { SidebarProfile } from './ui/sidebar-profile'
 
 export function Sidebar() {
   return (
@@ -26,7 +25,7 @@ export function Sidebar() {
         </h1>
 
         <nav className="flex flex-col gap-4">
-          <Navigation.Root href="/dashboard" shouldMatchExactHref={true}>
+          <Navigation.Root href="/overview" shouldMatchExactHref={true}>
             <Navigation.Icon icon={LayoutGrid} />
             Dashboard
           </Navigation.Root>

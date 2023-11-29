@@ -1,11 +1,11 @@
 'use client'
 
-import { Edit3, Medal, Goal, X } from 'lucide-react'
 import dayJs from 'dayjs'
+import { Edit3, Goal, Medal, X } from 'lucide-react'
 
 import { useState } from 'react'
-import { Button } from './ui/button'
-import { Input } from './ui/Input'
+import { Input } from '../../../components/ui/Input'
+import { Button } from '../../../components/ui/button'
 
 export function MonthlyGoal() {
   const [isModalActive, setIsModalActive] = useState(false)

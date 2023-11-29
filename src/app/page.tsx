@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import Image from 'next/image'
 import { cookies } from 'next/headers'
+import Image from 'next/image'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 import googleIcon from '@/assets/google.svg'
@@ -8,7 +8,7 @@ import { LoginForm } from '@/components/forms/login-form'
 
 export default function Home() {
   if (cookies().has('token')) {
-    redirect('/dashboard')
+    redirect('/overview')
   }
 
   return (

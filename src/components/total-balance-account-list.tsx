@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import { formatPrice } from '@/lib/formatPrice'
 import { useEffect, useState } from 'react'
-import { Account } from './total-balance'
+import { Account } from '../app/(dashboard)/overview/total-balance'
 
 interface TotalBalanceAccountListProps {
   accounts: Account[]

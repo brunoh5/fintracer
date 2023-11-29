@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { api } from '@/lib/api'
 import { formatPrice } from '@/lib/formatPrice'
 import { useEffect, useState } from 'react'
-import { TotalBalanceAccountList } from './total-balance-account-list'
+import { TotalBalanceAccountList } from '../../../components/total-balance-account-list'
 
 export type Account = {
   id: string
