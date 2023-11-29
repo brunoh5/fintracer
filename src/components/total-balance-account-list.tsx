@@ -4,7 +4,7 @@ import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
 import { formatPrice } from '@/lib/formatPrice'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Account } from './total-balance'
 
 interface TotalBalanceAccountListProps {
@@ -14,13 +14,12 @@ interface TotalBalanceAccountListProps {
 export function TotalBalanceAccountList({
   accounts,
 }: TotalBalanceAccountListProps) {
-  const [totalPages] = useState(accounts.length + 1)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [pages] = useState<number[]>([])
+  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
 
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push(i)
-  }
+  useEffect(() => {
+    setTotalPages(accounts.length - 1)
+  }, [accounts.length])
 
   return (
     <>
@@ -29,7 +28,7 @@ export function TotalBalanceAccountList({
           accounts.map((account, index) => (
             <div
               key={account.id}
-              data-index={currentPage === index + 1}
+              data-index={index === currentPage}
               className="items-center justify-between rounded bg-persian-green p-4 hidden data-[index=true]:flex"
             >
               {/* Account */}
@@ -68,8 +67,9 @@ export function TotalBalanceAccountList({
       <div className="mt-2 flex items-center justify-between">
         <button
           onClick={() => {
-            if (currentPage === 0) return
-            setCurrentPage(currentPage - 1)
+            if (currentPage > 0) {
+              setCurrentPage(currentPage - 1)
+            }
           }}
           className="flex items-center justify-center text-[#D1D1D1]"
           aria-label="previous account view"
@@ -77,7 +77,7 @@ export function TotalBalanceAccountList({
           <ChevronLeft size={16} />
           Previous
         </button>
-        <span>
+        {/* <span>
           {pages.map((page) => (
             <p
               key={page}
@@ -90,11 +90,23 @@ export function TotalBalanceAccountList({
               }}
             />
           ))}
-        </span>
+        </span> */}
+
+        <div className="flex items-center justify-center space-x-2">
+          {accounts.map((_, index) => (
+            <p
+              key={index}
+              data-active={index === currentPage}
+              className="w-2 h-2 rounded-full bg-zinc-400 data-[active=true]:bg-green-700"
+            />
+          ))}
+        </div>
+
         <button
           onClick={() => {
-            if (currentPage === totalPages) return
-            setCurrentPage(currentPage + 1)
+            if (currentPage < totalPages) {
+              setCurrentPage(currentPage + 1)
+            }
           }}
           className="flex items-center justify-center"
           aria-label="next account view"
