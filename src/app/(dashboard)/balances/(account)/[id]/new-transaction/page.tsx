@@ -83,7 +83,7 @@ export default function Account({ params }: { params: { id: string } }) {
           </Input.Root>
 
           <Input.Root>
-            <Input.Label text="Shop Name" name="shopName" />
+            <Input.Label text="Estabelecimento/Site" name="shopName" />
             <Input.Wrapper>
               <Input.Content name="shopName" placeholder="Walmart" />
             </Input.Wrapper>
@@ -154,7 +154,7 @@ export default function Account({ params }: { params: { id: string } }) {
           </div>
 
           <Button aria-label="sign up submit" type="submit">
-            Sign up
+            Criar Transação
           </Button>
         </form>
       </main>

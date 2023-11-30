@@ -12,13 +12,13 @@ export default function Account({ params }: { params: { id: string } }) {
       <Header />
 
       <main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
-        <h2 className="text-[22px] text-gray-500">Account Details</h2>
+        <h2 className="text-[22px] text-gray-500">Detalhes da Conta</h2>
 
         <BalanceAccount accountId={params.id} />
 
         <div className="flex items-center justify-between">
           <h2 className="mb-2 text-[22px] text-gray-500">
-            Transactions History
+            Histórico de Transações
           </h2>
           <div className="flex gap-4 justify-center items-center text-gray-500">
             <Plus size={16} />

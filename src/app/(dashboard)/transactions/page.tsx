@@ -9,14 +9,14 @@ export default function Transactions() {
       <Header />
 
       <main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
-        <h2 className="text-[22px] text-gray-500">Recent Transactions</h2>
+        <h2 className="text-[22px] text-gray-500">Transações Recentes</h2>
 
         <div className="flex w-[300px] items-center justify-between font-bold text-gray-900">
           <span className="border-b-2 border-persian-green p-2 text-persian-green">
-            All
+            Todos
           </span>
-          <span className="p-2">Revenue</span>
-          <span className="p-2">Expenses</span>
+          <span className="p-2">Receita</span>
+          <span className="p-2">Despesas</span>
         </div>
 
         <div className="rounded-2xl bg-white px-7">
@@ -24,19 +24,19 @@ export default function Transactions() {
             <TableHeader className="border-b border-[#D2D2D2]/25 font-bold">
               <TableRow>
                 <TableHead scope="col" className="py-3 text-left">
-                  Items
+                  Nome
                 </TableHead>
                 <TableHead scope="col" className="px-7 py-3 text-center">
-                  Shop Name
+                  Estabelecimento
                 </TableHead>
                 <TableHead scope="col" className="px-7 py-3 text-center">
-                  Date
+                  Data
                 </TableHead>
                 <TableHead scope="col" className="px-7 py-3 text-center">
-                  Payment Method
+                  Método de Pagamento
                 </TableHead>
                 <TableHead scope="col" className="py-3 text-center">
-                  Amount
+                  Valor
                 </TableHead>
               </TableRow>
             </TableHeader>

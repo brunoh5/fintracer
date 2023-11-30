@@ -15,7 +15,9 @@ import { api } from '@/lib/api'
 
 type Transaction = {
   id: string
-  category: string
+  category: {
+    name: string
+  }
   name: string
   shopName: string
   amount: number
@@ -47,12 +49,14 @@ export function RecentTransactionsList() {
         >
           <div className="flex items-center gap-4">
             <div className="p-2">
-              {transaction.category === 'food' && <Utensils />}
-              {transaction.category === 'transportation' && <Car />}
-              {transaction.category === 'entertainment' && <Clapperboard />}
-              {transaction.category === 'shopping' && <ShoppingBag />}
-              {transaction.category === 'Others' && <LayoutDashboard />}
-              {transaction.category === 'Others' && <LayoutDashboard />}
+              {transaction.category.name === 'food' && <Utensils />}
+              {transaction.category.name === 'transportation' && <Car />}
+              {transaction.category.name === 'entertainment' && (
+                <Clapperboard />
+              )}
+              {transaction.category.name === 'shopping' && <ShoppingBag />}
+              {transaction.category.name === 'Others' && <LayoutDashboard />}
+              {transaction.category.name === 'Others' && <LayoutDashboard />}
             </div>
             <div className="flex flex-col">
               <p className="font-semibold">{transaction.name}</p>

@@ -59,9 +59,7 @@ export function TransactionsList({ accountId }: { accountId: string }) {
           <TableCell className="text-left">
             {dayJs(transaction.created_at).format('MMM DD YYYY')}
           </TableCell>
-          <TableCell className="text-center">
-            {transaction.status}Pending
-          </TableCell>
+          <TableCell className="text-center">{transaction.status}</TableCell>
           <TableCell className="text-center">
             {transactionType[transaction.type as Type]}
           </TableCell>
