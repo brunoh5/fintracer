@@ -25,9 +25,15 @@ export default function Account({ params }: { params: { id: string } }) {
   const [paid_at, setPaidAt] = useState('')
 
   useEffect(() => {
-    api.get('/categories').then((res) => {
-      setCategories(res.data.categories)
-    })
+    api
+      .get('/categories', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setCategories(res.data.categories)
+      })
   }, [token])
 
   async function handleRegister(event: FormEvent<HTMLFormElement>) {

@@ -1,5 +1,9 @@
 'use client'
 
+import { TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { api } from '@/lib/api'
+import dayjs from 'dayjs'
+import Cookie from 'js-cookie'
 import {
   Car,
   Clapperboard,
@@ -8,11 +12,7 @@ import {
   ShoppingBag,
   Utensils,
 } from 'lucide-react'
-import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import Cookie from 'js-cookie'
-import { api } from '@/lib/api'
-import { TableBody, TableCell, TableRow } from './ui/table'
 
 type Transaction = {
   id: string
@@ -22,7 +22,7 @@ type Transaction = {
   amount: number
   created_at: Date
   type: string
-  method: string
+  payment_method: string
   category: {
     name: string
   }
@@ -50,14 +50,16 @@ const paymentMethods = {
 
 type Method = keyof typeof paymentMethods
 
-export function TableTransactionsList() {
+export function TransactionList() {
   const token = Cookie.get('token')
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
   useEffect(() => {
     api
-      .get('/transactions', { headers: { Authorization: `Bearer ${token}` } })
+      .get('/users/transactions', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         setTransactions(response.data.transactions)
       })
@@ -78,7 +80,9 @@ export function TableTransactionsList() {
             {dayjs(transaction.created_at).format('MMM DD YYYY')}
           </TableCell>
 
-          <TableCell>{paymentMethods[transaction.method as Method]}</TableCell>
+          <TableCell>
+            {paymentMethods[transaction.payment_method as Method]}
+          </TableCell>
 
           <TableCell className="font-semibold">
             {new Intl.NumberFormat('pt-BR', {

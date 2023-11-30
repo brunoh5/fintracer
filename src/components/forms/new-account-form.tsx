@@ -1,12 +1,13 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
 import Cookie from 'js-cookie'
 import { X } from 'lucide-react'
+import { FormEvent, useState } from 'react'
 
-import { Button } from '../ui/button'
-import { Input } from '../ui/Input'
 import { api } from '@/lib/api'
+import { formatAccountNumber } from '@/utils/format-account-number'
+import { Input } from '../ui/Input'
+import { Button } from '../ui/button'
 import { toast } from '../ui/use-toast'
 
 export function NewAccountForm() {
@@ -25,7 +26,7 @@ export function NewAccountForm() {
       type: formData.get('type'),
       bank: formData.get('bank'),
       number: formattedNumber.replace(/\s/g, ''),
-      initialAmount: formData.get('initialAmount'),
+      initialAmount: Number(formData.get('initialAmount')) ?? 0,
     }
 
     try {
@@ -44,11 +45,6 @@ export function NewAccountForm() {
         description: `${err}`,
       })
     }
-  }
-
-  function formatAccountNumber(value: string): string {
-    const accountNumber = value?.replace(/\D/g, '')
-    return accountNumber.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/g, '$1 $2 $3 $4')
   }
 
   return (
@@ -114,7 +110,12 @@ export function NewAccountForm() {
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 pr-9">
                   <span className="text-gray-500 sm:text-sm">R$</span>
                 </div>
-                <Input.Content name="initialAmount" autoComplete="off" />
+                <Input.Content
+                  type="number"
+                  name="initialAmount"
+                  autoComplete="off"
+                  value={0}
+                />
               </Input.Wrapper>
             </Input.Root>
 

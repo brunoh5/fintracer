@@ -3,10 +3,10 @@
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 
+import { TotalBalanceAccountList } from '@/components/total-balance-account-list'
 import { api } from '@/lib/api'
 import { formatPrice } from '@/lib/formatPrice'
 import { useEffect, useState } from 'react'
-import { TotalBalanceAccountList } from '../../../components/total-balance-account-list'
 
 export type Account = {
   id: string

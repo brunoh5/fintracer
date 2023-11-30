@@ -56,6 +56,7 @@ export function LoginForm() {
         <Input.Wrapper>
           <Input.Content
             name="email"
+            id="email"
             placeholder="johndoe@email.com"
             type="email"
             autoComplete="email"
@@ -74,6 +75,7 @@ export function LoginForm() {
         <Input.Wrapper>
           <Input.Content
             name="password"
+            id="password"
             placeholder="*********"
             type="password"
             autoComplete="current-password"

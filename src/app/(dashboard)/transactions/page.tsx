@@ -1,6 +1,7 @@
-import { TableTransactions } from '@/components/table-transactions'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/ui/header'
+import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { TransactionList } from './transaction-list'
 
 export default function Transactions() {
   return (
@@ -19,7 +20,29 @@ export default function Transactions() {
         </div>
 
         <div className="rounded-2xl bg-white px-7">
-          <TableTransactions />
+          <Table className="w-full text-center">
+            <TableHeader className="border-b border-[#D2D2D2]/25 font-bold">
+              <TableRow>
+                <TableHead scope="col" className="py-3 text-left">
+                  Items
+                </TableHead>
+                <TableHead scope="col" className="px-7 py-3 text-center">
+                  Shop Name
+                </TableHead>
+                <TableHead scope="col" className="px-7 py-3 text-center">
+                  Date
+                </TableHead>
+                <TableHead scope="col" className="px-7 py-3 text-center">
+                  Payment Method
+                </TableHead>
+                <TableHead scope="col" className="py-3 text-center">
+                  Amount
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TransactionList />
+          </Table>
 
           <div className="mt-8 mb-8 flex items-center justify-center">
             <Button className="w-48">Load More</Button>
