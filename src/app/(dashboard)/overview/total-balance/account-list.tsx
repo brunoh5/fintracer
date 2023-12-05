@@ -5,15 +5,13 @@ import Image from 'next/image'
 
 import { formatPrice } from '@/lib/formatPrice'
 import { useState } from 'react'
-import { Account } from '../app/(dashboard)/overview/total-balance'
+import { Account } from '.'
 
 interface TotalBalanceAccountListProps {
 	accounts: Account[] | undefined
 }
 
-export function TotalBalanceAccountList({
-	accounts,
-}: TotalBalanceAccountListProps) {
+export function AccountList({ accounts }: TotalBalanceAccountListProps) {
 	// const [totalPages, setTotalPages] = useState(0)
 	const [currentPage, setCurrentPage] = useState(0)
 
@@ -34,7 +32,6 @@ export function TotalBalanceAccountList({
 	return (
 		<>
 			<div className="overflow-hidden">
-				{/* {accounts && accounts.length !== 0 ? ( */}
 				{accounts?.map((account, index) => (
 					<div
 						key={account.id}
@@ -66,13 +63,7 @@ export function TotalBalanceAccountList({
 							</div>
 						</div>
 					</div>
-				))
-				// ) : (
-				// 	<div className="flex justify-center items-center rounded bg-persian-green p-4 text-zinc-50 h-full">
-				// 		<p>Nenhuma conta criada ainda</p>
-				// 	</div>
-				// )}
-				}
+				))}
 			</div>
 
 			<div className="mt-2 flex items-center justify-between">

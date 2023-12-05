@@ -3,19 +3,19 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export default function DashboardLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode
 }) {
-  if (!cookies().has('token')) {
-    redirect('/')
-  }
+	if (!cookies().has('token')) {
+		redirect('/')
+	}
 
-  return (
-    <div className="flex">
-      <Sidebar />
+	return (
+		<div className="flex">
+			<Sidebar />
 
-      {children}
-    </div>
-  )
+			{children}
+		</div>
+	)
 }

@@ -2,40 +2,40 @@ import { ArrowUp, Home } from 'lucide-react'
 import { ExpenseItem } from '../../../components/expense-item'
 
 const expenses = [
-  {
-    icon: 'Home',
-    title: 'Housing',
-    value: '250.00',
-    span: '15%*',
-    statusIcon: 'ArrowUp',
-    statusColor: 'red',
-  },
+	{
+		icon: 'Home',
+		title: 'Housing',
+		value: '250.00',
+		span: '15%*',
+		statusIcon: 'ArrowUp',
+		statusColor: 'red',
+	},
 ]
 
 export function ExpenseBreakdown() {
-  return (
-    <div className="h-[252px] w-full">
-      <div className="flex items-center justify-between">
-        <h2 className="mb-2 text-[22px] text-gray-500">Expenses Breakdown</h2>
-        <span className="self-end font-medium text-gray-300">
-          *Compare to last month
-        </span>
-      </div>
+	return (
+		<div className="h-[252px] w-full">
+			<div className="flex items-center justify-between">
+				<h2 className="mb-2 text-[22px] text-gray-500">Expenses Breakdown</h2>
+				<span className="self-end font-medium text-gray-300">
+					*Compare to last month
+				</span>
+			</div>
 
-      <div className="grid w-full grid-cols-3 gap-x-10 gap-y-6 rounded-lg bg-white px-6 py-5">
-        {expenses &&
-          expenses.map((expense) => (
-            <ExpenseItem
-              key={expense.title}
-              icon={Home}
-              title={expense.title}
-              value={expense.value}
-              span={expense.span}
-              statusIcon={ArrowUp}
-              statusColor="red"
-            />
-          ))}
-        {/* 
+			<div className="grid w-full grid-cols-3 gap-x-10 gap-y-6 rounded-lg bg-white px-6 py-5">
+				{expenses &&
+					expenses.map((expense) => (
+						<ExpenseItem
+							key={expense.title}
+							icon={Home}
+							title={expense.title}
+							value={expense.value}
+							span={expense.span}
+							statusIcon={ArrowUp}
+							statusColor="red"
+						/>
+					))}
+				{/* 
         <Expense
           icon={Utensils}
           title="Food"
@@ -76,7 +76,7 @@ export function ExpenseBreakdown() {
           statusIcon={ArrowUp}
           statusColor="red"
         /> */}
-      </div>
-    </div>
-  )
+			</div>
+		</div>
+	)
 }

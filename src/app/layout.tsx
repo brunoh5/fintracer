@@ -1,4 +1,5 @@
 import { Toaster } from '@/components/ui/toaster'
+import { ReactQueryProvider } from '@/utils/query-client-provider'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -6,27 +7,24 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'FinTrack',
-  description:
-    'Site de organização financeira para controle de gastos pessoais e empresariais.',
+	title: 'FinTrack',
+	description:
+		'Site de organização financeira para controle de gastos pessoais e empresariais.',
 }
 
-// if (process.env.NODE_ENV === 'development') {
-//   console.log('Testing')
-//   Adicionar MirageJS
-// }
-
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode
 }) {
-  return (
-    <html lang="pt-BR" suppressHydrationWarning>
-      <body className={inter.variable}>
-        {children}
-        <Toaster />
-      </body>
-    </html>
-  )
+	return (
+		<html lang="pt-BR" suppressHydrationWarning>
+			<body className={inter.variable}>
+				<ReactQueryProvider>
+					{children}
+					<Toaster />
+				</ReactQueryProvider>
+			</body>
+		</html>
+	)
 }
