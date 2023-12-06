@@ -26,8 +26,6 @@ export function Profile() {
 				},
 			})
 
-			console.log(response.data)
-
 			return response.data.user
 		},
 		staleTime: 1000 * 60 * 60 * 24, // 1 day

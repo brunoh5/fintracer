@@ -1,32 +1,19 @@
 'use client'
 
+import type { TransactionProps } from '@/@types/transaction'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { api } from '@/services/api'
 import dayjs from 'dayjs'
 import Cookie from 'js-cookie'
 import {
-    Car,
-    Clapperboard,
-    Home,
-    LayoutDashboard,
-    ShoppingBag,
-    Utensils,
+	Car,
+	Clapperboard,
+	Home,
+	LayoutDashboard,
+	ShoppingBag,
+	Utensils,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-
-type Transaction = {
-	id: string
-	name: string
-	shopName: string
-	status: 'Complete' | 'Pending'
-	amount: number
-	created_at: Date
-	type: string
-	payment_method: string
-	category: {
-		name: string
-	}
-}
 
 const categoryIcon = {
 	Casa: <Home size={24} className="mr-4" />,
@@ -53,7 +40,7 @@ type Method = keyof typeof paymentMethods
 export function TransactionList() {
 	const token = Cookie.get('token')
 
-	const [transactions, setTransactions] = useState<Transaction[]>([])
+	const [transactions, setTransactions] = useState<TransactionProps[]>([])
 
 	useEffect(() => {
 		api
@@ -61,13 +48,14 @@ export function TransactionList() {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			.then((response) => {
+				console.log(response.data.transactions)
 				setTransactions(response.data.transactions)
 			})
 	}, [token])
 
 	return (
 		<TableBody>
-			{transactions.map((transaction: Transaction, index) => (
+			{transactions.map((transaction: TransactionProps, index) => (
 				<TableRow key={index}>
 					<TableCell className="flex items-center text-left">
 						{categoryIcon[transaction.category.name as Icon]}

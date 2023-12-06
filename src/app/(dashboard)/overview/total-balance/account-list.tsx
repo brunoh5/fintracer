@@ -2,32 +2,31 @@
 
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
-
-import { formatPrice } from '@/lib/formatPrice'
+import Cookies from 'js-cookie'
+import { formatPrice } from '@/utils/format-price'
 import { useState } from 'react'
 import { Account } from '.'
+import { api } from '@/services/api'
+import { useQuery } from '@tanstack/react-query'
 
-interface TotalBalanceAccountListProps {
-	accounts: Account[] | undefined
-}
-
-export function AccountList({ accounts }: TotalBalanceAccountListProps) {
-	// const [totalPages, setTotalPages] = useState(0)
+export function AccountList() {
 	const [currentPage, setCurrentPage] = useState(0)
 
-	// useEffect(() => {
-	// 	setTotalPages(accounts.length - 1)
-	// }, [accounts.length])
+	const token = Cookies.get('token')
 
-	// if (accounts) {
-	// 	if (accounts.length) {
-	// 		return (
-	// 			<div className="flex justify-center items-center rounded bg-persian-green p-4 text-zinc-50 h-full">
-	// 				<p>Nenhuma conta criada ainda</p>
-	// 			</div>
-	// 		)
-	// 	}
-	// }
+	const { data: accounts } = useQuery<Account[]>({
+		queryKey: ['total-balance/accounts'],
+		queryFn: async () => {
+			const response = await api.get('/accounts', {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+
+			return response.data.accounts
+		},
+		staleTime: 1000 * 60 * 5,
+	})
 
 	return (
 		<>

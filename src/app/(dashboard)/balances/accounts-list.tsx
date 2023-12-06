@@ -2,10 +2,10 @@
 
 import { Navigation } from '@/components/ui/Navigation'
 import { api } from '@/services/api'
+import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 
 type Account = {
 	id: string
@@ -19,26 +19,26 @@ type Account = {
 export function AccountList() {
 	const token = Cookies.get('token')
 
-	const [accounts, setAccounts] = useState<Account[]>([])
-
-	useEffect(() => {
-		api
-			.get('/accounts', {
+	const { data: accounts } = useQuery<Account[]>({
+		queryKey: ['balance/accounts'],
+		queryFn: async () => {
+			const response = await api.get('/accounts', {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
-			.then((res) => {
-				setAccounts(res.data.accounts)
-			})
-	}, [token])
+
+			return response.data.accounts
+		},
+		staleTime: 1000 * 60 * 5, // 5 minutes
+	})
 
 	return (
 		<>
 			{accounts &&
-				accounts.map((account) => {
+				accounts.map((account, index) => {
 					return (
-						<div key={account.id} className="rounded-lg bg-white p-6 h-72">
+						<div key={index} className="rounded-lg bg-white p-6 h-72">
 							<div className="flex items-center justify-between pb-3 border-b border-[#D2D2D2]/25">
 								<p className="font-bold text-gray-500">{account.type}</p>
 								<div className="flex items-center gap-1">
