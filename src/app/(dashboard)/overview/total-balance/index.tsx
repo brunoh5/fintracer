@@ -1,3 +1,5 @@
+'use client'
+
 import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import Link from 'next/link'

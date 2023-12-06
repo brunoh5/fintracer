@@ -7,9 +7,10 @@ import {
 	Settings,
 	Wallet,
 } from 'lucide-react'
-import { Navigation } from './ui/Navigation'
-import { LogoutButton } from './ui/logout-button'
-import { SidebarProfile } from './ui/sidebar-profile'
+
+import { Navigation } from '../ui/Navigation'
+import { LogoutButton } from '../ui/logout-button'
+import { Profile } from './profile'
 
 export function Sidebar() {
 	return (
@@ -59,7 +60,7 @@ export function Sidebar() {
 			</div>
 
 			<div className="mt-4 flex flex-col gap-11 divide-y">
-				<SidebarProfile />
+				<Profile />
 			</div>
 		</aside>
 	)

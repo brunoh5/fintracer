@@ -1,34 +1,21 @@
+'use client'
+
 import { useQuery } from '@tanstack/react-query'
-import Cookie from 'js-cookie'
+import Cookies from 'js-cookie'
 import { MoreVertical, UserCircleIcon } from 'lucide-react'
 import Image from 'next/image'
 import { Suspense } from 'react'
 
 import { api } from '@/services/api'
-import { Skeleton } from './skeleton'
+import { ProfileSkeleton } from './profile-skeleton'
 
 type User = {
 	name: string
 	avatar_url: null
 }
 
-function ProfileSkeleton() {
-	return (
-		<div className="flex items-center py-8">
-			<Skeleton className="h-4 w-[40px] rounded-full" />
-			<div className="relative ml-4 flex-1">
-				<div className="mr-8 flex w-full flex-col">
-					<Skeleton className="h-4 w-[80px]" />
-					<span className="text-xs text-white/20">View Profile</span>
-				</div>
-				<MoreVertical className="absolute right-0 top-1 text-white" />
-			</div>
-		</div>
-	)
-}
-
-export function SidebarProfile() {
-	const token = Cookie.get('token')
+export function Profile() {
+	const token = Cookies.get('token')
 
 	const { data: user } = useQuery<User>({
 		queryKey: ['profile'],

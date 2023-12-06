@@ -2,6 +2,7 @@
 
 import { Header } from '@/components/ui/header'
 import { UpcomingBill } from '@/components/upcoming-bill'
+import Cookies from 'js-cookie'
 import { Suspense } from 'react'
 import { ExpenseBreakdown } from './expense-breakdown'
 import { MonthlyGoal } from './monthly-goal'
@@ -15,6 +16,7 @@ import { TotalBalance } from './total-balance'
 // }
 
 export default function Dashboard() {
+	const token = Cookies.get('token')
 	// const { data, isFetching } = useQuery<Repos[]>({
 	// 	queryKey: ['repos'],
 	// 	queryFn: async () => {
