@@ -1,8 +1,8 @@
 import { Toaster } from '@/components/ui/toaster'
-import { ReactQueryProvider } from '@/utils/query-client-provider'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Providers from './providers'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -20,10 +20,10 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR" suppressHydrationWarning>
 			<body className={inter.variable}>
-				<ReactQueryProvider>
+				<Providers>
 					{children}
 					<Toaster />
-				</ReactQueryProvider>
+				</Providers>
 			</body>
 		</html>
 	)
