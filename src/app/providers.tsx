@@ -6,11 +6,21 @@ import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experime
 import { ReactNode, useState } from 'react'
 
 export default function Providers({ children }: { children: ReactNode }) {
-	const [queryClient] = useState(() => new QueryClient())
+	const [queryClient] = useState(
+		() =>
+			new QueryClient({
+				defaultOptions: {
+					queries: {
+						staleTime: 1000 * 60 * 5, // 5 minutes
+					},
+				},
+			}),
+	)
 
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+			{/* {children} */}
 			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	)

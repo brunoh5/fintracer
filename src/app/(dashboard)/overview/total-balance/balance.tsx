@@ -2,7 +2,7 @@
 
 import { api } from '@/services/api'
 import { formatPrice } from '@/utils/format-price'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
 type Account = {
@@ -15,7 +15,7 @@ type Account = {
 export function Balance() {
 	const token = Cookies.get('token')
 
-	const { data: totalBalance } = useQuery<number>({
+	const { data: totalBalance } = useSuspenseQuery<number>({
 		queryKey: ['balance'],
 		queryFn: async () => {
 			const response = await api.get('/accounts', {

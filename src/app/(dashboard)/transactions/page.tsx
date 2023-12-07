@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button'
-import { Header } from '@/components/ui/header'
+import { Header } from '@/components/header'
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { TransactionList } from './transaction-list'
 
 export default function Transactions() {
 	return (
-		<div className="flex w-screen flex-col">
+		<div className="flex-1 w-screen flex-col ml-[280px]">
 			<Header />
 
 			<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">

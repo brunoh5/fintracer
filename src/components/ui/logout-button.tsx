@@ -7,7 +7,6 @@ import { Button } from './button'
 
 export function LogoutButton() {
 	function handleLogout() {
-		console.log('> aqui')
 		Cookie.remove('token')
 		Cookie.remove('user')
 		redirect('/')

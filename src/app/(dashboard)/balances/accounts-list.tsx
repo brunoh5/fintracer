@@ -2,7 +2,7 @@
 
 import { Navigation } from '@/components/ui/Navigation'
 import { api } from '@/services/api'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
@@ -19,7 +19,7 @@ type Account = {
 export function AccountList() {
 	const token = Cookies.get('token')
 
-	const { data: accounts } = useQuery<Account[]>({
+	const { data: accounts } = useSuspenseQuery<Account[]>({
 		queryKey: ['balance/accounts'],
 		queryFn: async () => {
 			const response = await api.get('/accounts', {

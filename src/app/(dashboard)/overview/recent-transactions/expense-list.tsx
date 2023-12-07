@@ -1,13 +1,13 @@
 import { TransactionProps } from '@/@types/transaction'
 import { api } from '@/services/api'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import { Transaction } from './components/transaction'
 
 export function Expenses() {
 	const token = Cookies.get('token')
 
-	const { data: transactions } = useQuery<TransactionProps[]>({
+	const { data: transactions } = useSuspenseQuery<TransactionProps[]>({
 		queryKey: ['recent-transactions'],
 		queryFn: async () => {
 			const response = await api.get('/users/transactions', {

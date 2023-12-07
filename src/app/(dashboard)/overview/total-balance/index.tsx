@@ -4,14 +4,7 @@ import { AccountList } from './account-list'
 import { AccountListSkeleton } from './account-list-skeleton'
 import { Balance } from './balance'
 
-export type Account = {
-	id: string
-	type: string
-	number: string
-	balance: number
-}
-
-export function TotalBalance() {
+export async function TotalBalance() {
 	return (
 		<div className="w-full">
 			<h2 className="mb-2 text-[22px] text-gray-500">Balanço Geral</h2>
@@ -23,7 +16,7 @@ export function TotalBalance() {
 					</Link>
 				</div>
 
-				<Suspense fallback={<AccountListSkeleton />}>
+				<Suspense key={'test'} fallback={<AccountListSkeleton />}>
 					<AccountList />
 				</Suspense>
 			</div>

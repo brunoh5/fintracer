@@ -16,3 +16,17 @@ export type TransactionProps = {
 	userId: string
 	accountId: string
 }
+
+export type AccountProps = {
+	id: string
+	type: string
+	bank: string
+	bankImgUrl?: string
+	number?: string
+	balance: number
+}
+
+export type UserProps = {
+	name: string
+	avatar_url?: string | null
+}

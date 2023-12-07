@@ -1,4 +1,4 @@
-import { Header } from '@/components/ui/header'
+import { Header } from '@/components/header'
 import { UpcomingBill } from '@/components/upcoming-bill'
 import { Suspense } from 'react'
 import { ExpenseBreakdown } from './expense-breakdown'
@@ -9,9 +9,9 @@ import { RecentTransaction } from './recent-transactions'
 
 export default function Dashboard() {
 	return (
-		<div className="flex w-screen flex-col">
+		<div className="flex-1 w-screen flex-col ml-[280px]">
 			<Header hasName />
-			<main className="relative flex flex-col gap-8  pb-8 pl-6 pr-8 pt-4">
+			<main className="overflow-auto relative flex flex-col gap-8  pb-8 pl-6 pr-8 pt-4">
 				<div className="flex items-center justify-between gap-6">
 					{/* Top Content */}
 					<TotalBalance />

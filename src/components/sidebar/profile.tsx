@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import { MoreVertical, UserCircleIcon } from 'lucide-react'
 import Image from 'next/image'
@@ -17,7 +17,7 @@ type User = {
 export function Profile() {
 	const token = Cookies.get('token')
 
-	const { data: user } = useQuery<User>({
+	const { data: user } = useSuspenseQuery<User>({
 		queryKey: ['profile'],
 		queryFn: async () => {
 			const response = await api.get('/me', {

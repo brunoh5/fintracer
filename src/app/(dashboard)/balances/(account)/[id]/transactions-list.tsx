@@ -2,21 +2,10 @@
 
 import dayJs from 'dayjs'
 import Cookie from 'js-cookie'
-
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { api } from '@/services/api'
-import { useEffect, useState } from 'react'
-
-type Transactions = {
-	id: string
-	category: string
-	name: string
-	status: 'Complete' | 'Pending'
-	amount: number
-	created_at: Date
-	type: string
-	payment_method: string
-}
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { TransactionProps } from '@/@types'
 
 const transactionType = {
 	sent: 'Enviada',
@@ -38,23 +27,22 @@ type Method = keyof typeof paymentMethods
 export function TransactionsList({ accountId }: { accountId: string }) {
 	const token = Cookie.get('token')
 
-	const [transactions, setTransactions] = useState<Transactions[]>([])
-
-	useEffect(() => {
-		api
-			.get(`/transactions/${accountId}/all`, {
+	const { data: transactions } = useSuspenseQuery<TransactionProps[]>({
+		queryKey: ['account', 'transactions', accountId],
+		queryFn: async () => {
+			const response = await api.get(`/transactions/${accountId}/all`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
-			.then((res) => {
-				setTransactions(res.data.transactions)
-			})
-	}, [token, accountId])
+
+			return response.data.transactions
+		},
+	})
 
 	return (
 		<TableBody>
-			{transactions.map((transaction) => (
+			{transactions?.map((transaction) => (
 				<TableRow key={transaction.id}>
 					<TableCell className="text-left">
 						{dayJs(transaction.created_at).format('MMM DD YYYY')}

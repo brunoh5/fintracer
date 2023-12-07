@@ -1,35 +1,26 @@
 'use client'
 
+import { AccountProps } from '@/@types'
 import { Button } from '@/components/ui/button'
 import { api } from '@/services/api'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import Cookie from 'js-cookie'
-import { useEffect, useState } from 'react'
-
-type Account = {
-	id: string
-	type: string
-	bank: string
-	bankImgUrl?: string
-	number?: string
-	balance: number
-}
 
 export function BalanceAccount({ accountId }: { accountId: string }) {
 	const token = Cookie.get('token')
 
-	const [account, setAccount] = useState<Account | null>(null)
-
-	useEffect(() => {
-		api
-			.get(`/accounts/${accountId}`, {
+	const { data: account } = useSuspenseQuery<AccountProps>({
+		queryKey: ['accounts', accountId],
+		queryFn: async () => {
+			const response = await api.get(`/accounts/${accountId}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
-			.then((res) => {
-				setAccount(res.data.account)
-			})
-	}, [token, accountId])
+
+			return response.data.account
+		},
+	})
 
 	return (
 		<div className="flex flex-col gap-10 w-full rounded-lg bg-white px-6 py-5">

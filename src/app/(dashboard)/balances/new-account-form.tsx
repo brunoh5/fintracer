@@ -10,13 +10,13 @@ import { formatAccountNumber } from '@/utils/format-account-number'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useSuspenseQueryClient } from '@tanstack/react-query'
 
 export function NewAccountForm() {
 	const token = Cookie.get('token')
 	const [isOpen, setIsOpen] = useState(false)
 	const [formattedNumber, setFormattedNumber] = useState('')
-	const queryClient = useQueryClient()
+	const queryClient = useSuspenseQueryClient()
 
 	const mutation = useMutation({
 		mutationKey: ['balance/accounts'],

@@ -15,7 +15,7 @@ import { Profile } from './profile'
 export function Sidebar() {
 	return (
 		<aside
-			className="flex min-h-screen w-full max-w-[280px] flex-col justify-between bg-eerie-black-900 px-7 py-12 font-semibold"
+			className="fixed w-[280px] left-0 top-0 h-screen flex flex-col justify-between bg-eerie-black-900 px-7 py-12 font-semibold"
 			suppressHydrationWarning
 		>
 			<div>
@@ -59,7 +59,7 @@ export function Sidebar() {
 				<LogoutButton />
 			</div>
 
-			<div className="mt-4 flex flex-col gap-11 divide-y">
+			<div className="mt-4 flex flex-col divide-y">
 				<Profile />
 			</div>
 		</aside>

@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/button'
-import { Header } from '@/components/ui/header'
+import { Header } from '@/components/header'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
 import dayjs from 'dayjs'

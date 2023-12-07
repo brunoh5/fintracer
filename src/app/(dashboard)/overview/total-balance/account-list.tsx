@@ -5,16 +5,16 @@ import Image from 'next/image'
 import Cookies from 'js-cookie'
 import { formatPrice } from '@/utils/format-price'
 import { useState } from 'react'
-import { Account } from '.'
 import { api } from '@/services/api'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { AccountProps } from '@/@types'
 
 export function AccountList() {
 	const [currentPage, setCurrentPage] = useState(0)
 
 	const token = Cookies.get('token')
 
-	const { data: accounts } = useQuery<Account[]>({
+	const { data: accounts } = useSuspenseQuery<AccountProps[]>({
 		queryKey: ['total-balance/accounts'],
 		queryFn: async () => {
 			const response = await api.get('/accounts', {
@@ -25,13 +25,14 @@ export function AccountList() {
 
 			return response.data.accounts
 		},
+
 		staleTime: 1000 * 60 * 5,
 	})
 
 	return (
 		<>
 			<div className="overflow-hidden">
-				{accounts?.map((account, index) => (
+				{accounts.map((account, index) => (
 					<div
 						key={account.id}
 						data-index={index === currentPage}

@@ -3,35 +3,30 @@
 import dayJs from 'dayjs'
 import Cookie from 'js-cookie'
 import { Bell, ChevronsRight, Search } from 'lucide-react'
-
 import { api } from '@/services/api'
-import { useEffect, useState } from 'react'
-import { Input } from './Input'
+import { Input } from './ui/Input'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { UserProps } from '@/@types'
 
 interface HeaderProps {
 	hasName?: boolean
 }
 
-type User = {
-	name: string
-	avatar_url?: string | null
-}
-
 export function Header({ hasName = false }: HeaderProps) {
 	const token = Cookie.get('token')
-	const [user, setUser] = useState<User>()
 
-	useEffect(() => {
-		api
-			.get('/me', {
+	const { data: user } = useSuspenseQuery<UserProps>({
+		queryKey: ['profile'],
+		queryFn: async () => {
+			const response = await api.get('/me', {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
-			.then((res) => {
-				setUser(res.data.user)
-			})
-	}, [token])
+
+			return response.data.user
+		},
+	})
 
 	return (
 		<header className="flex h-[88px] items-center justify-between pb-5 pl-6 pr-8 pt-5">
