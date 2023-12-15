@@ -1,5 +1,5 @@
 import { ArrowUp, Home } from 'lucide-react'
-import { ExpenseItem } from '../../../components/expense-item'
+import { ExpenseItem } from '@/components/expense-item'
 
 const expenses = [
 	{

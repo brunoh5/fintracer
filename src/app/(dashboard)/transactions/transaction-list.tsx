@@ -1,8 +1,9 @@
 'use client'
 
-import type { TransactionProps } from '@/@types/transaction'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { api } from '@/services/api'
+import { TransactionProps } from '@/types'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import Cookie from 'js-cookie'
 import {
@@ -13,7 +14,6 @@ import {
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
 
 const categoryIcon = {
 	Casa: <Home size={24} className="mr-4" />,
@@ -40,18 +40,16 @@ type Method = keyof typeof paymentMethods
 export function TransactionList() {
 	const token = Cookie.get('token')
 
-	const [transactions, setTransactions] = useState<TransactionProps[]>([])
-
-	useEffect(() => {
-		api
-			.get('/users/transactions', {
+	const { data: transactions } = useSuspenseQuery<TransactionProps[]>({
+		queryKey: ['users', 'transactions'],
+		queryFn: async () => {
+			const response = await api.get('/users/transactions', {
 				headers: { Authorization: `Bearer ${token}` },
 			})
-			.then((response) => {
-				console.log(response.data.transactions)
-				setTransactions(response.data.transactions)
-			})
-	}, [token])
+
+			return response.data.transactions
+		},
+	})
 
 	return (
 		<TableBody>

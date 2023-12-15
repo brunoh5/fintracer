@@ -1,9 +1,14 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/header'
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { TransactionList } from './transaction-list'
+import { Suspense, useState } from 'react'
 
 export default function Transactions() {
+	const [activeTab, setActiveTab] = useState('all')
+
 	return (
 		<div className="flex-1 w-screen flex-col ml-[280px]">
 			<Header />
@@ -12,11 +17,27 @@ export default function Transactions() {
 				<h2 className="text-[22px] text-gray-500">Transações Recentes</h2>
 
 				<div className="flex w-[300px] items-center justify-between font-bold text-gray-900">
-					<span className="border-b-2 border-persian-green p-2 text-persian-green">
+					<span
+						onClick={() => setActiveTab('all')}
+						data-active={activeTab === 'all'}
+						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+					>
 						Todos
 					</span>
-					<span className="p-2">Receita</span>
-					<span className="p-2">Despesas</span>
+					<span
+						onClick={() => setActiveTab('revenues')}
+						data-active={activeTab === 'revenues'}
+						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+					>
+						Receita
+					</span>
+					<span
+						onClick={() => setActiveTab('expenses')}
+						data-active={activeTab === 'expenses'}
+						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+					>
+						Despesa
+					</span>
 				</div>
 
 				<div className="rounded-2xl bg-white px-7">
@@ -41,11 +62,29 @@ export default function Transactions() {
 							</TableRow>
 						</TableHeader>
 
-						<TransactionList />
+						{activeTab === 'all' && (
+							<Suspense fallback={<p>Carregando</p>}>
+								<TransactionList />
+							</Suspense>
+						)}
+
+						{activeTab === 'revenues' && (
+							<Suspense fallback={<p>Carregando</p>}>
+								<TransactionList />
+							</Suspense>
+						)}
+
+						{activeTab === 'expenses' && (
+							<Suspense fallback={<p>Carregando</p>}>
+								<TransactionList />
+							</Suspense>
+						)}
 					</Table>
 
 					<div className="mt-8 mb-8 flex items-center justify-center">
-						<Button className="w-48">Load More</Button>
+						<Button type="submit" className="w-48" disabled>
+							Load More
+						</Button>
 					</div>
 				</div>
 			</main>

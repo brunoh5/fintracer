@@ -1,8 +1,8 @@
 'use client'
 
-import { AccountProps } from '@/@types'
 import { Button } from '@/components/ui/button'
 import { api } from '@/services/api'
+import { AccountProps } from '@/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import Cookie from 'js-cookie'
 

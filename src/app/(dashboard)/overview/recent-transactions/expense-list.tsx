@@ -1,4 +1,4 @@
-import { TransactionProps } from '@/@types/transaction'
+import { TransactionProps } from '@/types'
 import { api } from '@/services/api'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'

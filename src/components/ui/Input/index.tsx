@@ -5,9 +5,9 @@ import { InputRoot } from './InputRoot'
 import { InputWrapper } from './InputWrapper'
 
 export const Input = {
-  Root: InputRoot,
-  Label: InputLabel,
-  Wrapper: InputWrapper,
-  Icon: InputIcon,
-  Content: InputContent,
+	Root: InputRoot,
+	Label: InputLabel,
+	Wrapper: InputWrapper,
+	Icon: InputIcon,
+	Content: InputContent,
 }

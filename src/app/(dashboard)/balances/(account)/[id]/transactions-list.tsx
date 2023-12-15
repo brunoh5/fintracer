@@ -5,7 +5,7 @@ import Cookie from 'js-cookie'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { api } from '@/services/api'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { TransactionProps } from '@/@types'
+import { TransactionProps } from '@/types'
 
 const transactionType = {
 	sent: 'Enviada',

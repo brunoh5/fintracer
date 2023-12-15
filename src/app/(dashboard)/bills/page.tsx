@@ -11,29 +11,6 @@ export default function Bills() {
 			<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
 				<h2 className="text-[22px] text-gray-500">Próximas Contas</h2>
 
-				{/* <div className="rounded-2xl bg-white px-7">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Invoice</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {bills.map((bill, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">INV001</TableCell>
-                  <TableCell>Paid</TableCell>
-                  <TableCell>Credit Card</TableCell>
-                  <TableCell className="text-right">$250.00</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div> */}
-
 				<div className="rounded-2xl bg-white px-7">
 					<Table className="w-full text-center">
 						<TableHeader className="border-b border-[#D2D2D2]/25 font-bold">

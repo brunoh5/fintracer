@@ -7,7 +7,7 @@ import { formatPrice } from '@/utils/format-price'
 import { useState } from 'react'
 import { api } from '@/services/api'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { AccountProps } from '@/@types'
+import { AccountProps } from '@/types'
 
 export function AccountList() {
 	const [currentPage, setCurrentPage] = useState(0)

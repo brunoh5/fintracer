@@ -6,7 +6,7 @@ import { Bell, ChevronsRight, Search } from 'lucide-react'
 import { api } from '@/services/api'
 import { Input } from './ui/Input'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { UserProps } from '@/@types'
+import { UserProps } from '@/types'
 
 interface HeaderProps {
 	hasName?: boolean

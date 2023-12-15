@@ -10,17 +10,18 @@ import { formatAccountNumber } from '@/utils/format-account-number'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { useMutation, useSuspenseQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AccountProps } from '@/types'
 
 export function NewAccountForm() {
 	const token = Cookie.get('token')
 	const [isOpen, setIsOpen] = useState(false)
 	const [formattedNumber, setFormattedNumber] = useState('')
-	const queryClient = useSuspenseQueryClient()
+	const queryClient = useQueryClient()
 
 	const mutation = useMutation({
 		mutationKey: ['balance/accounts'],
-		mutationFn: (data: any) => {
+		mutationFn: (data: object) => {
 			return api.post('/accounts', data, {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -33,14 +34,15 @@ export function NewAccountForm() {
 			// Salva as ultimas contas
 			const previousAccounts = queryClient.getQueryData(['balance/accounts'])
 			// Salva o novo estado
-			queryClient.setQueryData(['balance/accounts'], (old: any) => [
+			queryClient.setQueryData(['balance/accounts'], (old: AccountProps[]) => [
 				...old,
 				newAccount,
 			])
 
 			return previousAccounts
 		},
-		onError: (err, newTodo, context: any) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		onError: (err, _, context: any) => {
 			queryClient.setQueryData(['balance/accounts'], context.previousAccounts)
 			toast({
 				variant: 'destructive',

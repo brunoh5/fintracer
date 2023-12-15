@@ -1,4 +1,4 @@
-import { TransactionProps } from '@/@types/transaction'
+import { TransactionProps } from '@/types'
 import dayjs from 'dayjs'
 import {
 	Car,

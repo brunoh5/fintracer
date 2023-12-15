@@ -30,3 +30,14 @@ export type UserProps = {
 	name: string
 	avatar_url?: string | null
 }
+
+export type BillsProps = {
+	id: string
+	dueDate: string
+	logoUrl: string
+	title: string
+	description: string
+	lastCharge: string
+	amount: number
+	userId: string
+}

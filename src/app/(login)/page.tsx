@@ -1,13 +1,14 @@
-import { cookies } from 'next/headers'
-import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 
-import googleIcon from '@/assets/google.svg'
-import { LoginForm } from '@/components/forms/login-form'
+import { LoginForm } from './form'
+import { nextAuthOptions } from '../api/auth/[...nextauth]/route'
 
-export default function Home() {
-	if (cookies().has('token')) {
+export default async function Home() {
+	const session = await getServerSession(nextAuthOptions)
+
+	if (session) {
 		redirect('/overview')
 	}
 
@@ -26,7 +27,7 @@ export default function Home() {
 					<p>or sign in with</p>
 				</div>
 
-				<button
+				{/* <button
 					className="my-4 flex w-full items-center justify-center gap-1 rounded bg-gray-200 px-3 py-2 text-center"
 					aria-label="Login com google"
 				>
@@ -38,7 +39,7 @@ export default function Home() {
 						className="mr-4"
 					/>
 					Continue with Google
-				</button>
+				</button> */}
 
 				<Link
 					href="/signUp"

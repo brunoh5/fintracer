@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation'
 import { FormEvent } from 'react'
 
 import { api } from '@/services/api'
-import { Input } from '../ui/Input'
-import { Button } from '../ui/button'
-import { useToast } from '../ui/use-toast'
+import { Input } from '@/components/ui/Input'
+import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/use-toast'
 
 export function SignUpForm() {
 	const { toast } = useToast()
@@ -73,12 +73,12 @@ export function SignUpForm() {
 				</Input.Wrapper>
 			</Input.Root>
 
-			<div className="mt-4 w-full">
+			{/* <div className="mt-4 w-full">
 				<p className="mx-auto">
 					By continuing, you agree to our{' '}
 					<span className="text-persian-green">terms of service.</span>
 				</p>
-			</div>
+			</div> */}
 
 			<Button aria-label="sign up submit" type="submit">
 				Sign up

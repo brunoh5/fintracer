@@ -1,13 +1,18 @@
 import { Sidebar } from '@/components/sidebar'
-import { cookies } from 'next/headers'
+import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import { nextAuthOptions } from '../api/auth/[...nextauth]/route'
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
 	children,
 }: {
 	children: React.ReactNode
 }) {
-	if (!cookies().has('token')) {
+	const session = await getServerSession(nextAuthOptions)
+
+	// console.log(session)
+
+	if (!session) {
 		redirect('/')
 	}
 
