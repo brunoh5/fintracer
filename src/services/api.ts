@@ -1,3 +1,5 @@
-import { getAPIClient } from './axios'
+import axios from 'axios'
 
-export const api = getAPIClient()
+export const api = axios.create({
+	baseURL: 'https://fintrack.serveo.net',
+})

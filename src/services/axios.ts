@@ -1,28 +1,42 @@
+// import axios from 'axios'
+
+// export function getAPIClient() {
+// 	const api = axios.create({
+// 		baseURL: 'https://fintrack.serveo.net',
+// 	})
+
+// 	api.interceptors.request.use((config) => {
+// 		return config
+// 	})
+
+// 	return api
+// }
+
 import axios from 'axios'
-import { env } from 'process'
-import { parseCookies } from 'nookies'
-import Cookies from 'js-cookie'
+import { useSession } from 'next-auth/react'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getAPIClient(ctx?: any) {
-	const { 'next-auth.session-token': token } = parseCookies(ctx)
+const getInstance = (token: string) => {
+	const axiosApiInstance = axios.create()
 
-	console.log(Cookies.get('nextauth.token'))
-	console.log(Cookies.get('next-auth.session-token'))
+	axiosApiInstance.interceptors.request.use(
+		(config) => {
+			if (token) {
+				config.headers.common = {
+					Authorization: `Bearer ${token}`,
+				}
+			}
+			return config
+		},
+		(error) => {
+			Promise.reject(error)
+		},
+	)
 
-	console.log({ token })
+	return axiosApiInstance
+}
 
-	const api = axios.create({
-		baseURL: env.NEXT_PUBLIC_API,
-	})
-
-	api.interceptors.request.use((config) => {
-		return config
-	})
-
-	if (token) {
-		api.defaults.headers.Authorization = `Bearer ${token}`
-	}
-
-	return api
+export function useAxios() {
+	const { data: session } = useSession()
+	const token = session?.user as string
+	return getInstance(token)
 }

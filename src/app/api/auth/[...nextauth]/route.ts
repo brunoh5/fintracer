@@ -1,4 +1,4 @@
-import { api } from '@/services/api'
+import axios from 'axios'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
@@ -16,7 +16,7 @@ const nextAuthOptions: NextAuthOptions = {
 					password: string
 				}
 
-				const response = await api.post('/sessions', { email, password })
+				const response = await axios.post('/sessions', { email, password })
 
 				const { token } = response.data
 
@@ -31,19 +31,22 @@ const nextAuthOptions: NextAuthOptions = {
 	pages: {
 		signIn: '/',
 	},
+	secret: process.env.NEXTAUTH_SECRET,
+	session: {
+		strategy: 'jwt',
+		maxAge: 60 * 60 * 24 * 365, // 365 days
+	},
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				token.jwt = user
+				token.user = user
 			}
 
 			return token
 		},
 		async session({ session, token }) {
-			if (token.jwt) {
-				session.user = token.jwt
-			}
-
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			session.user = token.user as any
 			return session
 		},
 	},
