@@ -1,32 +1,43 @@
 'use client'
 
 import dayJs from 'dayjs'
-import Cookie from 'js-cookie'
-import { Bell, ChevronsRight, Search } from 'lucide-react'
+import { Bell, ChevronsRight } from 'lucide-react'
 import { api } from '@/services/api'
-import { Input } from './ui/Input'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { UserProps } from '@/types'
+import { SearchInput } from './search-input'
+import { useSession } from 'next-auth/react'
+import { Session } from 'next-auth'
 
 interface HeaderProps {
 	hasName?: boolean
 }
 
 export function Header({ hasName = false }: HeaderProps) {
-	const token = Cookie.get('token')
+	const { data: session } = useSession()
 
-	const { data: user } = useSuspenseQuery<UserProps>({
-		queryKey: ['profile'],
-		queryFn: async () => {
-			const response = await api.get('/me', {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+	// const { data: user } = useSuspenseQuery<UserProps>({
+	// 	queryKey: ['profile', session],
+	// 	queryFn: async () => {
+	// 		const session =
 
-			return response.data.user
-		},
-	})
+	// 		const response = await api.get('/me', {
+	// 			headers: {
+	// 				Authorization: `Bearer ${session?.user}`,
+	// 			},
+	// 		})
+
+	// 		return response.data.user
+	// 	},
+	// 	staleTime: 1000 * 60 * 60 * 24, // 1 day
+	// })
+
+	const user = {
+		name: 'Testing',
+		avatar_url: '',
+	}
+
+	console.log(session)
 
 	return (
 		<header className="flex h-[88px] items-center justify-between pb-5 pl-6 pr-8 pt-5">
@@ -46,15 +57,7 @@ export function Header({ hasName = false }: HeaderProps) {
 			</div>
 			<div className="flex h-[416px] items-center justify-between gap-8">
 				<Bell />
-				<Input.Wrapper>
-					<Input.Content
-						name="search"
-						placeholder="Search here"
-						theme="light"
-						autoComplete="off"
-					/>
-					<Input.Icon icon={Search} position="right" />
-				</Input.Wrapper>
+				<SearchInput />
 			</div>
 		</header>
 	)

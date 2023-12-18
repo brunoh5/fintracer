@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FormEvent, SyntheticEvent, useRef } from 'react'
+import { SyntheticEvent, useRef } from 'react'
 import { signIn } from 'next-auth/react'
 
-import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
+import { Input } from '@/components/input'
 
 export function LoginForm() {
 	const { toast } = useToast()
@@ -39,48 +39,49 @@ export function LoginForm() {
 	}
 
 	return (
-		<form onSubmit={handleLogin}>
-			<input type="text" name="email" id="email" ref={emailRef} />
-			<input type="password" name="password" id="password" ref={passwordRef} />
-			<button type="submit">Enviar</button>
+		<form onSubmit={handleLogin} className="flex flex-col gap-6">
+			<div>
+				<label
+					htmlFor="email"
+					className="text-gray-900 font-semibold leading-6 block"
+				>
+					Email Address
+				</label>
+				<Input
+					type="email"
+					id="email"
+					ref={emailRef}
+					placeholder="johndoe@email.com"
+					autoComplete="email"
+					required
+				/>
+			</div>
+
+			<div>
+				<div>
+					<label
+						htmlFor="password"
+						className="text-gray-900 font-semibold leading-6 block"
+					>
+						Email Address
+					</label>
+					<Link href="/forgotPassword" className="text-xs text-persian-green">
+						Forgot Password
+					</Link>
+				</div>
+				<Input
+					type="password"
+					id="password"
+					ref={passwordRef}
+					placeholder="*********"
+					autoComplete="current-password"
+					required
+				/>
+			</div>
+
+			<Button aria-label="login submit" type="submit">
+				Login
+			</Button>
 		</form>
-		// <form onSubmit={handleLogin} className="flex flex-col gap-6">
-		// 	<Input.Root>
-		// 		<Input.Label name="email" text="Email Address" />
-		// 		<Input.Wrapper>
-		// 			<Input.Content
-		// 				name="email"
-		// 				id="email"
-		// 				placeholder="johndoe@email.com"
-		// 				type="email"
-		// 				autoComplete="email"
-		// 				required
-		// 			/>
-		// 		</Input.Wrapper>
-		// 	</Input.Root>
-
-		// 	<Input.Root>
-		// 		<div className="flex justify-between">
-		// 			<Input.Label name="password" text="Password" />
-		// 			<Link href="/forgotPassword" className="text-xs text-persian-green">
-		// 				Forgot Password
-		// 			</Link>
-		// 		</div>
-		// 		<Input.Wrapper>
-		// 			<Input.Content
-		// 				name="password"
-		// 				id="password"
-		// 				placeholder="*********"
-		// 				type="password"
-		// 				autoComplete="current-password"
-		// 				required
-		// 			/>
-		// 		</Input.Wrapper>
-		// 	</Input.Root>
-
-		// 	<Button aria-label="login submit" type="submit">
-		// 		Login
-		// 	</Button>
-		// </form>
 	)
 }
