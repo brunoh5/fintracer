@@ -5,7 +5,7 @@ import Credentials from 'next-auth/providers/credentials'
 const nextAuthOptions: NextAuthOptions = {
 	providers: [
 		Credentials({
-			name: 'login',
+			name: 'Credentials',
 			credentials: {
 				email: { label: 'Username', type: 'text' },
 				password: { label: 'password', type: 'password' },
@@ -31,18 +31,22 @@ const nextAuthOptions: NextAuthOptions = {
 	pages: {
 		signIn: '/',
 	},
-	// callbacks: {
-	// 	async jwt({ token }) {
-	// 		console.log(token)
-	// 		return token
-	// 	},
-	// 	async session({ session, token }) {
-	// 		if (token) {
-	// 			session.jwt = token
-	// 		}
-	// 		return session
-	// 	},
-	// },
+	callbacks: {
+		async jwt({ token, user }) {
+			if (user) {
+				token.jwt = user
+			}
+
+			return token
+		},
+		async session({ session, token }) {
+			if (token.jwt) {
+				session.user = token.jwt
+			}
+
+			return session
+		},
+	},
 }
 
 const handler = NextAuth(nextAuthOptions)

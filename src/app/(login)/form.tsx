@@ -13,21 +13,18 @@ export function LoginForm() {
 	const { toast } = useToast()
 	const { replace } = useRouter()
 
-	const emailRef = useRef('')
-	const passwordRef = useRef('')
+	const emailRef = useRef<HTMLInputElement>(null)
+	const passwordRef = useRef<HTMLInputElement>(null)
 
 	async function handleLogin(event: SyntheticEvent) {
 		event.preventDefault()
 
-		// const formData = new FormData(event.currentTarget)
+		const email = emailRef.current?.value
+		const password = passwordRef.current?.value
 
-		const email = emailRef.current
-		const password = passwordRef.current
-
-		const response = await signIn('login', {
+		const response = await signIn('credentials', {
 			email,
 			password,
-			redirect: false,
 		})
 
 		if (response?.error) {
@@ -38,7 +35,7 @@ export function LoginForm() {
 			})
 		}
 
-		// replace('/overview')
+		replace('/overview')
 	}
 
 	return (

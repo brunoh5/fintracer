@@ -10,8 +10,6 @@ export default async function DashboardLayout({
 }) {
 	const session = await getServerSession(nextAuthOptions)
 
-	// console.log(session)
-
 	if (!session) {
 		redirect('/')
 	}

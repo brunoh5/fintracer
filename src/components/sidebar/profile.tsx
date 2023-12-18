@@ -8,6 +8,7 @@ import { Suspense } from 'react'
 
 import { api } from '@/services/api'
 import { ProfileSkeleton } from './profile-skeleton'
+import { getSession, useSession } from 'next-auth/react'
 
 type User = {
 	name: string
@@ -16,6 +17,10 @@ type User = {
 
 export function Profile() {
 	const token = Cookies.get('token')
+
+	const { data: session } = useSession()
+
+	console.log(session)
 
 	const { data: user } = useSuspenseQuery<User>({
 		queryKey: ['profile'],

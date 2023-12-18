@@ -10,21 +10,9 @@ export function ForgotForm() {
 	const { push } = useRouter()
 
 	async function handleForgotPassword(event: FormEvent<HTMLFormElement>) {
-		const formData = new FormData(event.currentTarget)
+		event.preventDefault()
 
-		const data = {
-			email: formData.get('email'),
-		}
-
-		try {
-			const response = await api.post('/users/forgotPassword', data)
-
-			console.log(response.data)
-
-			push('/dashboard')
-		} catch (err) {
-			console.log(err)
-		}
+		return null
 	}
 
 	return (

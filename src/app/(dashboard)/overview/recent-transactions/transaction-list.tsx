@@ -16,8 +16,6 @@ export function TransactionsList() {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 
-			console.log(response.data.transactions)
-
 			return response.data.transactions
 		},
 		staleTime: 1000 * 60 * 5,
@@ -26,7 +24,6 @@ export function TransactionsList() {
 	return (
 		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] pb-2">
 			{transactions?.map((transaction, index) => {
-				console.log(transaction)
 				return <Transaction key={index} transaction={transaction} />
 			})}
 		</div>
