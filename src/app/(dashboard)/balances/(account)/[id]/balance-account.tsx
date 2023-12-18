@@ -1,20 +1,21 @@
 'use client'
 
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
+
 import { Button } from '@/components/ui/button'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import Cookie from 'js-cookie'
 
 export function BalanceAccount({ accountId }: { accountId: string }) {
-	const token = Cookie.get('token')
-
 	const { data: account } = useSuspenseQuery<AccountProps>({
 		queryKey: ['accounts', accountId],
 		queryFn: async () => {
+			const session = await getSession()
+
 			const response = await api.get(`/accounts/${accountId}`, {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 

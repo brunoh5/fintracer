@@ -1,24 +1,24 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
+
 import { TransactionProps } from '@/types'
 import { api } from '@/services/api'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import Cookies from 'js-cookie'
 import { Transaction } from './components/transaction'
 
 export function TransactionsList() {
-	const token = Cookies.get('token')
-
-	const { data: transactions } = useSuspenseQuery<TransactionProps[]>({
+	const { data: transactions } = useQuery<TransactionProps[]>({
 		queryKey: ['recent-transactions'],
 		queryFn: async () => {
+			const session = await getSession()
+
 			const response = await api.get('/users/transactions', {
-				headers: { Authorization: `Bearer ${token}` },
+				headers: { Authorization: `Bearer ${session?.user}` },
 			})
 
 			return response.data.transactions
 		},
-		staleTime: 1000 * 60 * 5,
 	})
 
 	return (

@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { Suspense } from 'react'
+
 import { AccountList } from './account-list'
-import { AccountListSkeleton } from './account-list-skeleton'
 import { Balance } from './balance'
 
 export async function TotalBalance() {
@@ -16,9 +15,7 @@ export async function TotalBalance() {
 					</Link>
 				</div>
 
-				<Suspense key={'test'} fallback={<AccountListSkeleton />}>
-					<AccountList />
-				</Suspense>
+				<AccountList />
 			</div>
 		</div>
 	)

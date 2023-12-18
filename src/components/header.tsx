@@ -3,41 +3,31 @@
 import dayJs from 'dayjs'
 import { Bell, ChevronsRight } from 'lucide-react'
 import { api } from '@/services/api'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { UserProps } from '@/types'
 import { SearchInput } from './search-input'
-import { useSession } from 'next-auth/react'
-import { Session } from 'next-auth'
+import { getSession } from 'next-auth/react'
 
 interface HeaderProps {
 	hasName?: boolean
 }
 
 export function Header({ hasName = false }: HeaderProps) {
-	const { data: session } = useSession()
+	const { data: user } = useQuery<UserProps>({
+		queryKey: ['profile'],
+		queryFn: async () => {
+			const session = await getSession()
 
-	// const { data: user } = useSuspenseQuery<UserProps>({
-	// 	queryKey: ['profile', session],
-	// 	queryFn: async () => {
-	// 		const session =
+			const response = await api.get('/me', {
+				headers: {
+					Authorization: `Bearer ${session?.user}`,
+				},
+			})
 
-	// 		const response = await api.get('/me', {
-	// 			headers: {
-	// 				Authorization: `Bearer ${session?.user}`,
-	// 			},
-	// 		})
-
-	// 		return response.data.user
-	// 	},
-	// 	staleTime: 1000 * 60 * 60 * 24, // 1 day
-	// })
-
-	const user = {
-		name: 'Testing',
-		avatar_url: '',
-	}
-
-	console.log(session)
+			return response.data.user
+		},
+		staleTime: 1000 * 60 * 60 * 24, // 1 day
+	})
 
 	return (
 		<header className="flex h-[88px] items-center justify-between pb-5 pl-6 pr-8 pt-5">

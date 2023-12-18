@@ -1,38 +1,35 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
+
 import { api } from '@/services/api'
 import { formatPrice } from '@/utils/format-price'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import Cookies from 'js-cookie'
-
-type Account = {
-	id: string
-	type: string
-	number: string
-	balance: number
-}
+import { AccountProps } from '@/types'
 
 export function Balance() {
-	const token = Cookies.get('token')
-
-	const { data: totalBalance } = useSuspenseQuery<number>({
+	const { data: totalBalance } = useQuery<number>({
 		queryKey: ['balance'],
 		queryFn: async () => {
+			const session = await getSession()
+
 			const response = await api.get('/accounts', {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 
 			const { accounts } = response.data
 
-			const totalBalance = accounts.reduce((acc: number, account: Account) => {
-				return (acc += Number(account.balance))
-			}, 0)
+			const totalBalance = accounts.reduce(
+				(acc: number, account: AccountProps) => {
+					return (acc += Number(account.balance))
+				},
+				0,
+			)
 
 			return totalBalance
 		},
-		staleTime: 1000 * 60 * 5,
 	})
 
 	return (

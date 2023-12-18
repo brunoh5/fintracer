@@ -15,8 +15,6 @@ export function Profile() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			console.log('test')
-
 			const response = await api.get('/me', {
 				headers: {
 					Authorization: `Bearer ${session?.user}`,

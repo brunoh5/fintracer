@@ -1,10 +1,11 @@
 'use client'
 
 import dayJs from 'dayjs'
-import Cookie from 'js-cookie'
+import { useQuery } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
+
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { api } from '@/services/api'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { TransactionProps } from '@/types'
 
 const transactionType = {
@@ -25,14 +26,14 @@ type Type = keyof typeof transactionType
 type Method = keyof typeof paymentMethods
 
 export function TransactionsList({ accountId }: { accountId: string }) {
-	const token = Cookie.get('token')
-
-	const { data: transactions } = useSuspenseQuery<TransactionProps[]>({
+	const { data: transactions } = useQuery<TransactionProps[]>({
 		queryKey: ['account', 'transactions', accountId],
 		queryFn: async () => {
+			const session = await getSession()
+
 			const response = await api.get(`/transactions/${accountId}/all`, {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 

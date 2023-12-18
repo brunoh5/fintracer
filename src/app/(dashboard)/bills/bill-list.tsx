@@ -1,22 +1,22 @@
 'use client'
 
 import dayjs from 'dayjs'
-import Cookies from 'js-cookie'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { BillsProps } from '@/types'
 import { api } from '@/services/api'
 
 export function BillList() {
-	const token = Cookies.get('token')
-
-	const { data: bills } = useSuspenseQuery<BillsProps[]>({
+	const { data: bills } = useQuery<BillsProps[]>({
 		queryKey: ['bills'],
 		queryFn: async () => {
+			const session = await getSession()
+
 			const response = await api.get('/bills', {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 

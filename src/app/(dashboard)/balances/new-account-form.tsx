@@ -1,39 +1,39 @@
 /* eslint-disable n/handle-callback-err */
 'use client'
 
-import Cookie from 'js-cookie'
 import { X } from 'lucide-react'
 import { FormEvent, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
 
 import { api } from '@/services/api'
 import { formatAccountNumber } from '@/utils/format-account-number'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AccountProps } from '@/types'
 
 export function NewAccountForm() {
-	const token = Cookie.get('token')
 	const [isOpen, setIsOpen] = useState(false)
 	const [formattedNumber, setFormattedNumber] = useState('')
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation({
 		mutationKey: ['balance/accounts'],
-		mutationFn: (data: object) => {
+		mutationFn: async (data: object) => {
+			const session = await getSession()
+
 			return api.post('/accounts', data, {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 		},
 		onMutate: async (newAccount) => {
-			// Apaga o quer tiver salvo
 			await queryClient.cancelQueries({ queryKey: ['balance/accounts'] })
-			// Salva as ultimas contas
+
 			const previousAccounts = queryClient.getQueryData(['balance/accounts'])
-			// Salva o novo estado
+
 			queryClient.setQueryData(['balance/accounts'], (old: AccountProps[]) => [
 				...old,
 				newAccount,

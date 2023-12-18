@@ -41,3 +41,8 @@ export type BillsProps = {
 	amount: number
 	userId: string
 }
+
+export type CategoryProps = {
+	id: string
+	name: string
+}

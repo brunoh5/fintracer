@@ -1,7 +1,5 @@
 import { Header } from '@/components/header'
-import { Suspense } from 'react'
 import { AccountList } from './accounts-list'
-import { AccountListSkeleton } from '../overview/total-balance/account-list-skeleton'
 import { NewAccountForm } from './new-account-form'
 
 export default function Balances() {
@@ -13,10 +11,7 @@ export default function Balances() {
 				<h2 className="text-[22px] text-gray-500">Contas</h2>
 
 				<div className="grid h-screen w-full grid-cols-3 grid-rows-[288px] gap-x-6 gap-y-8">
-					{/* <AccountList /> */}
-					<Suspense fallback={<AccountListSkeleton />}>
-						<AccountList />
-					</Suspense>
+					<AccountList />
 
 					<NewAccountForm />
 				</div>

@@ -2,68 +2,72 @@
 
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
-import Cookies from 'js-cookie'
-import { formatPrice } from '@/utils/format-price'
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
+
+import { formatPrice } from '@/utils/format-price'
 import { api } from '@/services/api'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { AccountProps } from '@/types'
+import { AccountListSkeleton } from './account-list-skeleton'
 
 export function AccountList() {
 	const [currentPage, setCurrentPage] = useState(0)
 
-	const token = Cookies.get('token')
-
-	const { data: accounts } = useSuspenseQuery<AccountProps[]>({
+	const { data: accounts, isLoading } = useQuery<AccountProps[]>({
 		queryKey: ['total-balance/accounts'],
 		queryFn: async () => {
+			const session = await getSession()
+
 			const response = await api.get('/accounts', {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 
 			return response.data.accounts
 		},
-
-		staleTime: 1000 * 60 * 5,
 	})
 
 	return (
 		<>
 			<div className="overflow-hidden">
-				{accounts.map((account, index) => (
-					<div
-						key={account.id}
-						data-index={index === currentPage}
-						className="items-center justify-between rounded bg-persian-green p-4 hidden data-[index=true]:flex"
-					>
-						{/* Account */}
-						<div className="flex flex-col">
-							<span className="text-white/70">Tipo de conta</span>
-							<p className="text-white">{account.type}</p>
-							<span className="text-white/70">{account.number}</span>
-						</div>
-						<div className="flex flex-col justify-between">
-							<Image
-								src="/mastercard.png"
-								alt="Mastercard"
-								width={12}
-								height={12}
-								className="self-end"
-							/>
-							<div className="self flex items-center justify-between">
-								<span className="text-white">
-									{formatPrice(account.balance)}
-								</span>
-								<ArrowUpRight
-									size={16}
-									className="rounded-full bg-white text-persian-green"
+				{isLoading ? (
+					<AccountListSkeleton />
+				) : (
+					accounts?.map((account, index) => (
+						<div
+							key={account.id}
+							data-index={index === currentPage}
+							className="items-center justify-between rounded bg-persian-green p-4 hidden data-[index=true]:flex"
+						>
+							{/* Account */}
+							<div className="flex flex-col">
+								<span className="text-white/70">Tipo de conta</span>
+								<p className="text-white">{account.type}</p>
+								<span className="text-white/70">{account.number}</span>
+							</div>
+							<div className="flex flex-col justify-between">
+								<Image
+									src="/mastercard.png"
+									alt="Mastercard"
+									width={12}
+									height={12}
+									className="self-end"
 								/>
+								<div className="self flex items-center justify-between">
+									<span className="text-white">
+										{formatPrice(account.balance)}
+									</span>
+									<ArrowUpRight
+										size={16}
+										className="rounded-full bg-white text-persian-green"
+									/>
+								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					))
+				)}
 			</div>
 
 			<div className="mt-2 flex items-center justify-between">

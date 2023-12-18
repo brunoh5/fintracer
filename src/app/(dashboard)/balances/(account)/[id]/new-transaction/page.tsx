@@ -1,53 +1,56 @@
 'use client'
 
-import { Input } from '@/components/ui/Input'
+import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
+import { FormEvent, useRef } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getSession } from 'next-auth/react'
+
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/header'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
-import dayjs from 'dayjs'
-import Cookie from 'js-cookie'
-import { useRouter } from 'next/navigation'
-import { FormEvent, useEffect, useState } from 'react'
-
-type Category = {
-	id: string
-	name: string
-}
+import { CategoryProps } from '@/types'
+import { Input } from '@/components/input'
 
 export default function Account({ params }: { params: { id: string } }) {
-	const token = Cookie.get('token')
 	const { toast } = useToast()
 	const router = useRouter()
 
-	const [categories, setCategories] = useState<Category[]>([])
+	const nameRef = useRef<HTMLInputElement>(null)
+	const shopNameRef = useRef<HTMLInputElement>(null)
+	const paidAtRef = useRef<HTMLInputElement>(null)
+	const amountRef = useRef<HTMLInputElement>(null)
 
-	const [paid_at, setPaidAt] = useState('')
+	const { data: categories } = useQuery<CategoryProps[]>({
+		queryKey: ['categories'],
+		queryFn: async () => {
+			const session = await getSession()
 
-	useEffect(() => {
-		api
-			.get('/categories', {
+			const response = await api.get('/categories', {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
-			.then((res) => {
-				setCategories(res.data.categories)
-			})
-	}, [token])
+
+			return response.data.categories
+		},
+	})
 
 	async function handleRegister(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
+
+		const session = await getSession()
 
 		try {
 			const formData = new FormData(event.currentTarget)
 
 			const data = {
 				accountId: params.id,
-				name: formData.get('name'),
+				name: nameRef.current?.value,
 				shopName: formData.get('shopName'),
-				amount: formData.get('amount'),
-				paid_at: dayjs(paid_at) || null,
+				amount: amountRef.current?.value,
+				paid_at: dayjs(paidAtRef.current?.value) || null,
 				type: formData.get('type'),
 				payment_method: formData.get('payment_method'),
 				categoryId: formData.get('categoryId'),
@@ -55,7 +58,7 @@ export default function Account({ params }: { params: { id: string } }) {
 
 			await api.post('/transactions', data, {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 
@@ -75,41 +78,45 @@ export default function Account({ params }: { params: { id: string } }) {
 
 			<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
 				<form onSubmit={handleRegister} className="flex flex-col gap-6">
-					<Input.Root>
-						<Input.Label text="Name" name="name" />
-						<Input.Wrapper>
-							<Input.Content name="name" placeholder="Nome da transação" />
-						</Input.Wrapper>
-					</Input.Root>
+					<div>
+						<label
+							htmlFor="name"
+							className="text-gray-900 font-semibold leading-6 block"
+						>
+							Nome da transação
+						</label>
+						<Input type="text" id="name" ref={nameRef} />
+					</div>
 
-					<Input.Root>
-						<Input.Label text="Estabelecimento/Site" name="shopName" />
-						<Input.Wrapper>
-							<Input.Content name="shopName" placeholder="Walmart" />
-						</Input.Wrapper>
-					</Input.Root>
+					<div>
+						<label
+							htmlFor="shop_name"
+							className="text-gray-900 font-semibold leading-6 block"
+						>
+							Estabelecimento/Site
+						</label>
+						<Input type="text" id="shop_name" ref={shopNameRef} />
+					</div>
 
-					<Input.Root>
-						<Input.Label name="amount" text="Valor" />
-						<Input.Wrapper>
-							<Input.Content type="number" name="amount" />
-						</Input.Wrapper>
-					</Input.Root>
+					<div>
+						<label
+							htmlFor="amount"
+							className="text-gray-900 font-semibold leading-6 block"
+						>
+							Valor
+						</label>
+						<Input type="number" id="number" ref={amountRef} />
+					</div>
 
-					<Input.Root>
-						<Input.Label
-							name="paid_at"
-							text="Se estiver pago preencha a data"
-						/>
-						<Input.Wrapper>
-							<Input.Content
-								type="date"
-								name="paid_at"
-								value={paid_at}
-								onChange={(e) => setPaidAt(e.target.value)}
-							/>
-						</Input.Wrapper>
-					</Input.Root>
+					<div>
+						<label
+							htmlFor="paid_at"
+							className="text-gray-900 font-semibold leading-6 block"
+						>
+							Preencha caso esteja pago
+						</label>
+						<Input type="date" id="paid_at" ref={paidAtRef} />
+					</div>
 
 					<div>
 						<div>
@@ -145,7 +152,7 @@ export default function Account({ params }: { params: { id: string } }) {
 							Qual categoria esta transação pertence ?
 						</label>
 						<select name="categoryId" id="categoryId">
-							{categories.map((category: Category) => (
+							{categories?.map((category: CategoryProps) => (
 								<option key={category.id} value={category.id}>
 									{category.name}
 								</option>
