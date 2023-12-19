@@ -33,6 +33,8 @@ export function LoginForm() {
 				title: 'Algo de errado ocorreu',
 				description: `${response.error}`,
 			})
+
+			return
 		}
 
 		replace('/overview')

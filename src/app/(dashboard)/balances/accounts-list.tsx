@@ -61,7 +61,9 @@ export function AccountList() {
 								</div>
 							</div>
 							<div className="flex items-center justify-between">
-								<button className="text-primary">Remove</button>
+								<button className="text-primary" aria-label="Remove Account">
+									Remove
+								</button>
 
 								<Navigation.Root href={`/balances/${account.id}`}>
 									Details

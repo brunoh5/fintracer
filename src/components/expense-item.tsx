@@ -1,13 +1,13 @@
 import {
 	ArrowRight,
-	Home,
-	ArrowUp,
-	Utensils,
-	ArrowDown,
-	Car,
-	Clapperboard,
-	ShoppingBag,
-	LayoutDashboard,
+	// Home,
+	// ArrowUp,
+	// Utensils,
+	// ArrowDown,
+	// Car,
+	// Clapperboard,
+	// ShoppingBag,
+	// LayoutDashboard,
 } from 'lucide-react'
 import { ElementType } from 'react'
 

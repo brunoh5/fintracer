@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 
 import { LoginForm } from './form'
-import { nextAuthOptions } from '../api/auth/[...nextauth]/route'
+import { nextAuthOptions } from '../api/auth/[...nextauth]/options'
 
 export default async function Home() {
 	const session = await getServerSession(nextAuthOptions)

@@ -1,6 +1,5 @@
 'use client'
 
-import Cookie from 'js-cookie'
 import { useRouter } from 'next/navigation'
 import { FormEvent } from 'react'
 
@@ -11,31 +10,30 @@ import { useToast } from '@/components/ui/use-toast'
 
 export function SignUpForm() {
 	const { toast } = useToast()
-	const router = useRouter()
+	const { replace } = useRouter()
 
 	async function handleRegister(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
 
-		try {
-			const formData = new FormData(event.currentTarget)
+		const formData = new FormData(event.currentTarget)
 
-			const response = await api.post('/users/create', {
-				name: formData.get('name'),
-				email: formData.get('email'),
-				password: formData.get('password'),
-			})
+		const response = await api.post('/users/create', {
+			name: formData.get('name'),
+			email: formData.get('email'),
+			password: formData.get('password'),
+		})
 
-			Cookie.set('token', response.data.token)
-			Cookie.set('user', response.data.user)
-
-			router.push('/dashboard')
-		} catch (err) {
+		if (response?.status !== 201) {
 			toast({
 				variant: 'destructive',
-				title: 'Uh oh! Something went wrong',
-				description: `${err}`,
+				title: 'Algo de errado ocorreu',
+				description: `${response.data}`,
 			})
+
+			return
 		}
+
+		replace('/overview')
 	}
 
 	return (

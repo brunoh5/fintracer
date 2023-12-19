@@ -6,9 +6,10 @@ import { getSession } from 'next-auth/react'
 import { api } from '@/services/api'
 import { formatPrice } from '@/utils/format-price'
 import { AccountProps } from '@/types'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function Balance() {
-	const { data: totalBalance } = useQuery<number>({
+	const { data: totalBalance, isLoading } = useQuery<number>({
 		queryKey: ['balance'],
 		queryFn: async () => {
 			const session = await getSession()
@@ -33,8 +34,14 @@ export function Balance() {
 	})
 
 	return (
-		<span className="text-[22px] font-bold text-eerie-black-900">
-			{formatPrice(totalBalance ?? 0)}
-		</span>
+		<>
+			{isLoading ? (
+				<Skeleton />
+			) : (
+				<span className="text-[22px] font-bold text-eerie-black-900">
+					{formatPrice(totalBalance ?? 0)}
+				</span>
+			)}
+		</>
 	)
 }

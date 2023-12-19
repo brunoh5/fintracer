@@ -6,9 +6,10 @@ import { getSession } from 'next-auth/react'
 import { TransactionProps } from '@/types'
 import { api } from '@/services/api'
 import { Transaction } from './components/transaction'
+import { TransactionListSkeleton } from './transaction-list-skeleton'
 
 export function TransactionsList() {
-	const { data: transactions } = useQuery<TransactionProps[]>({
+	const { data: transactions, isLoading } = useQuery<TransactionProps[]>({
 		queryKey: ['recent-transactions'],
 		queryFn: async () => {
 			const session = await getSession()
@@ -23,9 +24,13 @@ export function TransactionsList() {
 
 	return (
 		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] pb-2">
-			{transactions?.map((transaction, index) => {
-				return <Transaction key={index} transaction={transaction} />
-			})}
+			{isLoading ? (
+				<TransactionListSkeleton />
+			) : (
+				transactions?.map((transaction, index) => (
+					<Transaction key={index} transaction={transaction} />
+				))
+			)}
 		</div>
 	)
 }

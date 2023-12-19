@@ -13,7 +13,7 @@ export function SearchInput() {
 	return (
 		<div className="relative mt-2 rounded-md shadow-sm w-full">
 			<input
-				type="search"
+				type="text"
 				className="block w-full rounded-xl border-0 py-3 text-gray-900 ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-special-gray-500 leading-[22px] focus:placeholder:text-special-gray-500 pl-7 pr-20"
 				id="search"
 				autoComplete="off"

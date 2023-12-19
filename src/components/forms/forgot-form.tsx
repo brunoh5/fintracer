@@ -1,14 +1,10 @@
 'use client'
 
-import { api } from '@/services/api'
-import { useRouter } from 'next/navigation'
 import { FormEvent } from 'react'
 import { Input } from '../ui/Input'
 import { Button } from '../ui/button'
 
 export function ForgotForm() {
-	const { push } = useRouter()
-
 	async function handleForgotPassword(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
 

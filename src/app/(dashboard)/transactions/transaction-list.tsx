@@ -1,11 +1,8 @@
 'use client'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { api } from '@/services/api'
-import { TransactionProps } from '@/types'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import Cookie from 'js-cookie'
 import {
 	Car,
 	Clapperboard,
@@ -14,6 +11,10 @@ import {
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
+import { getSession } from 'next-auth/react'
+
+import { TransactionProps } from '@/types'
+import { api } from '@/services/api'
 
 const categoryIcon = {
 	Casa: <Home size={24} className="mr-4" />,
@@ -38,13 +39,13 @@ const paymentMethods = {
 type Method = keyof typeof paymentMethods
 
 export function TransactionList() {
-	const token = Cookie.get('token')
-
-	const { data: transactions } = useSuspenseQuery<TransactionProps[]>({
+	const { data: transactions, isLoading } = useQuery<TransactionProps[]>({
 		queryKey: ['users', 'transactions'],
 		queryFn: async () => {
+			const session = await getSession()
+
 			const response = await api.get('/users/transactions', {
-				headers: { Authorization: `Bearer ${token}` },
+				headers: { Authorization: `Bearer ${session?.user}` },
 			})
 
 			return response.data.transactions
@@ -53,31 +54,35 @@ export function TransactionList() {
 
 	return (
 		<TableBody>
-			{transactions.map((transaction: TransactionProps, index) => (
-				<TableRow key={index}>
-					<TableCell className="flex items-center text-left">
-						{categoryIcon[transaction.category.name as Icon]}
-						<span className="font-semibold">{transaction.name}</span>
-					</TableCell>
+			{isLoading ? (
+				<p>Carregando</p>
+			) : (
+				transactions?.map((transaction: TransactionProps) => (
+					<TableRow key={transaction.id}>
+						<TableCell className="flex items-center text-left">
+							{categoryIcon[transaction.category.name as Icon]}
+							<span className="font-semibold">{transaction.name}</span>
+						</TableCell>
 
-					<TableCell>{transaction.shopName}</TableCell>
+						<TableCell>{transaction.shopName}</TableCell>
 
-					<TableCell>
-						{dayjs(transaction.created_at).format('MMM DD YYYY')}
-					</TableCell>
+						<TableCell>
+							{dayjs(transaction.created_at).format('MMM DD YYYY')}
+						</TableCell>
 
-					<TableCell>
-						{paymentMethods[transaction.payment_method as Method]}
-					</TableCell>
+						<TableCell>
+							{paymentMethods[transaction.payment_method as Method]}
+						</TableCell>
 
-					<TableCell className="font-semibold">
-						{new Intl.NumberFormat('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						}).format(transaction.amount)}
-					</TableCell>
-				</TableRow>
-			))}
+						<TableCell className="font-semibold">
+							{new Intl.NumberFormat('pt-BR', {
+								style: 'currency',
+								currency: 'BRL',
+							}).format(transaction.amount)}
+						</TableCell>
+					</TableRow>
+				))
+			)}
 		</TableBody>
 	)
 }

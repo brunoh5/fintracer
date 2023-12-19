@@ -1,6 +1,6 @@
 'use client'
 
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { api } from '@/services/api'
 import { AccountProps } from '@/types'
 
 export function BalanceAccount({ accountId }: { accountId: string }) {
-	const { data: account } = useSuspenseQuery<AccountProps>({
+	const { data: account } = useQuery<AccountProps>({
 		queryKey: ['accounts', accountId],
 		queryFn: async () => {
 			const session = await getSession()

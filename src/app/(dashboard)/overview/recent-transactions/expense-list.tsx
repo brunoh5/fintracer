@@ -1,6 +1,6 @@
 'use client'
 
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { TransactionProps } from '@/types'
@@ -8,12 +8,12 @@ import { api } from '@/services/api'
 import { Transaction } from './components/transaction'
 
 export function Expenses() {
-	const { data: transactions } = useSuspenseQuery<TransactionProps[]>({
+	const { data: transactions } = useQuery<TransactionProps[]>({
 		queryKey: ['recent-transactions'],
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/users/transactions', {
+			const response = await api.get('/users/transactions?type=expense', {
 				headers: { Authorization: `Bearer ${session?.user}` },
 			})
 

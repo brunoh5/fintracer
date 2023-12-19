@@ -1,10 +1,10 @@
 import {
 	ArrowRightLeft,
-	CreditCard,
-	Crosshair,
+	// CreditCard,
+	// Crosshair,
+	// Settings,
 	LayoutGrid,
 	Receipt,
-	Settings,
 	Wallet,
 } from 'lucide-react'
 
@@ -42,18 +42,18 @@ export function Sidebar() {
 						<Navigation.Icon icon={Receipt} />
 						Despesas
 					</Navigation.Root>
-					<Navigation.Root href="/expenses" shouldMatchExactHref={true}>
+					{/* <Navigation.Root href="/expenses" shouldMatchExactHref={true}>
 						<Navigation.Icon icon={CreditCard} />
 						Gastos
-					</Navigation.Root>
-					<Navigation.Root href="/goals" shouldMatchExactHref={true}>
+					</Navigation.Root> */}
+					{/* <Navigation.Root href="/goals" shouldMatchExactHref={true}>
 						<Navigation.Icon icon={Crosshair} />
 						Objetivos
-					</Navigation.Root>
-					<Navigation.Root href="/settings/account">
+					</Navigation.Root> */}
+					{/* <Navigation.Root href="/settings/account">
 						<Navigation.Icon icon={Settings} />
 						Configurações
-					</Navigation.Root>
+					</Navigation.Root> */}
 				</nav>
 
 				<LogoutButton />

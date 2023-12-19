@@ -1,8 +1,9 @@
-import { Header } from '@/components/header'
-import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
+
+import { Header } from '@/components/header'
+import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { BalanceAccount } from './balance-account'
 import { TransactionsList } from './transactions-list'
 
