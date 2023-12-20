@@ -3,8 +3,7 @@
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { TransactionsList } from './transaction-list'
-import { Suspense, useState } from 'react'
-import { TransactionListSkeleton } from './transaction-list-skeleton'
+import { useState } from 'react'
 import { RevenueList } from './revenue-list'
 import { Expenses } from './expense-list'
 
@@ -35,36 +34,24 @@ export function RecentTransaction() {
 					<span
 						onClick={() => setActiveTab('revenues')}
 						data-active={activeTab === 'revenues'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green cursor-pointer"
 					>
 						Receita
 					</span>
 					<span
 						onClick={() => setActiveTab('expenses')}
 						data-active={activeTab === 'expenses'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green cursor-pointer"
 					>
 						Despesa
 					</span>
 				</div>
 
-				{activeTab === 'all' && (
-					<Suspense fallback={<TransactionListSkeleton />}>
-						<TransactionsList />
-					</Suspense>
-				)}
+				{activeTab === 'all' && <TransactionsList />}
 
-				{activeTab === 'revenues' && (
-					<Suspense fallback={<TransactionListSkeleton />}>
-						<RevenueList />
-					</Suspense>
-				)}
+				{activeTab === 'revenues' && <RevenueList />}
 
-				{activeTab === 'expenses' && (
-					<Suspense fallback={<TransactionListSkeleton />}>
-						<Expenses />
-					</Suspense>
-				)}
+				{activeTab === 'expenses' && <Expenses />}
 			</div>
 		</div>
 	)

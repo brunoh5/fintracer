@@ -10,7 +10,7 @@ import { TransactionListSkeleton } from './transaction-list-skeleton'
 
 export function RevenueList() {
 	const { data: transactions, isLoading } = useQuery<TransactionProps[]>({
-		queryKey: ['recent-transactions'],
+		queryKey: ['recent-transactions', 'received'],
 		queryFn: async () => {
 			const session = await getSession()
 

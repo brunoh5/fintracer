@@ -9,11 +9,11 @@ import { Transaction } from './components/transaction'
 
 export function Expenses() {
 	const { data: transactions } = useQuery<TransactionProps[]>({
-		queryKey: ['recent-transactions'],
+		queryKey: ['recent-transactions', 'expenses'],
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/users/transactions?type=expense', {
+			const response = await api.get('/users/transactions?type=sent', {
 				headers: { Authorization: `Bearer ${session?.user}` },
 			})
 
@@ -23,16 +23,9 @@ export function Expenses() {
 
 	return (
 		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] pb-2">
-			{transactions &&
-				transactions?.map((transaction) => {
-					if (transaction.type === 'sent') {
-						return (
-							<Transaction key={transaction.id} transaction={transaction} />
-						)
-					} else {
-						return null
-					}
-				})}
+			{transactions?.map((transaction) => (
+				<Transaction key={transaction.id} transaction={transaction} />
+			))}
 		</div>
 	)
 }
