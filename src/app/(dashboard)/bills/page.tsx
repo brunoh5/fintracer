@@ -2,6 +2,7 @@ import { Header } from '@/components/header'
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Suspense } from 'react'
 import { BillList } from './bill-list'
+import { NewBillForm } from './new-bill-form'
 
 export default function Bills() {
 	return (
@@ -9,7 +10,10 @@ export default function Bills() {
 			<Header />
 
 			<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
-				<h2 className="text-[22px] text-gray-500">Próximas Contas</h2>
+				<div className="flex items-center justify-between">
+					<h2 className="text-[22px] text-gray-500">Próximas Contas</h2>
+					<NewBillForm />
+				</div>
 
 				<div className="rounded-2xl bg-white px-7">
 					<Table className="w-full text-center">
