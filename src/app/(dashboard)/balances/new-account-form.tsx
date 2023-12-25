@@ -8,10 +8,10 @@ import { getSession } from 'next-auth/react'
 
 import { api } from '@/services/api'
 import { formatAccountNumber } from '@/utils/format-account-number'
-import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { AccountProps } from '@/types'
+import { Input } from '@/components/ui/Input'
 
 export function NewAccountForm() {
 	const [isOpen, setIsOpen] = useState(false)

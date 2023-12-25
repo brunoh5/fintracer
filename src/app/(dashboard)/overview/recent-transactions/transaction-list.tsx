@@ -26,6 +26,8 @@ export function TransactionsList() {
 		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] pb-2">
 			{isLoading ? (
 				<TransactionListSkeleton />
+			) : transactions?.length === 0 ? (
+				<p>Nenhuma transação cadastrada no momento</p>
 			) : (
 				transactions?.map((transaction, index) => (
 					<Transaction key={index} transaction={transaction} />

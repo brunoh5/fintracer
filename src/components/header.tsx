@@ -36,7 +36,7 @@ export function Header({ hasName = false }: HeaderProps) {
 					<span className="text-xl text-eerie-black-900">
 						Bem vindo{' '}
 						<span className="capitalize">
-							{user ? user.name : 'Visitante'}!
+							{user ? user.name.split(' ', 1) : 'Visitante'}!
 						</span>
 					</span>
 				)}

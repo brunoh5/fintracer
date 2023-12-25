@@ -9,7 +9,7 @@ import { TransactionsList } from './transactions-list'
 
 export default function Account({ params }: { params: { id: string } }) {
 	return (
-		<div className="flex w-screen flex-col">
+		<div className="flex w-screen flex-col ml-[280px]">
 			<Header />
 
 			<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">

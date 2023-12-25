@@ -1,7 +1,20 @@
 {
-  "name": "web",
-  "version": "0.1.0",
+  "name": "fintracer",
+  "description": "Sistema de gestão financeira",
+  "keywords": [
+    "gestão financeira"
+  ],
+  "author": "Bruno Henrique",
+  "homepage": "https://www.fintracer.com.br/",
+  "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunoh5/fintracer.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,6 +24,7 @@
   "dependencies": {
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-toast": "^1.1.5",
+    "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "5.14.1",
     "@tanstack/react-query-devtools": "^5.14.1",
     "@tanstack/react-query-next-experimental": "^5.14.1",
@@ -18,21 +32,20 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
-    "js-cookie": "^3.0.5",
     "lucide-react": "^0.298.0",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
-    "nookies": "^2.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sharp": "^0.33.1",
     "tailwind-merge": "^2.1.0",
     "tailwind-variants": "^0.1.19",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.1.0",
     "@tailwindcss/forms": "^0.5.7",
-    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",

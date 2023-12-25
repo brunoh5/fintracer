@@ -16,9 +16,8 @@ export default async function Home() {
 		<main className="flex h-screen flex-1 items-center justify-center">
 			<div className="w-full max-w-md">
 				<h1 className="mb-6 w-full text-center text-2xl text-persian-green">
-					<span className="font-semibold uppercase">Fine</span>
-					bank.
-					<span className="font-semibold uppercase">IO</span>
+					<span className="font-semibold uppercase">Fin</span>
+					tracer.
 				</h1>
 
 				<LoginForm />

@@ -1,15 +1,19 @@
 'use client'
 
-import Cookie from 'js-cookie'
 import { LogOut } from 'lucide-react'
-import { redirect } from 'next/navigation'
 import { Button } from './button'
+import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export function LogoutButton() {
-	function handleLogout() {
-		Cookie.remove('token')
-		Cookie.remove('user')
-		redirect('/')
+	const { replace } = useRouter()
+
+	async function handleLogout() {
+		await signOut({
+			redirect: false,
+		})
+
+		replace('/')
 	}
 
 	return (

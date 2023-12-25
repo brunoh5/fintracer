@@ -27,7 +27,7 @@ export function RecentTransaction() {
 					<span
 						onClick={() => setActiveTab('all')}
 						data-active={activeTab === 'all'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green cursor-pointer"
 					>
 						Todos
 					</span>

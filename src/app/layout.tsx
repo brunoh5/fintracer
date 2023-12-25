@@ -7,7 +7,10 @@ import Providers from './providers'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-	title: 'FinTrack',
+	title: {
+		template: '%s | Fintracer',
+		absolute: 'Fintracer',
+	},
 	description:
 		'Site de organização financeira para controle de gastos pessoais e empresariais.',
 }

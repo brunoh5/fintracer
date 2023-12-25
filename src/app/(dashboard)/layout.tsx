@@ -15,7 +15,7 @@ export default async function DashboardLayout({
 	}
 
 	return (
-		<div className="flex">
+		<div className="flex flex-1">
 			<Sidebar />
 
 			{children}

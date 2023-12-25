@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
 import { CategoryProps } from '@/types'
 import { Input } from '@/components/input'
+import { Select } from '@/components/select-input'
 
 export default function Account({ params }: { params: { id: string } }) {
 	const { toast } = useToast()
@@ -21,6 +22,8 @@ export default function Account({ params }: { params: { id: string } }) {
 	const shopNameRef = useRef<HTMLInputElement>(null)
 	const paidAtRef = useRef<HTMLInputElement>(null)
 	const amountRef = useRef<HTMLInputElement>(null)
+	const paymentMethodRef = useRef<HTMLSelectElement>(null)
+	const categoryRef = useRef<HTMLSelectElement>(null)
 
 	const { data: categories } = useQuery<CategoryProps[]>({
 		queryKey: ['categories'],
@@ -52,8 +55,8 @@ export default function Account({ params }: { params: { id: string } }) {
 				amount: amountRef.current?.value,
 				paid_at: dayjs(paidAtRef.current?.value) || null,
 				type: formData.get('type'),
-				payment_method: formData.get('payment_method'),
-				categoryId: formData.get('categoryId'),
+				payment_method: paymentMethodRef.current?.value,
+				categoryId: categoryRef.current?.value,
 			}
 
 			await api.post('/transactions', data, {
@@ -137,27 +140,30 @@ export default function Account({ params }: { params: { id: string } }) {
 						<label htmlFor="payment_method">
 							Qual método de pagamento usado?
 						</label>
-						<select name="payment_method" id="payment_method">
+
+						<Select id="payment_method" ref={paymentMethodRef}>
+							<option>Selecione</option>
 							<option value="money">Dinheiro</option>
 							<option value="PIX">Pix</option>
 							<option value="credit-card">Cartão de Credito</option>
 							<option value="debit-card">Cartão de Debito</option>
 							<option value="bank-check">Cheque Bancário</option>
 							<option value="bank-transfer">Transferência Bancaria</option>
-						</select>
+						</Select>
 					</div>
 
 					<div>
 						<label htmlFor="categoryId">
 							Qual categoria esta transação pertence ?
 						</label>
-						<select name="categoryId" id="categoryId">
+
+						<Select id="categoryId" ref={categoryRef}>
 							{categories?.map((category: CategoryProps) => (
 								<option key={category.id} value={category.id}>
 									{category.name}
 								</option>
 							))}
-						</select>
+						</Select>
 					</div>
 
 					<Button aria-label="sign up submit" type="submit">

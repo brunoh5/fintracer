@@ -1,75 +1,104 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { FormEvent } from 'react'
+import { SyntheticEvent, useRef } from 'react'
 
 import { api } from '@/services/api'
-import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
+import { signIn } from 'next-auth/react'
+import { Input } from '@/components/input'
 
 export function SignUpForm() {
 	const { toast } = useToast()
 	const { replace } = useRouter()
 
-	async function handleRegister(event: FormEvent<HTMLFormElement>) {
+	const nameRef = useRef<HTMLInputElement>(null)
+	const emailRef = useRef<HTMLInputElement>(null)
+	const passwordRef = useRef<HTMLInputElement>(null)
+
+	async function handleRegister(event: SyntheticEvent) {
 		event.preventDefault()
 
-		const formData = new FormData(event.currentTarget)
+		const data = {
+			email: emailRef.current?.value,
+			password: passwordRef.current?.value,
+		}
 
-		const response = await api.post('/users/create', {
-			name: formData.get('name'),
-			email: formData.get('email'),
-			password: formData.get('password'),
-		})
-
-		if (response?.status !== 201) {
+		try {
+			await api.post('/users', {
+				...data,
+				name: nameRef.current?.value,
+			})
+		} catch {
 			toast({
 				variant: 'destructive',
-				title: 'Algo de errado ocorreu',
-				description: `${response.data}`,
+				title: 'E-mail já cadastrado',
+				description: 'Usuario já existente',
 			})
 
 			return
 		}
+
+		await signIn('credentials', {
+			...data,
+			redirect: false,
+		})
 
 		replace('/overview')
 	}
 
 	return (
 		<form onSubmit={handleRegister} className="flex flex-col gap-6">
-			<Input.Root>
-				<Input.Label text="Name" name="name" />
-				<Input.Wrapper>
-					<Input.Content
-						name="name"
-						placeholder="Bruno Henrique"
-						autoComplete="name"
-					/>
-				</Input.Wrapper>
-			</Input.Root>
-			<Input.Root>
-				<Input.Label text="Email Address" name="email" />
-				<Input.Wrapper>
-					<Input.Content
-						type="email"
-						name="email"
-						placeholder="hello@example.com"
-						autoComplete="email"
-					/>
-				</Input.Wrapper>
-			</Input.Root>
-			<Input.Root>
-				<Input.Label name="password" text="Password" />
-				<Input.Wrapper>
-					<Input.Content
-						type="password"
-						name="password"
-						placeholder="*********"
-						autoComplete="new-password"
-					/>
-				</Input.Wrapper>
-			</Input.Root>
+			<div>
+				<label
+					htmlFor="name"
+					className="text-gray-900 font-semibold leading-6 block"
+				>
+					E-mail
+				</label>
+				<Input
+					type="name"
+					id="name"
+					ref={nameRef}
+					autoComplete="name"
+					required
+				/>
+			</div>
+
+			<div>
+				<label
+					htmlFor="email"
+					className="text-gray-900 font-semibold leading-6 block"
+				>
+					E-mail
+				</label>
+				<Input
+					type="email"
+					id="email"
+					ref={emailRef}
+					placeholder="johndoe@email.com"
+					autoComplete="email"
+					required
+				/>
+			</div>
+
+			<div>
+				<label
+					htmlFor="password"
+					className="text-gray-900 font-semibold leading-6 block"
+				>
+					Senha
+				</label>
+				<Input
+					type="password"
+					id="password"
+					ref={passwordRef}
+					placeholder="*********"
+					autoComplete="new-password"
+					required
+				/>
+			</div>
 
 			{/* <div className="mt-4 w-full">
 				<p className="mx-auto">
@@ -79,7 +108,7 @@ export function SignUpForm() {
 			</div> */}
 
 			<Button aria-label="sign up submit" type="submit">
-				Sign up
+				Registre-se
 			</Button>
 		</form>
 	)
