@@ -17,11 +17,11 @@ export const env = createEnv({
 	server: {
 		NEXTAUTH_URL: z.string().optional(),
 		NEXTAUTH_SECRET: z.string().min(1),
-		API_URI: z.string().url().min(1),
+		API_URI: z.string().min(1),
 	},
 	client: {
-		NEXT_PUBLIC_VERCEL_URL: z.string().url().min(1),
-		NEXT_PUBLIC_API: z.string().url().min(1),
+		NEXT_PUBLIC_VERCEL_URL: z.string().min(1),
+		NEXT_PUBLIC_API: z.string().min(1),
 	},
 	shared: {
 		NODE_ENV: nodeEnv,
