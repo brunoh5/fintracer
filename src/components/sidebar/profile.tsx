@@ -6,8 +6,9 @@ import Image from 'next/image'
 import { getSession } from 'next-auth/react'
 
 import { api } from '@/services/api'
-import { ProfileSkeleton } from './profile-skeleton'
 import { UserProps } from '@/types'
+
+import { ProfileSkeleton } from './profile-skeleton'
 
 export function Profile() {
 	const { data: user, isLoading } = useQuery<UserProps>({

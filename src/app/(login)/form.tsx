@@ -1,13 +1,12 @@
 'use client'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { SyntheticEvent, useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
+import { SyntheticEvent, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
-import { Input } from '@/components/input'
 
 export function LoginForm() {
 	const { toast } = useToast()
@@ -56,10 +55,10 @@ export function LoginForm() {
 
 	return (
 		<form onSubmit={handleLogin} className="flex flex-col gap-6">
-			<div>
+			<div className="flex flex-col gap-2">
 				<label
 					htmlFor="email"
-					className="text-gray-900 font-semibold leading-6 block"
+					className="font-semibold leading-6 text-muted-foreground"
 				>
 					E-mail
 				</label>
@@ -70,21 +69,22 @@ export function LoginForm() {
 					placeholder="johndoe@email.com"
 					autoComplete="email"
 					required
+					className="rounded-sm"
 				/>
 			</div>
 
-			<div>
-				<div>
-					<label
-						htmlFor="password"
-						className="text-gray-900 font-semibold leading-6 block"
-					>
-						Senha
-					</label>
-					<Link href="/forgotPassword" className="text-xs text-persian-green">
+			<div className="flex flex-col gap-2">
+				{/* <div> */}
+				<label
+					htmlFor="password"
+					className="block font-semibold leading-6 text-gray-900"
+				>
+					Senha
+				</label>
+				{/* <Link href="/forgotPassword" className="text-xs text-primary">
 						Forgot Password
-					</Link>
-				</div>
+					</Link> */}
+				{/* </div> */}
 				<Input
 					type="password"
 					id="password"
@@ -92,10 +92,15 @@ export function LoginForm() {
 					placeholder="*********"
 					autoComplete="current-password"
 					required
+					className="rounded-sm"
 				/>
 			</div>
 
-			<Button aria-label="login submit" type="submit">
+			<Button
+				className="px-2 py-4 text-lg"
+				aria-label="login submit"
+				type="submit"
+			>
 				{isLoading ? 'Carregando' : 'Login'}
 			</Button>
 		</form>

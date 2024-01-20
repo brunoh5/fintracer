@@ -1,9 +1,10 @@
 'use client'
 
-import { Input } from '@/components/input'
-import { Button } from '@/components/ui/button'
 import { Edit3, X } from 'lucide-react'
 import { useRef, useState } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 export function MonthlyGoalForm() {
 	const [isModalActive, setIsModalActive] = useState(false)
@@ -31,17 +32,17 @@ export function MonthlyGoalForm() {
 			</button>
 
 			{isModalActive && (
-				<div className="absolute bg-gray-950/20 bottom-0 left-0 right-0 top-0 flex items-center justify-center transition-all">
+				<div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-gray-950/20 transition-all">
 					{/* Modal */}
-					<div className="relative rounded-2xl bg-white px-16 pt-16 pb-12 gap-6 flex flex-col items-center w-[488px] h-[392px]">
+					<div className="relative flex h-[392px] w-[488px] flex-col items-center gap-6 rounded-2xl bg-white px-16 pb-12 pt-16">
 						<button
-							className="absolute top-8 right-8 group"
+							className="group absolute right-8 top-8"
 							onClick={() => setIsModalActive(false)}
 							aria-label="close goal modal"
 						>
 							<X
 								size={32}
-								className="text-gray-900 group-hover:text-chili-red transition-colors"
+								className="text-gray-900 transition-colors group-hover:text-chili-red"
 							/>
 						</button>
 

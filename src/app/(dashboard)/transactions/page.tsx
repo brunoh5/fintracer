@@ -1,10 +1,12 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Header } from '@/components/header'
-import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { TransactionList } from './transaction-list'
 import { Suspense, useState } from 'react'
+
+import { Header } from '@/components/header'
+import { Button } from '@/components/ui/button'
+import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+
+import { TransactionList } from './transaction-list'
 
 export default function Transactions() {
 	const [activeTab, setActiveTab] = useState('all')
@@ -20,21 +22,21 @@ export default function Transactions() {
 					<span
 						onClick={() => setActiveTab('all')}
 						data-active={activeTab === 'all'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+						className="data-[active=true]:border-b-2 data-[active=true]:border-primary p-2 data-[active=true]:text-primary"
 					>
 						Todos
 					</span>
 					<span
 						onClick={() => setActiveTab('revenues')}
 						data-active={activeTab === 'revenues'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+						className="data-[active=true]:border-b-2 data-[active=true]:border-primary p-2 data-[active=true]:text-primary"
 					>
 						Receita
 					</span>
 					<span
 						onClick={() => setActiveTab('expenses')}
 						data-active={activeTab === 'expenses'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-persian-green p-2 data-[active=true]:text-persian-green"
+						className="data-[active=true]:border-b-2 data-[active=true]:border-primary p-2 data-[active=true]:text-primary"
 					>
 						Despesa
 					</span>

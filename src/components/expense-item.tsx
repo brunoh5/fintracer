@@ -42,7 +42,7 @@ export function ExpenseItem({
 						<StatusIcon
 							size={16}
 							className={`${statusColor === 'red' && 'text-chili-red'} ${
-								statusColor === 'green' && 'text-persian-green'
+								statusColor === 'green' && 'text-primary'
 							}`}
 						/>
 					</div>

@@ -1,14 +1,19 @@
 import dayJs from 'dayjs'
 import { Goal, Medal } from 'lucide-react'
 
-import { MonthlyGoalForm } from './monthly-goal-form'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+
+import { MonthlyGoalForm } from './form'
 
 export function MonthlyGoal() {
 	return (
-		<div className="w-full">
-			<h2 className="mb-2 text-[22px] text-gray-500">Goals</h2>
-			<div className="flex h-[232px] flex-col gap-5 rounded-lg bg-white px-6 py-5">
-				<div className="flex items-center justify-between border-b border-[#F3F3F3] pb-3">
+		<Card>
+			<CardHeader>
+				<CardTitle className="text-xl">Goals</CardTitle>
+			</CardHeader>
+			<CardContent className="flex flex-col gap-3">
+				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
 						<span className="text-[22px] font-bold text-eerie-black-900">
 							$20,000
@@ -18,6 +23,8 @@ export function MonthlyGoal() {
 					</div>
 					<p className="text-xs text-gray-900">{dayJs().format('MMM, YYYY')}</p>
 				</div>
+
+				<Separator />
 
 				<div className="flex items-center justify-between">
 					<div className="flex flex-col gap-6">
@@ -37,11 +44,11 @@ export function MonthlyGoal() {
 						</div>
 					</div>
 					<div>
-						<div className="h-[94px] w-[144px] bg-persian-green" />
+						<div className="h-[94px] w-[144px] bg-primary" />
 						<span className="text-xs">Target vs Achievement</span>
 					</div>
 				</div>
-			</div>
-		</div>
+			</CardContent>
+		</Card>
 	)
 }

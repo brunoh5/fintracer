@@ -1,17 +1,17 @@
 /* eslint-disable n/handle-callback-err */
 'use client'
 
-import { X } from 'lucide-react'
-import { FormEvent, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { X } from 'lucide-react'
 import { getSession } from 'next-auth/react'
+import { FormEvent, useState } from 'react'
 
-import { api } from '@/services/api'
-import { formatAccountNumber } from '@/utils/format-account-number'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
+import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { Input } from '@/components/ui/Input'
 
 export function NewAccountForm() {
 	const [isOpen, setIsOpen] = useState(false)
@@ -74,80 +74,67 @@ export function NewAccountForm() {
 	}
 
 	return (
-		<div className="flex h-72 flex-col items-center rounded-lg bg-white px-6 pb-[88px] pt-[100px]">
-			<div className="w-[208px]">
+		<Card className="flex h-72 flex-col items-center rounded-lg px-6 pb-[88px] pt-[100px]">
+			<CardContent className="flex flex-col gap-6 sm:w-[208px]">
 				<Button onClick={() => setIsOpen(true)}>Add Accounts</Button>
-				<button className="px-6 py-3">Edit Accounts</button>
-			</div>
+				<Button variant="secondary" className="px-6 py-3">
+					Edit Accounts
+				</Button>
+			</CardContent>
 
 			<div
-				className="z-10 absolute hidden bg-gray-950/20 bottom-0 left-0 right-0 top-0 items-center justify-center transition-all data-[active=true]:flex"
+				className="absolute bottom-0 left-0 right-0 top-0 z-10 hidden items-center justify-center bg-gray-950/20 transition-all data-[active=true]:flex"
 				role="dialog"
 				aria-modal="true"
 				data-active={isOpen === true}
 			>
-				<div className="relative rounded-2xl bg-white px-16 pt-16 pb-12 w-full max-w-[488px]">
+				{/* Mudar para Dialog */}
+				<div className="relative w-full max-w-[488px] rounded-2xl bg-white px-16 pb-12 pt-16">
 					<button
-						className="absolute top-8 right-8 group"
+						className="group absolute right-8 top-8"
 						onClick={() => setIsOpen(false)}
 					>
 						<X
 							size={32}
-							className="text-gray-900 group-hover:text-chili-red transition-colors"
+							className="text-gray-900 transition-colors group-hover:text-chili-red"
 						/>
 					</button>
 
 					<form
 						onSubmit={handleCreateAccount}
-						className="gap-8 flex flex-col items-center w-full"
+						className="flex w-full flex-col items-center gap-8"
 					>
-						<Input.Root>
-							<Input.Label name="type" text="Account Type" />
-							<Input.Wrapper>
-								<Input.Content name="type" autoComplete="off" />
-							</Input.Wrapper>
-						</Input.Root>
+						<div>
+							<label htmlFor="account-type">Account Type</label>
+							<Input id="account-type" name="type" autoComplete="off" />
+						</div>
 
-						<Input.Root>
-							<Input.Label name="bank" text="Bank" />
-							<Input.Wrapper>
-								<Input.Content name="bank" autoComplete="off" />
-							</Input.Wrapper>
-						</Input.Root>
+						<div>
+							<label htmlFor="bank-name">Bank</label>
+							<Input id="bank-name" name="type" autoComplete="off" />
+						</div>
 
-						<Input.Root>
-							<Input.Label name="number" text="Account Number" />
-							<Input.Wrapper>
-								<Input.Content
-									name="number"
-									autoComplete="off"
-									value={formattedNumber}
-									onChange={(e) =>
-										setFormattedNumber(formatAccountNumber(e.target.value))
-									}
-									maxLength={16}
-									defaultValue={''}
-								/>
-							</Input.Wrapper>
-						</Input.Root>
+						<div>
+							<label htmlFor="account-number">Account Number</label>
+							<Input
+								id="account-number"
+								name="number"
+								autoComplete="off"
+								maxLength={16}
+							/>
+						</div>
 
-						<Input.Root>
-							<Input.Label name="initialAmount" text="Initial Amount" />
-							<Input.Wrapper>
-								<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 pr-9">
-									<span className="text-gray-500 sm:text-sm">R$</span>
-								</div>
-								<Input.Content
-									type="number"
-									name="initialAmount"
-									autoComplete="off"
-									value={0}
-									defaultValue={0}
-								/>
-							</Input.Wrapper>
-						</Input.Root>
+						<div>
+							<label htmlFor="initial-amount">Initial Amount</label>
+							<Input
+								id="initial-amount"
+								name="initialAmount"
+								autoComplete="off"
+								defaultValue={0}
+							/>
+						</div>
 
-						<div className="flex justify-center w-full">
+						<div className="flex w-full justify-center">
 							<Button className="max-w-[192px]" type="submit">
 								Save
 							</Button>
@@ -155,6 +142,6 @@ export function NewAccountForm() {
 					</form>
 				</div>
 			</div>
-		</div>
+		</Card>
 	)
 }

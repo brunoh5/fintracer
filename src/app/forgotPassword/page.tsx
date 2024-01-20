@@ -6,7 +6,7 @@ export default function ForgotPassword() {
 	return (
 		<main className="flex h-screen flex-1 items-center justify-center">
 			<div className="flex w-full max-w-md flex-col items-center">
-				<h1 className="mb-6 w-full text-center text-2xl text-persian-green">
+				<h1 className="mb-6 w-full text-center text-2xl text-primary">
 					<span className="font-semibold uppercase">Fine</span>
 					bank.
 					<span className="font-semibold uppercase">IO</span>

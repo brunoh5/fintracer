@@ -3,16 +3,6 @@ import { z } from 'zod'
 
 const nodeEnv = z.enum(['development', 'production', 'test'])
 
-// function requiredOnEnv(env: z.infer<typeof nodeEnv>) {
-// 	return (value: any) => {
-// 		if (env === process.env.NODE_ENV && !value) {
-// 			return false
-// 		}
-
-// 		return true
-// 	}
-// }
-
 export const env = createEnv({
 	server: {
 		NEXTAUTH_URL: z.string().optional(),

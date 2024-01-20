@@ -1,6 +1,8 @@
-import { Sidebar } from '@/components/sidebar'
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
+
+import { Sidebar } from '@/components/sidebar'
+
 import { nextAuthOptions } from '../api/auth/[...nextauth]/options'
 
 export default async function DashboardLayout({
@@ -15,7 +17,7 @@ export default async function DashboardLayout({
 	}
 
 	return (
-		<div className="flex flex-1">
+		<div className="min-h-dvh md:flex" suppressHydrationWarning>
 			<Sidebar />
 
 			{children}

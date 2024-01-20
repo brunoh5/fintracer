@@ -11,10 +11,10 @@ export function SearchInput() {
 	}
 
 	return (
-		<div className="relative mt-2 rounded-md shadow-sm w-full">
+		<div className="relative mt-2 w-full rounded-md shadow-sm">
 			<input
 				type="text"
-				className="block w-full rounded-xl border-0 py-3 text-gray-900 ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-special-gray-500 leading-[22px] focus:placeholder:text-special-gray-500 pl-7 pr-20"
+				className="block w-full rounded-xl border-0 py-3 pl-7 pr-20 leading-[22px]  text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-special-gray-500 focus:placeholder:text-special-gray-500"
 				id="search"
 				autoComplete="off"
 				ref={searchRef}
@@ -23,7 +23,7 @@ export function SearchInput() {
 			<button
 				type="button"
 				onClick={handleSearch}
-				className="pointer-events-none absolute inset-y-0 flex items-center right-0 pr-3"
+				className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
 			>
 				<Search size={24} className="text-[#999DA3]" />
 			</button>

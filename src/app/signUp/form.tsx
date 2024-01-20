@@ -1,13 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import { SyntheticEvent, useRef } from 'react'
 
-import { api } from '@/services/api'
+import { Input } from '@/components/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
-import { signIn } from 'next-auth/react'
-import { Input } from '@/components/input'
+import { api } from '@/services/api'
 
 export function SignUpForm() {
 	const { toast } = useToast()
@@ -55,7 +55,7 @@ export function SignUpForm() {
 					htmlFor="name"
 					className="text-gray-900 font-semibold leading-6 block"
 				>
-					E-mail
+					Digite seu nome
 				</label>
 				<Input
 					type="name"
@@ -103,7 +103,7 @@ export function SignUpForm() {
 			{/* <div className="mt-4 w-full">
 				<p className="mx-auto">
 					By continuing, you agree to our{' '}
-					<span className="text-persian-green">terms of service.</span>
+					<span className="text-primary">terms of service.</span>
 				</p>
 			</div> */}
 

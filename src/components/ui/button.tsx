@@ -1,34 +1,57 @@
-import { ComponentProps } from 'react'
-import { tv, VariantProps } from 'tailwind-variants'
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
 
-const button = tv({
-	base: 'flex items-center justify-center gap-4 rounded font-bold w-full',
-	variants: {
-		size: {
-			default: 'py-4 px-3 w-full',
-			sm: 'h-9 px-5 py-2',
-			xs: 'h-8 px-4 py-1 text-xs',
-			lg: 'py-3 px-2 w-[144px] text-xs',
-		},
-		background: {
-			default: 'bg-persian-green text-white',
-			off: 'bg-inherit text-black',
-		},
-	},
-	defaultVariants: {
-		size: 'default',
-		background: 'default',
-	},
-})
+import { cn } from "@/utils/shad-cn-configs"
 
-export type ButtonProps = ComponentProps<'button'> &
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	VariantProps<typeof button> & {}
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2",
+        sm: "h-8 rounded-md px-3 text-xs",
+        lg: "h-10 rounded-md px-8",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
 
-export function Button({ size, className, ...props }: ButtonProps) {
-	return (
-		<button className={button({ size, className })} {...props}>
-			{props.children}
-		</button>
-	)
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
 }
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }

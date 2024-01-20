@@ -3,10 +3,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
-import { api } from '@/services/api'
-import { formatPrice } from '@/utils/format-price'
-import { AccountProps } from '@/types'
 import { Skeleton } from '@/components/ui/skeleton'
+import { api } from '@/services/api'
+import { AccountProps } from '@/types'
+import { formatPrice } from '@/utils/format-price'
 
 export function Balance() {
 	const { data: totalBalance, isLoading } = useQuery<number>({
@@ -38,7 +38,7 @@ export function Balance() {
 			{isLoading ? (
 				<Skeleton />
 			) : (
-				<span className="text-[22px] font-bold text-eerie-black-900">
+				<span className="text-xl font-bold">
 					{formatPrice(totalBalance ?? 0)}
 				</span>
 			)}

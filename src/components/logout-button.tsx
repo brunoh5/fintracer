@@ -1,9 +1,10 @@
 'use client'
 
 import { LogOut } from 'lucide-react'
-import { Button } from './button'
-import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
+
+import { Button } from './ui/button'
 
 export function LogoutButton() {
 	const { replace } = useRouter()
@@ -20,10 +21,11 @@ export function LogoutButton() {
 		<Button
 			onClick={handleLogout}
 			type="button"
-			className="w-full hover:bg-white/[0.08] text-zinc-50 flex items-center justify-start bg-transparent"
+			className="flex items-center justify-start gap-4 hover:bg-white/[0.08]"
+			variant="ghost"
 			aria-label="logout button"
 		>
-			<LogOut className="mr-4" />
+			<LogOut />
 			Logout
 		</Button>
 	)

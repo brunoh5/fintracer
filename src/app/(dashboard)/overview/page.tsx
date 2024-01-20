@@ -1,12 +1,13 @@
+import { Metadata } from 'next'
+
 import { Header } from '@/components/header'
-import { UpcomingBill } from '@/components/upcoming-bill'
-import { Suspense } from 'react'
+
 import { ExpenseBreakdown } from './expense-breakdown'
 import { MonthlyGoal } from './monthly-goal'
+import { RecentTransaction } from './recent-transactions'
 import { Statistics } from './statistics'
 import { TotalBalance } from './total-balance'
-import { RecentTransaction } from './recent-transactions'
-import { Metadata } from 'next'
+import { UpcomingBill } from './upcoming-bill'
 
 export const metadata: Metadata = {
 	title: 'Dashboard',
@@ -15,30 +16,22 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
 	return (
-		<div className="flex-1 w-screen flex-col ml-[280px]">
+		<div className="w-screen flex-1 flex-col xl:ml-[280px]">
 			<Header hasName />
 
-			<main className="overflow-auto relative flex flex-col gap-8  pb-8 pl-6 pr-8 pt-4">
-				<div className="flex items-center justify-between gap-6">
+			<main className="relative flex flex-col gap-y-8 pb-8 pl-6 pr-8 pt-4">
+				<div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
 					<TotalBalance />
-					<Suspense>
-						<MonthlyGoal />
-					</Suspense>
-					<Suspense>
-						<UpcomingBill />
-					</Suspense>
+					<MonthlyGoal />
+					<UpcomingBill />
 				</div>
 
-				<div className="flex justify-between gap-6">
+				<div className="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-6">
 					<RecentTransaction />
 
-					<div className="flex flex-1 flex-col gap-8">
-						<Suspense>
-							<Statistics />
-						</Suspense>
-						<Suspense>
-							<ExpenseBreakdown />
-						</Suspense>
+					<div className="col-span-2 flex flex-col gap-8">
+						<Statistics />
+						<ExpenseBreakdown />
 					</div>
 				</div>
 			</main>

@@ -1,14 +1,15 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
+import { useState } from 'react'
 
-import { formatPrice } from '@/utils/format-price'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
+import { formatPrice } from '@/utils/format-price'
+
 import { AccountListSkeleton } from './account-list-skeleton'
 
 export function AccountList() {
@@ -39,7 +40,7 @@ export function AccountList() {
 						<div
 							key={account.id}
 							data-index={index === currentPage}
-							className="items-center justify-between rounded bg-persian-green p-4 hidden data-[index=true]:flex"
+							className="hidden items-center justify-between rounded bg-primary p-4 data-[index=true]:flex"
 						>
 							{/* Account */}
 							<div className="flex flex-col">
@@ -61,7 +62,7 @@ export function AccountList() {
 									</span>
 									<ArrowUpRight
 										size={16}
-										className="rounded-full bg-white text-persian-green"
+										className="rounded-full bg-white text-primary"
 									/>
 								</div>
 							</div>
@@ -104,7 +105,7 @@ export function AccountList() {
 							<p
 								key={index}
 								data-active={index === currentPage}
-								className="w-2 h-2 rounded-full bg-zinc-400 data-[active=true]:bg-green-700"
+								className="h-2 w-2 rounded-full bg-muted-foreground data-[active=true]:bg-primary"
 							/>
 						))}
 				</div>

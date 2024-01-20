@@ -1,9 +1,10 @@
-import { Skeleton } from '@/components/ui/skeleton'
 import { ArrowUpRight } from 'lucide-react'
+
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function AccountListSkeleton() {
 	return (
-		<div className="items-center justify-between rounded bg-persian-green p-4 flex">
+		<div className="items-center justify-between rounded bg-primary p-4 flex">
 			<div className="flex flex-col">
 				<span className="text-white/70">Tipo de conta</span>
 				<Skeleton className="h-4 w-[80px]" />
@@ -14,7 +15,7 @@ export function AccountListSkeleton() {
 					<Skeleton className="h-4 w-[80px]" />
 					<ArrowUpRight
 						size={16}
-						className="rounded-full bg-white text-persian-green"
+						className="rounded-full bg-white text-primary"
 					/>
 				</div>
 			</div>
