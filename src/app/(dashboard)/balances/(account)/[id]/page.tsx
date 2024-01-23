@@ -4,12 +4,13 @@ import { Suspense } from 'react'
 
 import { Header } from '@/components/header'
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+
 import { BalanceAccount } from './balance-account'
 import { TransactionsList } from './transactions-list'
 
 export default function Account({ params }: { params: { id: string } }) {
 	return (
-		<div className="flex w-screen flex-col ml-[280px]">
+		<div className="ml-[280px] flex w-screen flex-col">
 			<Header />
 
 			<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
@@ -23,7 +24,7 @@ export default function Account({ params }: { params: { id: string } }) {
 					<h2 className="mb-2 text-[22px] text-gray-500">
 						Histórico de Transações
 					</h2>
-					<div className="flex gap-4 justify-center items-center text-gray-500">
+					<div className="flex items-center justify-center gap-4 text-gray-500">
 						<Plus size={16} />
 						<Link
 							className="text-xs"

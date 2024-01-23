@@ -1,29 +1,43 @@
 'use client'
 
-import { FormEvent } from 'react'
-import { Input } from '../ui/Input'
+import { FormEvent, useRef } from 'react'
+
 import { Button } from '../ui/button'
+import { Input } from '../ui/input'
 
 export function ForgotForm() {
+	const emailRef = useRef<HTMLInputElement>(null)
+
 	async function handleForgotPassword(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
+
+		const data = {
+			email: emailRef.current?.value,
+		}
+
+		console.log(data)
 
 		return null
 	}
 
 	return (
 		<form className="w-full max-w-[400px]" onSubmit={handleForgotPassword}>
-			<Input.Root>
-				<Input.Label text="Email Address" name="email" />
-				<Input.Wrapper>
-					<Input.Content
-						name="email"
-						placeholder="johndoe@email.com"
-						type="email"
-						autoComplete="email"
-					/>
-				</Input.Wrapper>
-			</Input.Root>
+			<div>
+				<label
+					htmlFor="email"
+					className="block font-semibold leading-6 text-gray-900"
+				>
+					E-mail
+				</label>
+				<Input
+					type="email"
+					id="email"
+					ref={emailRef}
+					autoComplete="email"
+					required
+					placeholder="johndoe@email.com"
+				/>
+			</div>
 
 			<Button aria-label="forgot password submit">Password Reset</Button>
 		</form>

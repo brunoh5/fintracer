@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { SyntheticEvent, useRef } from 'react'
 
-import { Input } from '@/components/input'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
 
@@ -53,7 +53,7 @@ export function SignUpForm() {
 			<div>
 				<label
 					htmlFor="name"
-					className="text-gray-900 font-semibold leading-6 block"
+					className="block font-semibold leading-6 text-gray-900"
 				>
 					Digite seu nome
 				</label>
@@ -69,7 +69,7 @@ export function SignUpForm() {
 			<div>
 				<label
 					htmlFor="email"
-					className="text-gray-900 font-semibold leading-6 block"
+					className="block font-semibold leading-6 text-gray-900"
 				>
 					E-mail
 				</label>
@@ -86,7 +86,7 @@ export function SignUpForm() {
 			<div>
 				<label
 					htmlFor="password"
-					className="text-gray-900 font-semibold leading-6 block"
+					className="block font-semibold leading-6 text-gray-900"
 				>
 					Senha
 				</label>

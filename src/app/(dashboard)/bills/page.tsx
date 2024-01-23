@@ -1,12 +1,14 @@
+import { Suspense } from 'react'
+
 import { Header } from '@/components/header'
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Suspense } from 'react'
+
 import { BillList } from './bill-list'
 import { NewBillForm } from './new-bill-form'
 
 export default function Bills() {
 	return (
-		<div className="flex-1 w-screen flex-col ml-[280px]">
+		<div className="ml-[280px] w-screen flex-1 flex-col">
 			<Header />
 
 			<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">

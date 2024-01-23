@@ -24,8 +24,8 @@ export function BalanceAccount({ accountId }: { accountId: string }) {
 	})
 
 	return (
-		<div className="flex flex-col gap-10 w-full rounded-lg bg-white px-6 py-5">
-			<div className="grid grid-cols-3 gap-y-10 gap-x-28">
+		<div className="flex w-full flex-col gap-10 rounded-lg bg-white px-6 py-5">
+			<div className="grid grid-cols-3 gap-x-28 gap-y-10">
 				<div>
 					<p className="text-gray-300">Nome do Banco</p>
 					<p className="text-lg font-bold">{account?.bank}</p>
@@ -55,7 +55,7 @@ export function BalanceAccount({ accountId }: { accountId: string }) {
 			</div>
 			<div className="flex items-center gap-4">
 				<Button size="lg">Editar Conta</Button>
-				<Button size="lg" background="off">
+				<Button size="lg" variant="ghost">
 					Remove
 				</Button>
 			</div>

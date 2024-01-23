@@ -1,8 +1,9 @@
 'use client'
 
-import { Input } from '@/components/input'
 import { X } from 'lucide-react'
 import { SyntheticEvent, useRef, useState } from 'react'
+
+import { Input } from '@/components/ui/input'
 
 export function NewBillForm() {
 	const [isVisible, setIsVisible] = useState(false)
@@ -46,20 +47,20 @@ export function NewBillForm() {
 			</button>
 
 			<div
-				className="z-10 absolute hidden bg-gray-950/20 bottom-0 left-0 right-0 top-0 items-center justify-center transition-all data-[active=true]:flex"
+				className="absolute bottom-0 left-0 right-0 top-0 z-10 hidden items-center justify-center bg-gray-950/20 transition-all data-[active=true]:flex"
 				role="dialog"
 				aria-modal="true"
 				data-active={isVisible}
 			>
-				<div className="relative rounded-2xl bg-white px-16 pt-16 pb-12 w-full max-w-[568px]">
-					<form onSubmit={handleCreateBill} className="flex flex-col w-full">
-						<div className="flex space-between align-center w-full">
+				<div className="relative w-full max-w-[568px] rounded-2xl bg-white px-16 pb-12 pt-16">
+					<form onSubmit={handleCreateBill} className="flex w-full flex-col">
+						<div className="space-between align-center flex w-full">
 							{/* Header */}
-							<h6 className="font-bold text-xl">Conta a pagar</h6>
+							<h6 className="text-xl font-bold">Conta a pagar</h6>
 							<button
 								type="button"
 								onClick={() => setIsVisible(!isVisible)}
-								className="hover:text-red-700 transition-colors flex items-center"
+								className="flex items-center transition-colors hover:text-red-700"
 							>
 								<X />
 							</button>
@@ -143,7 +144,7 @@ export function NewBillForm() {
 								<textarea
 									ref={descriptionRef}
 									id="description"
-									className="w-full h-full max-h-20 resize-none"
+									className="h-full max-h-20 w-full resize-none"
 								/>
 							</div>
 

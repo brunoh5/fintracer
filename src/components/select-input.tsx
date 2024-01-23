@@ -1,4 +1,4 @@
-import { SelectHTMLAttributes, forwardRef } from 'react'
+import { forwardRef, SelectHTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export type SelectProps = SelectHTMLAttributes<HTMLSelectElement>
@@ -8,7 +8,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
 		return (
 			<select
 				className={twMerge(
-					'block w-full rounded-xl border-0 py-3 text-gray-900 ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-special-gray-500 leading-[22px] focus:placeholder:text-special-gray-500 ring-[#D0D5DD] px-3',
+					'block w-full rounded-xl border-0 px-3 py-3 leading-[22px] text-gray-900  ring-1 ring-inset ring-[#D0D5DD] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-special-gray-500 focus:placeholder:text-special-gray-500',
 					className,
 				)}
 				ref={ref}

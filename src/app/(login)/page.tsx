@@ -14,7 +14,7 @@ export default async function Home() {
 
 	return (
 		<main className="flex h-screen flex-1 items-center justify-center">
-			<div className="w-full max-w-md flex flex-col gap-4">
+			<div className="flex w-full max-w-md flex-col gap-4">
 				<h1 className="w-full text-center text-2xl text-primary">
 					<span className="font-semibold uppercase">Fin</span>
 					tracer

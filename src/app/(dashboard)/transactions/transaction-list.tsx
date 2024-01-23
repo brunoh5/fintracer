@@ -1,6 +1,5 @@
 'use client'
 
-import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import {
@@ -13,8 +12,9 @@ import {
 } from 'lucide-react'
 import { getSession } from 'next-auth/react'
 
-import { TransactionProps } from '@/types'
+import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { api } from '@/services/api'
+import { TransactionProps } from '@/types'
 
 const categoryIcon = {
 	Casa: <Home size={24} className="mr-4" />,

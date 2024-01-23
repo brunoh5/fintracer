@@ -1,11 +1,12 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-
-import { TransactionProps } from '@/types'
-import { api } from '@/services/api'
-import { Transaction } from './components/transaction'
 import { getSession } from 'next-auth/react'
+
+import { api } from '@/services/api'
+import { TransactionProps } from '@/types'
+
+import { Transaction } from './components/transaction'
 import { TransactionListSkeleton } from './transaction-list-skeleton'
 
 export function RevenueList() {

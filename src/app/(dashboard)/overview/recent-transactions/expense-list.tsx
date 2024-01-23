@@ -3,8 +3,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
-import { TransactionProps } from '@/types'
 import { api } from '@/services/api'
+import { TransactionProps } from '@/types'
+
 import { Transaction } from './components/transaction'
 
 export function Expenses() {

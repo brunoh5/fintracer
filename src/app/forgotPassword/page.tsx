@@ -13,7 +13,7 @@ export default function ForgotPassword() {
 				</h1>
 
 				<h2 className="text-xl font-bold text-black">Forgot Password?</h2>
-				<p className="text-center text-md text-gray-500">
+				<p className="text-md text-center text-gray-500">
 					Enter your email address to get the <br />
 					password reset link
 				</p>

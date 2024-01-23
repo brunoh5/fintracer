@@ -12,7 +12,7 @@ export default function Transactions() {
 	const [activeTab, setActiveTab] = useState('all')
 
 	return (
-		<div className="flex-1 w-screen flex-col ml-[280px]">
+		<div className="ml-[280px] w-screen flex-1 flex-col">
 			<Header />
 
 			<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
@@ -22,21 +22,21 @@ export default function Transactions() {
 					<span
 						onClick={() => setActiveTab('all')}
 						data-active={activeTab === 'all'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-primary p-2 data-[active=true]:text-primary"
+						className="p-2 data-[active=true]:border-b-2 data-[active=true]:border-primary data-[active=true]:text-primary"
 					>
 						Todos
 					</span>
 					<span
 						onClick={() => setActiveTab('revenues')}
 						data-active={activeTab === 'revenues'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-primary p-2 data-[active=true]:text-primary"
+						className="p-2 data-[active=true]:border-b-2 data-[active=true]:border-primary data-[active=true]:text-primary"
 					>
 						Receita
 					</span>
 					<span
 						onClick={() => setActiveTab('expenses')}
 						data-active={activeTab === 'expenses'}
-						className="data-[active=true]:border-b-2 data-[active=true]:border-primary p-2 data-[active=true]:text-primary"
+						className="p-2 data-[active=true]:border-b-2 data-[active=true]:border-primary data-[active=true]:text-primary"
 					>
 						Despesa
 					</span>
@@ -83,7 +83,7 @@ export default function Transactions() {
 						)}
 					</Table>
 
-					<div className="mt-8 mb-8 flex items-center justify-center">
+					<div className="mb-8 mt-8 flex items-center justify-center">
 						<Button type="submit" className="w-48" disabled>
 							Load More
 						</Button>

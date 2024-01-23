@@ -1,18 +1,18 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
-import { FormEvent, useRef } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
+import { FormEvent, useRef } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { Header } from '@/components/header'
+import { Input } from '@/components/input'
+import { Select } from '@/components/select-input'
+import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
 import { CategoryProps } from '@/types'
-import { Input } from '@/components/input'
-import { Select } from '@/components/select-input'
 
 export default function Account({ params }: { params: { id: string } }) {
 	const { toast } = useToast()
@@ -84,7 +84,7 @@ export default function Account({ params }: { params: { id: string } }) {
 					<div>
 						<label
 							htmlFor="name"
-							className="text-gray-900 font-semibold leading-6 block"
+							className="block font-semibold leading-6 text-gray-900"
 						>
 							Nome da transação
 						</label>
@@ -94,7 +94,7 @@ export default function Account({ params }: { params: { id: string } }) {
 					<div>
 						<label
 							htmlFor="shop_name"
-							className="text-gray-900 font-semibold leading-6 block"
+							className="block font-semibold leading-6 text-gray-900"
 						>
 							Estabelecimento/Site
 						</label>
@@ -104,7 +104,7 @@ export default function Account({ params }: { params: { id: string } }) {
 					<div>
 						<label
 							htmlFor="amount"
-							className="text-gray-900 font-semibold leading-6 block"
+							className="block font-semibold leading-6 text-gray-900"
 						>
 							Valor
 						</label>
@@ -114,7 +114,7 @@ export default function Account({ params }: { params: { id: string } }) {
 					<div>
 						<label
 							htmlFor="paid_at"
-							className="text-gray-900 font-semibold leading-6 block"
+							className="block font-semibold leading-6 text-gray-900"
 						>
 							Preencha caso esteja pago
 						</label>

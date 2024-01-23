@@ -30,7 +30,7 @@ export function ExpenseItem({
 }: ExpenseProps) {
 	return (
 		<div className="flex items-center justify-between px-4 py-2">
-			<div className="p-2 bg-[#D2D2D2]/25 rounded-lg w-10 h-14 flex items-center">
+			<div className="flex h-14 w-10 items-center rounded-lg bg-[#D2D2D2]/25 p-2">
 				<Icon />
 			</div>
 			<div className="flex items-center gap-4">

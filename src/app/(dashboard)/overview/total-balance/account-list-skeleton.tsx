@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export function AccountListSkeleton() {
 	return (
-		<div className="items-center justify-between rounded bg-primary p-4 flex">
+		<div className="flex items-center justify-between rounded bg-primary p-4">
 			<div className="flex flex-col">
 				<span className="text-white/70">Tipo de conta</span>
 				<Skeleton className="h-4 w-[80px]" />

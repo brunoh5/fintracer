@@ -1,4 +1,3 @@
-import { TransactionProps } from '@/types'
 import dayjs from 'dayjs'
 import {
 	Car,
@@ -9,6 +8,8 @@ import {
 	Utensils,
 } from 'lucide-react'
 import { HTMLAttributes } from 'react'
+
+import { TransactionProps } from '@/types'
 
 const categoryIcons = {
 	food: <Utensils />,
