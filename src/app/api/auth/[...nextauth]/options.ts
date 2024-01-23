@@ -18,7 +18,7 @@ export const nextAuthOptions: NextAuthOptions = {
 					password: string
 				}
 
-				const response = await axios.post(`http://localhost:3333/sessions`, {
+				const response = await axios.post(`${env.API_URI}/sessions`, {
 					email,
 					password,
 				})
