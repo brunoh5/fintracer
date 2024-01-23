@@ -24,7 +24,9 @@ export default function Providers({ children }: { children: ReactNode }) {
 	)
 
 	if (env.NODE_ENV === 'development' || env.NODE_ENV === 'test') {
-		server.listen()
+		server.listen({
+			onUnhandledRequest: 'bypass',
+		})
 	}
 
 	return (

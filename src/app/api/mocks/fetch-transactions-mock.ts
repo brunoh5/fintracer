@@ -1,47 +1,48 @@
-import { randomUUID } from 'node:crypto'
-
-import { faker } from '@faker-js/faker'
+import { fakerPT_BR as faker } from '@faker-js/faker'
 import { http, HttpResponse } from 'msw'
 
-export const fetchTransactionsMock = http.get('*/transactions', async () => {
-	return HttpResponse.json({
-		categories: [
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-				amount: 3500,
-				categoryId: randomUUID(),
-				created_at: new Date(),
-				paid_at: null,
-				payment_method: 'money',
-				shopName: faker.lorem.sentence(),
-				status: 'pending',
-				type: 'received',
-				category: {
-					id: randomUUID(),
+export const fetchTransactionsMock = http.get(
+	'http://localhost:3333/users/transactions',
+	async () => {
+		return HttpResponse.json({
+			transactions: [
+				{
+					id: faker.string.uuid(),
 					name: faker.lorem.sentence(),
+					amount: 3500,
+					categoryId: faker.string.uuid(),
+					created_at: new Date(),
+					paid_at: null,
+					payment_method: 'money',
+					shopName: faker.lorem.sentence(),
+					status: faker.helpers.arrayElement(['pending', 'complete']),
+					type: faker.helpers.arrayElement(['received', 'sent']),
+					category: {
+						id: faker.string.uuid(),
+						name: faker.lorem.sentence(),
+					},
+					userId: faker.string.uuid(),
+					accountId: faker.string.uuid(),
 				},
-				userId: randomUUID(),
-				accountId: randomUUID(),
-			},
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-				amount: 3500,
-				categoryId: randomUUID(),
-				created_at: new Date(),
-				paid_at: null,
-				payment_method: 'money',
-				shopName: faker.lorem.sentence(),
-				status: 'pending',
-				type: 'received',
-				category: {
-					id: randomUUID(),
+				{
+					id: faker.string.uuid(),
 					name: faker.lorem.sentence(),
+					amount: 3500,
+					categoryId: faker.string.uuid(),
+					created_at: new Date(),
+					paid_at: null,
+					payment_method: 'money',
+					shopName: faker.lorem.sentence(),
+					status: faker.helpers.arrayElement(['pending', 'complete']),
+					type: faker.helpers.arrayElement(['received', 'sent']),
+					category: {
+						id: faker.string.uuid(),
+						name: faker.lorem.sentence(),
+					},
+					userId: faker.string.uuid(),
+					accountId: faker.string.uuid(),
 				},
-				userId: randomUUID(),
-				accountId: randomUUID(),
-			},
-		],
-	})
-})
+			],
+		})
+	},
+)

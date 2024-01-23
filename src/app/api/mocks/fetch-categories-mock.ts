@@ -1,35 +1,36 @@
-import { randomUUID } from 'node:crypto'
-
-import { faker } from '@faker-js/faker'
+import { fakerPT_BR as faker } from '@faker-js/faker'
 import { http, HttpResponse } from 'msw'
 
-export const fetchCategoriesMock = http.get('*/categories', async () => {
-	return HttpResponse.json({
-		categories: [
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-			},
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-			},
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-			},
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-			},
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-			},
-			{
-				id: randomUUID(),
-				name: faker.lorem.sentence(),
-			},
-		],
-	})
-})
+export const fetchCategoriesMock = http.get(
+	'http://localhost:3333/categories',
+	async () => {
+		return HttpResponse.json({
+			categories: [
+				{
+					id: faker.string.uuid(),
+					name: faker.lorem.sentence(),
+				},
+				{
+					id: faker.string.uuid(),
+					name: faker.lorem.sentence(),
+				},
+				{
+					id: faker.string.uuid(),
+					name: faker.lorem.sentence(),
+				},
+				{
+					id: faker.string.uuid(),
+					name: faker.lorem.sentence(),
+				},
+				{
+					id: faker.string.uuid(),
+					name: faker.lorem.sentence(),
+				},
+				{
+					id: faker.string.uuid(),
+					name: faker.lorem.sentence(),
+				},
+			],
+		})
+	},
+)
