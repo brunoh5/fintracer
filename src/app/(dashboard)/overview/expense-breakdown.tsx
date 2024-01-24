@@ -63,13 +63,13 @@ export function ExpenseBreakdown() {
 				</div>
 			</CardHeader>
 			<CardContent>
-				<div className="grid w-full gap-x-10 gap-y-6 rounded-lg bg-white px-6 py-5 sm:grid-cols-3">
+				<div className="grid w-full gap-x-10 gap-y-6 rounded-lg sm:grid-cols-3">
 					{categories?.map((category) => (
 						<div
 							key={category.id}
 							className="flex items-center justify-between px-4 py-2"
 						>
-							<div className="flex h-14 w-10 items-center rounded-lg bg-[#D2D2D2]/25 p-2">
+							<div className="flex h-14 w-10 items-center rounded-lg p-2">
 								{categoryIcons[category.name as CategoryIcons]}
 							</div>
 							<div className="flex items-center gap-4">

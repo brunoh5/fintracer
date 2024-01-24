@@ -2,13 +2,14 @@
 
 import { useQuery } from '@tanstack/react-query'
 import dayJs from 'dayjs'
-import { Bell, ChevronsRight } from 'lucide-react'
+import { Bell, ChevronsRight, Search } from 'lucide-react'
 import { getSession } from 'next-auth/react'
 
 import { api } from '@/services/api'
 import { UserProps } from '@/types'
 
-import { SearchInput } from './search-input'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
 import { useToast } from './ui/use-toast'
 
 interface HeaderProps {
@@ -58,7 +59,12 @@ export function Header({ hasName = false }: HeaderProps) {
 			</div>
 			<div className="hidden h-[416px] items-center justify-between gap-8 sm:flex">
 				<Bell />
-				<SearchInput />
+				<div className="flex justify-center gap-2">
+					<Input className="w-full rounded bg-card" />
+					<Button type="button" variant="ghost">
+						<Search size={24} className="text-[#999DA3]" />
+					</Button>
+				</div>
 			</div>
 		</header>
 	)
