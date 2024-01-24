@@ -12,11 +12,11 @@ import { HTMLAttributes } from 'react'
 import { TransactionProps } from '@/types'
 
 const categoryIcons = {
-	food: <Utensils />,
-	transportation: <Car />,
-	entertainment: <Clapperboard />,
-	shopping: <ShoppingBag />,
-	others: <LayoutDashboard />,
+	Alimentação: <Utensils />,
+	Transporte: <Car />,
+	Entretenimento: <Clapperboard />,
+	Shopping: <ShoppingBag />,
+	Outros: <LayoutDashboard />,
 	Casa: <Home />,
 }
 

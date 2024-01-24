@@ -1,4 +1,4 @@
-import { fakerPT_BR as faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 import { http, HttpResponse } from 'msw'
 
 export const fetchCategoriesMock = http.get(
@@ -8,27 +8,27 @@ export const fetchCategoriesMock = http.get(
 			categories: [
 				{
 					id: faker.string.uuid(),
-					name: faker.lorem.sentence(),
+					name: 'Comida',
 				},
 				{
 					id: faker.string.uuid(),
-					name: faker.lorem.sentence(),
+					name: 'Transporte',
 				},
 				{
 					id: faker.string.uuid(),
-					name: faker.lorem.sentence(),
+					name: 'Entretenimento',
 				},
 				{
 					id: faker.string.uuid(),
-					name: faker.lorem.sentence(),
+					name: 'Shopping',
 				},
 				{
 					id: faker.string.uuid(),
-					name: faker.lorem.sentence(),
+					name: 'Outros',
 				},
 				{
 					id: faker.string.uuid(),
-					name: faker.lorem.sentence(),
+					name: 'Casa',
 				},
 			],
 		})

@@ -27,12 +27,13 @@ const categoryIcons = {
 	Casa: <Home />,
 }
 
+type CategoryIcons = keyof typeof categoryIcons
+
 const statusIcons = {
 	maior: <ArrowUp className="text-primary" size={16} />,
 	menor: <ArrowDown className="text-chili-red" size={16} />,
 }
 
-type CategoryIcons = keyof typeof categoryIcons
 type StatusIcons = keyof typeof statusIcons
 
 export function ExpenseBreakdown() {
