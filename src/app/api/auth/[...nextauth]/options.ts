@@ -18,10 +18,13 @@ export const nextAuthOptions: NextAuthOptions = {
 					password: string
 				}
 
-				const response = await axios.post('https://api.fintracer.com.br', {
-					email,
-					password,
-				})
+				const response = await axios.post(
+					'https://api.fintracer.com.br/sessions',
+					{
+						email,
+						password,
+					},
+				)
 
 				const { token } = response.data
 
