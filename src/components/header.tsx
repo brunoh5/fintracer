@@ -8,6 +8,7 @@ import { getSession } from 'next-auth/react'
 import { api } from '@/services/api'
 import { UserProps } from '@/types'
 
+import { ThemeSwitch } from './theme-switch'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { useToast } from './ui/use-toast'
@@ -58,6 +59,7 @@ export function Header({ hasName = false }: HeaderProps) {
 				</div>
 			</div>
 			<div className="hidden h-[416px] items-center justify-between gap-8 sm:flex">
+				<ThemeSwitch />
 				<Bell />
 				<div className="flex justify-center gap-2">
 					<Input className="w-full rounded bg-card" />

@@ -42,52 +42,50 @@ export default function Transactions() {
 					</span>
 				</div>
 
-				<div className="rounded-2xl bg-white px-7">
-					<Table className="w-full text-center">
-						<TableHeader className="border-b border-[#D2D2D2]/25 font-bold">
-							<TableRow>
-								<TableHead scope="col" className="py-3 text-left">
-									Nome
-								</TableHead>
-								<TableHead scope="col" className="px-7 py-3 text-center">
-									Estabelecimento
-								</TableHead>
-								<TableHead scope="col" className="px-7 py-3 text-center">
-									Data
-								</TableHead>
-								<TableHead scope="col" className="px-7 py-3 text-center">
-									Método de Pagamento
-								</TableHead>
-								<TableHead scope="col" className="py-3 text-center">
-									Valor
-								</TableHead>
-							</TableRow>
-						</TableHeader>
+				<Table className="w-full text-center">
+					<TableHeader className="font-bold">
+						<TableRow>
+							<TableHead scope="col" className="py-3 text-left">
+								Nome
+							</TableHead>
+							<TableHead scope="col" className="px-7 py-3 text-center">
+								Estabelecimento
+							</TableHead>
+							<TableHead scope="col" className="px-7 py-3 text-center">
+								Data
+							</TableHead>
+							<TableHead scope="col" className="px-7 py-3 text-center">
+								Método de Pagamento
+							</TableHead>
+							<TableHead scope="col" className="py-3 text-center">
+								Valor
+							</TableHead>
+						</TableRow>
+					</TableHeader>
 
-						{activeTab === 'all' && (
-							<Suspense fallback={<p>Carregando</p>}>
-								<TransactionList />
-							</Suspense>
-						)}
+					{activeTab === 'all' && (
+						<Suspense fallback={<p>Carregando</p>}>
+							<TransactionList />
+						</Suspense>
+					)}
 
-						{activeTab === 'revenues' && (
-							<Suspense fallback={<p>Carregando</p>}>
-								<TransactionList />
-							</Suspense>
-						)}
+					{activeTab === 'revenues' && (
+						<Suspense fallback={<p>Carregando</p>}>
+							<TransactionList />
+						</Suspense>
+					)}
 
-						{activeTab === 'expenses' && (
-							<Suspense fallback={<p>Carregando</p>}>
-								<TransactionList />
-							</Suspense>
-						)}
-					</Table>
+					{activeTab === 'expenses' && (
+						<Suspense fallback={<p>Carregando</p>}>
+							<TransactionList />
+						</Suspense>
+					)}
+				</Table>
 
-					<div className="mb-8 mt-8 flex items-center justify-center">
-						<Button type="submit" className="w-48" disabled>
-							Load More
-						</Button>
-					</div>
+				<div className="mb-8 mt-8 flex items-center justify-center">
+					<Button type="submit" className="w-48" disabled>
+						Load More
+					</Button>
 				</div>
 			</main>
 		</div>

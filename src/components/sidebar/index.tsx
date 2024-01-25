@@ -2,7 +2,6 @@ import { ArrowRightLeft, LayoutGrid, Wallet } from 'lucide-react'
 
 import { LogoutButton } from '../logout-button'
 import { NavLink } from '../nav-link'
-import { ThemeSwitch } from '../theme-switch'
 import { Mobile } from './mobile'
 import { Profile } from './profile'
 
@@ -14,14 +13,7 @@ export function Sidebar() {
 			<aside className="fixed left-0 top-0 z-40 flex h-screen w-[280px] -translate-x-full flex-col justify-between border-r border-r-muted px-7 py-12 font-semibold text-card-foreground transition-transform sm:translate-x-0 dark:bg-card">
 				<div className="flex h-full flex-col justify-between">
 					<div>
-						<div className="mb-6 flex w-full items-center  justify-between">
-							<h1 className=" text-center text-xl uppercase">
-								Fin
-								<span className="font-normal lowercase">tracer</span>
-							</h1>
-
-							<ThemeSwitch />
-						</div>
+						<h1 className="mb-6 text-center text-xl font-bold">Fintracer</h1>
 
 						<nav className="flex flex-col gap-4">
 							<NavLink href="/overview">
