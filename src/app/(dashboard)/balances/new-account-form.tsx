@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
+import { DatePicker } from '@/components/ui/date-picker'
 
 export function NewAccountForm() {
 	const [formattedNumber, setFormattedNumber] = useState('')

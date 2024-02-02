@@ -6,7 +6,7 @@ import { getSession } from 'next-auth/react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { formatPrice } from '@/utils/format-price'
+import { formatPrice } from '@/lib/format-price'
 
 export function Balance() {
 	const { data: totalBalance, isLoading } = useQuery<number>({

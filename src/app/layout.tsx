@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/toaster'
-import { cn } from '@/utils/shad-cn-configs'
+import { cn } from '@/lib/utils'
 
 import Providers from './providers'
 

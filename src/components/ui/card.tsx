@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { cn } from '@/utils/shad-cn-configs'
+import { cn } from '@/lib/utils'
 
 const Card = React.forwardRef<
 	HTMLDivElement,

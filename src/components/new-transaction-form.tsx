@@ -1,14 +1,12 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { createTransaction } from '@/app/api/create-transaction'
-import { Button } from '@/components/ui/button'
+import { Button } from './ui/button'
 import {
 	Dialog,
 	DialogClose,
@@ -17,31 +15,24 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog'
-import { cn } from '@/utils/shad-cn-configs'
-
-import { DatePickerInput } from './date-picker-input'
-import { Calendar } from './ui/calendar'
-import {
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from './ui/form'
+} from './ui/dialog'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { Select } from './ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { toast } from './ui/use-toast'
+import { DatePicker } from './ui/date-picker'
+import { useState } from 'react'
+import { RadioGroup, RadioGroupItem } from './ui/radio-group'
+import { CategoryProps } from '@/types'
+import { fetchCategories } from '@/app/api/fetch-categories'
+import { getSession } from 'next-auth/react'
+import { api } from '@/services/api'
 
 interface NewTransactionFormProps {
-	accountId?: string | null
+	accountId: string
 }
 
 const newTransactionForm = z.object({
-	accountId: z.string(),
 	name: z.string(),
 	shopName: z.string(),
 	amount: z.string(),
@@ -53,24 +44,45 @@ const newTransactionForm = z.object({
 
 type NewTransactionForm = z.infer<typeof newTransactionForm>
 
-export function NewTransaction({ accountId = null }: NewTransactionFormProps) {
-	const { register, handleSubmit, control } = useForm<NewTransactionForm>({
+export function NewTransaction({ accountId }: NewTransactionFormProps) {
+	const [date, setDate] = useState<Date | undefined>()
+
+	const { register, handleSubmit } = useForm<NewTransactionForm>({
 		resolver: zodResolver(newTransactionForm),
 	})
+
+	const { data: categories } = useQuery<CategoryProps[]>({
+		queryKey: ['categories'],
+		queryFn: async () => {
+			const session = await getSession()
+
+			const response = await api.get('/categories', {
+				headers: {
+					Authorization: `Bearer ${session?.user}`,
+				},
+			})
+
+			return response.data.categories
+		}
+	})
+
+	console.log(categories)
 
 	const { mutateAsync: createTransactionFn } = useMutation({
 		mutationFn: createTransaction,
 	})
 
 	async function handleCreateTransaction(data: NewTransactionForm) {
+		console.log(data, date)
+
 		try {
 			await createTransactionFn({
-				accountId: data.accountId,
 				name: data.name,
 				shopName: data.shopName,
-				amount: data.amount,
-				paid_at: data.paid_at,
 				type: data.type,
+				amount: data.amount,
+				accountId: accountId,
+				paid_at: date ?? null,
 				payment_method: data.payment_method ?? '',
 				categoryId: data.categoryId,
 			})
@@ -110,63 +122,60 @@ export function NewTransaction({ accountId = null }: NewTransactionFormProps) {
 					</div>
 
 					<div>
-						<Label htmlFor="amount">Estabelecimento / Site</Label>
+						<Label htmlFor="amount">Valor</Label>
 						<Input type="number" id="amount" {...register('amount')} />
 					</div>
 
+					<div>
+						<RadioGroup defaultValue='received' {...register('type')} className='flex items-center justify-between gap-4'>
+							<div className='flex items-center'>
+								<RadioGroupItem value='received' id='received' />
+								<Label htmlFor='received'>Recebido</Label>
+							</div>
+							<div className='flex items-center'>
+								<RadioGroupItem value='sent' id='sent' />
+								<Label htmlFor='sent'>Enviado</Label>
+							</div>
+						</RadioGroup>
+					</div>
+
 					{/* <Select
-						id="accountId"
+						disabled={accountId !== null}
+						defaultValue={accountId ? accountId : undefined}
 						{...register('accountId')}
-						className="data-[active=false]:hidden"
-						data-active={accountId !== ''}
-					></Select> */}
+					>
+						<SelectTrigger id='accountId'>
+							<SelectValue placeholder='Selecione a conta' />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value='conta1'>Conta 1</SelectItem>
+							<SelectItem value='conta2'>Conta 2</SelectItem>
+							<SelectItem value='conta3'>Conta 3</SelectItem>
+							<SelectItem value='conta4'>Conta 4</SelectItem>
+							<SelectItem value='conta5'>Conta 5</SelectItem>
+						</SelectContent>
+					</Select> */}
 
-					{/* <DatePickerInput control={control} /> */}
+					<div>
+						<Label htmlFor='categoryId'>Qual categoria armazenar essa transação ?</Label>
+						<Select
+							{...register('categoryId')}
+						>
+							<SelectTrigger id='categoryId'>
+								<SelectValue placeholder='Selecione a categoria da transação' />
+							</SelectTrigger>
+							<SelectContent>
+								{categories?.map((category: CategoryProps) => (
+									<SelectItem key={category.id} value={category.id}>
+										{category.name}
+									</SelectItem>
+								))}
+							</SelectContent>
 
-					<FormField
-						control={control}
-						name="paid_at"
-						render={({ field }) => (
-							<FormItem className="flex flex-col">
-								<FormLabel>Date of birth</FormLabel>
-								<Popover>
-									<PopoverTrigger asChild>
-										<FormControl>
-											<Button
-												variant={'outline'}
-												className={cn(
-													'w-[240px] pl-3 text-left font-normal',
-													!field.value && 'text-muted-foreground',
-												)}
-											>
-												{field.value ? (
-													format(field.value, 'PPP')
-												) : (
-													<span>Pick a date</span>
-												)}
-												<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-											</Button>
-										</FormControl>
-									</PopoverTrigger>
-									<PopoverContent className="w-auto p-0" align="start">
-										<Calendar
-											mode="single"
-											selected={field.value}
-											onSelect={field.onChange}
-											disabled={(date) =>
-												date > new Date() || date < new Date('1900-01-01')
-											}
-											initialFocus
-										/>
-									</PopoverContent>
-								</Popover>
-								<FormDescription>
-									Your date of birth is used to calculate your age.
-								</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+						</Select>
+					</div>
+
+					<DatePicker date={date} onDateChange={setDate} />
 				</form>
 
 				<DialogFooter className="flex items-center justify-end">

@@ -8,7 +8,7 @@ import { useState } from 'react'
 
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { formatPrice } from '@/utils/format-price'
+import { formatPrice } from '@/lib/format-price'
 
 import { AccountListSkeleton } from './account-list-skeleton'
 
