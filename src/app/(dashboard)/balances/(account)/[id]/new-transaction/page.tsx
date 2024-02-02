@@ -7,7 +7,6 @@ import { getSession } from 'next-auth/react'
 import { FormEvent, useRef } from 'react'
 
 import { Header } from '@/components/header'
-import { Select } from '@/components/select-input'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
@@ -59,12 +58,6 @@ export default function Account({ params }: { params: { id: string } }) {
 				categoryId: categoryRef.current?.value,
 			}
 
-			await api.post('/transactions', data, {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
-
 			router.push(`/balances/${params.id}`)
 		} catch (err) {
 			toast({
@@ -76,7 +69,7 @@ export default function Account({ params }: { params: { id: string } }) {
 	}
 
 	return (
-		<div className="flex w-screen flex-col">
+		<div className="ml-[280px] flex w-screen flex-col">
 			<Header />
 
 			<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
@@ -141,7 +134,7 @@ export default function Account({ params }: { params: { id: string } }) {
 							Qual método de pagamento usado?
 						</label>
 
-						<Select id="payment_method" ref={paymentMethodRef}>
+						{/* <Select id="payment_method" ref={paymentMethodRef}>
 							<option>Selecione</option>
 							<option value="money">Dinheiro</option>
 							<option value="PIX">Pix</option>
@@ -149,7 +142,7 @@ export default function Account({ params }: { params: { id: string } }) {
 							<option value="debit-card">Cartão de Debito</option>
 							<option value="bank-check">Cheque Bancário</option>
 							<option value="bank-transfer">Transferência Bancaria</option>
-						</Select>
+						</Select> */}
 					</div>
 
 					<div>
@@ -157,13 +150,13 @@ export default function Account({ params }: { params: { id: string } }) {
 							Qual categoria esta transação pertence ?
 						</label>
 
-						<Select id="categoryId" ref={categoryRef}>
+						{/* <Select id="categoryId" ref={categoryRef}>
 							{categories?.map((category: CategoryProps) => (
 								<option key={category.id} value={category.id}>
 									{category.name}
 								</option>
 							))}
-						</Select>
+						</Select> */}
 					</div>
 
 					<Button aria-label="sign up submit" type="submit">

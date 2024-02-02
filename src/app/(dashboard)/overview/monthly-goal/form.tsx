@@ -42,7 +42,7 @@ export function MonthlyGoalForm() {
 						>
 							<X
 								size={32}
-								className="text-gray-900 transition-colors group-hover:text-chili-red"
+								className="text-gray-900 transition-colors group-hover:text-red-500"
 							/>
 						</button>
 

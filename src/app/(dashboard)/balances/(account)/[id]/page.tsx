@@ -3,9 +3,11 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 import { Header } from '@/components/header'
+import { NewTransaction } from '@/components/new-transaction-form'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
-import { BalanceAccount } from './balance-account'
+import { ManageAccount } from './manage-account'
 import { TransactionsList } from './transactions-list'
 
 export default function Account({ params }: { params: { id: string } }) {
@@ -14,11 +16,12 @@ export default function Account({ params }: { params: { id: string } }) {
 			<Header />
 
 			<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
-				<h2 className="text-[22px] text-gray-500">Detalhes da Conta</h2>
-
-				<Suspense>
-					<BalanceAccount accountId={params.id} />
-				</Suspense>
+				<Card>
+					<CardHeader className="flex">
+						<CardTitle className="text-xl">Detalhes da conta</CardTitle>
+					</CardHeader>
+					<ManageAccount accountId={params.id} />
+				</Card>
 
 				<div className="flex items-center justify-between">
 					<h2 className="mb-2 text-[22px] text-gray-500">
@@ -32,10 +35,12 @@ export default function Account({ params }: { params: { id: string } }) {
 						>
 							Crie uma nova Transação
 						</Link>
+
+						<NewTransaction accountId={params.id} />
 					</div>
 				</div>
 
-				<div className="w-full bg-white px-6 py-5">
+				<div className="w-full px-6 py-5">
 					<Table>
 						<TableHeader>
 							<TableRow>

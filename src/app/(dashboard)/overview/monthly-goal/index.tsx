@@ -15,7 +15,7 @@ export function MonthlyGoal() {
 			<CardContent className="flex flex-col gap-3">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
-						<span className="text-[22px] font-bold text-eerie-black-900">
+						<span className="text-[22px] font-bold text-muted-foreground">
 							$20,000
 						</span>
 

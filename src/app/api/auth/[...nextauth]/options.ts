@@ -19,7 +19,8 @@ export const nextAuthOptions: NextAuthOptions = {
 				}
 
 				const response = await axios.post(
-					'https://api.fintracer.com.br/sessions',
+					// 'https://api.fintracer.com.br/sessions',
+					'http://localhost:3333/sessions',
 					{
 						email,
 						password,

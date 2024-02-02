@@ -77,7 +77,7 @@ export function LoginForm() {
 				{/* <div> */}
 				<label
 					htmlFor="password"
-					className="block font-semibold leading-6 text-gray-900"
+					className="block font-semibold leading-6 text-muted-foreground"
 				>
 					Senha
 				</label>

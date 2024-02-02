@@ -49,7 +49,7 @@ export function BillList() {
 					<TableCell className="px-7 py-8 text-gray-700">
 						{dayjs(bill.lastCharge).format('DD MMM, YYYY')}
 					</TableCell>
-					<TableCell className="py-8 font-extrabold text-eerie-black-900">
+					<TableCell className="py-8 font-extrabold text-muted-foreground">
 						{new Intl.NumberFormat('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
