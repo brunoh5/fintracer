@@ -5,11 +5,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { date, z } from 'zod'
 
 import { createTransaction } from '@/app/api/create-transaction'
 import { fetchAccounts } from '@/app/api/fetch-accounts'
 import { fetchCategories } from '@/app/api/fetch-categories'
+import { getAccount } from '@/app/api/get-account'
 import { AccountProps, CategoryProps } from '@/types'
 
 import { Button } from './ui/button'
@@ -46,7 +47,7 @@ const newTransactionForm = z.object({
 	accountId: z.any(),
 	shopName: z.string(),
 	amount: z.coerce.number(),
-	type: z.string(),
+	type: z.any(),
 	payment_method: z.string(),
 	categoryId: z.any(),
 })
@@ -86,6 +87,10 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 				queryKey: ['account', 'transactions', accountId],
 			})
 
+			// await queryClient.cancelQueries({
+			// 	queryKey: ['account', accountId],
+			// })
+
 			const previousData = queryClient.getQueryData([
 				'account',
 				'transactions',
@@ -97,26 +102,74 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 				(old: AccountProps[]) => [...old, newData],
 			)
 
+			// const amount = newData.data.amount
+
+			// const accountPreviousData = queryClient.getQueryData<AccountProps>([
+			// 	'accounts',
+			// 	accountId,
+			// ])
+
+			// const newBalance = Number(accountPreviousData?.balance) + amount
+
+			// queryClient.setQueryData(['accounts', accountId], (old: AccountProps) =>
+			// 	Object.assign(old, {
+			// 		balance: newBalance,
+			// 	}),
+			// )
+
 			return previousData
 		},
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		onError: (err, _, context: any) => {
+		onError: (_, __, context: any) => {
 			queryClient.setQueryData(
 				['account', 'transactions', accountId],
 				context.previousData,
 			)
-			toast({
-				variant: 'destructive',
-				title: 'Um erro ocorreu',
-				description: `${err}`,
-			})
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({
 				queryKey: ['account', 'transactions', accountId],
 			})
 		},
+		onSuccess(_, variables, __) {
+			const cachedAccount = queryClient.getQueryData(['accounts', accountId])
+			// const cachedTransactions = console.log(cached, variables)
+		},
 	})
+
+	// const mutate = useMutation({
+	// 	mutationFn: getAccount,
+	// 	onMutate: async (newData) => {
+	// 		await queryClient.cancelQueries({
+	// 			queryKey: ['accounts', accountId],
+	// 		})
+
+	// 		console.log(newData)
+
+	// 		const previousData = queryClient.getQueryData(['accounts', accountId])
+
+	// 		console.log(previousData)
+
+	// 		queryClient.setQueryData(
+	// 			['accounts', accountId],
+	// 			(old: AccountProps[]) => [...old, newData],
+	// 		)
+
+	// 		return previousData
+	// 	},
+	// 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// 	onError: (_, __, context: any) => {
+	// 		return queryClient.setQueryData(
+	// 			['accounts', accountId],
+	// 			context.previousData,
+	// 		)
+	// 	},
+	// 	onSettled: () => {
+	// 		queryClient.invalidateQueries({
+	// 			queryKey: ['accounts', accountId],
+	// 		})
+	// 	},
+	// })
 
 	async function handleCreateTransaction(data: NewTransactionForm) {
 		const session = await getSession()
@@ -135,6 +188,16 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 					categoryId: data.categoryId,
 				},
 			})
+
+			// await updateAccountBalanceFn({
+			// 	session,
+			// 	id: accountId,
+			// })
+
+			// mutate.mutate({
+			// 	id: accountId,
+			// 	session,
+			// })
 
 			toast({
 				variant: 'default',
@@ -177,22 +240,33 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 						<Input type="number" id="amount" {...register('amount')} />
 					</div>
 
-					<div className="flex items-center justify-center">
-						<RadioGroup
-							defaultValue="received"
-							{...register('type')}
-							className="flex items-center justify-between gap-4"
-						>
-							<div className="flex items-center gap-2 rounded border bg-green-700 p-4 text-white">
-								<RadioGroupItem value="received" id="received" />
-								<Label htmlFor="received">Recebido</Label>
-							</div>
-							<div className="flex items-center gap-2 rounded border bg-red-700 p-4 text-white">
-								<RadioGroupItem value="sent" id="sent" />
-								<Label htmlFor="sent">Enviado</Label>
-							</div>
-						</RadioGroup>
-					</div>
+					<div className="flex items-center justify-center"></div>
+
+					<Controller
+						name="type"
+						control={control}
+						defaultValue="received"
+						render={({ field: { name, onChange, value, disabled } }) => {
+							return (
+								<RadioGroup
+									name={name}
+									onValueChange={onChange}
+									value={value}
+									disabled={disabled}
+									className="flex items-center justify-between gap-4"
+								>
+									<div className="flex items-center gap-2 rounded border bg-green-700 p-4 text-white">
+										<RadioGroupItem value="received" id="received" />
+										<Label htmlFor="received">Recebido</Label>
+									</div>
+									<div className="flex items-center gap-2 rounded border bg-red-700 p-4 text-white">
+										<RadioGroupItem value="sent" id="sent" />
+										<Label htmlFor="sent">Enviado</Label>
+									</div>
+								</RadioGroup>
+							)
+						}}
+					/>
 
 					<Controller
 						name="accountId"
@@ -264,12 +338,12 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 									<SelectContent>
 										<SelectItem value="money">Dinheiro</SelectItem>
 										<SelectItem value="PIX">Pix</SelectItem>
-										<SelectItem value="credit-card">
+										<SelectItem value="credit_card">
 											Cartão de Credito
 										</SelectItem>
-										<SelectItem value="debit-card">Cartão de Debito</SelectItem>
-										<SelectItem value="bank-check">Cheque Bancário</SelectItem>
-										<SelectItem value="bank-transfer">
+										<SelectItem value="debit_card">Cartão de Debito</SelectItem>
+										<SelectItem value="bank_check">Cheque Bancário</SelectItem>
+										<SelectItem value="bank_transfer">
 											Transferência Bancaria
 										</SelectItem>
 									</SelectContent>

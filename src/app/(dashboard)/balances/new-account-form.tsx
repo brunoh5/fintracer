@@ -101,7 +101,7 @@ export function NewAccountForm() {
 
 							<div>
 								<label htmlFor="bank-name">Banco</label>
-								<Input id="bank-name" name="type" autoComplete="off" />
+								<Input id="bank-name" name="bank" autoComplete="off" />
 							</div>
 
 							<div>
