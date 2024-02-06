@@ -1,26 +1,24 @@
-import { Session, getServerSession } from 'next-auth'
+import { Session } from 'next-auth'
 
 import { api } from '@/services/api'
 
-interface FetchCategoriesResponse {
+interface FetchCategoriesRequest {
+	session: Session | null
+}
+
+export interface Categories {
 	categories: {
 		id: string
 		name: string
 	}[]
 }
 
-export async function fetchCategories(user: string | null) {
-	// const session = await getServerSession()
-
-	console.log(user)
-
-	const response = await api.get<FetchCategoriesResponse>('/categories', {
+export async function fetchCategories({ session }: FetchCategoriesRequest) {
+	const response = await api.get<Categories>('/categories', {
 		headers: {
-			Authorization: `Bearer ${user}`,
+			Authorization: `Bearer ${session?.user}`,
 		},
 	})
-
-	console.log(response)
 
 	return response.data.categories
 }

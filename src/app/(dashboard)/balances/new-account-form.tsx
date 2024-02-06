@@ -7,6 +7,7 @@ import { FormEvent, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+// import { DatePicker } from '@/components/ui/date-picker'
 import {
 	Dialog,
 	DialogContent,
@@ -18,7 +19,6 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { DatePicker } from '@/components/ui/date-picker'
 
 export function NewAccountForm() {
 	const [formattedNumber, setFormattedNumber] = useState('')

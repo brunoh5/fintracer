@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { Skeleton } from '@/components/ui/skeleton'
+import { formatPrice } from '@/lib/format-price'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { formatPrice } from '@/lib/format-price'
 
 export function Balance() {
 	const { data: totalBalance, isLoading } = useQuery<number>({

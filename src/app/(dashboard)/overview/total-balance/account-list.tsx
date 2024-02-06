@@ -6,9 +6,9 @@ import Image from 'next/image'
 import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 
+import { formatPrice } from '@/lib/format-price'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { formatPrice } from '@/lib/format-price'
 
 import { AccountListSkeleton } from './account-list-skeleton'
 
