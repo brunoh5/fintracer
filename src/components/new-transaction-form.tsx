@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -5,12 +7,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { date, z } from 'zod'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
 import { createTransaction } from '@/app/api/create-transaction'
 import { fetchAccounts } from '@/app/api/fetch-accounts'
 import { fetchCategories } from '@/app/api/fetch-categories'
-import { getAccount } from '@/app/api/get-account'
 import { AccountProps, CategoryProps } from '@/types'
 
 import { Button } from './ui/button'
@@ -34,7 +36,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from './ui/select'
-import { toast } from './ui/use-toast'
 
 interface NewTransactionFormProps {
 	accountId: string
@@ -81,15 +82,12 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 	})
 
 	const { mutateAsync: createTransactionFn } = useMutation({
+		mutationKey: ['account', 'transactions', accountId],
 		mutationFn: createTransaction,
 		onMutate: async (newData) => {
 			await queryClient.cancelQueries({
 				queryKey: ['account', 'transactions', accountId],
 			})
-
-			// await queryClient.cancelQueries({
-			// 	queryKey: ['account', accountId],
-			// })
 
 			const previousData = queryClient.getQueryData([
 				'account',
@@ -102,24 +100,8 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 				(old: AccountProps[]) => [...old, newData],
 			)
 
-			// const amount = newData.data.amount
-
-			// const accountPreviousData = queryClient.getQueryData<AccountProps>([
-			// 	'accounts',
-			// 	accountId,
-			// ])
-
-			// const newBalance = Number(accountPreviousData?.balance) + amount
-
-			// queryClient.setQueryData(['accounts', accountId], (old: AccountProps) =>
-			// 	Object.assign(old, {
-			// 		balance: newBalance,
-			// 	}),
-			// )
-
 			return previousData
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		onError: (_, __, context: any) => {
 			queryClient.setQueryData(
 				['account', 'transactions', accountId],
@@ -130,46 +112,29 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 			queryClient.invalidateQueries({
 				queryKey: ['account', 'transactions', accountId],
 			})
+
+			queryClient.invalidateQueries({
+				queryKey: ['accounts', accountId],
+			})
 		},
 		onSuccess(_, variables, __) {
-			const cachedAccount = queryClient.getQueryData(['accounts', accountId])
-			// const cachedTransactions = console.log(cached, variables)
+			const cachedAccount = queryClient.getQueryData<AccountProps>([
+				'accounts',
+				accountId,
+			])
+
+			console.log(cachedAccount)
+
+			if (cachedAccount) {
+				queryClient.setQueryData(
+					['accounts', accountId],
+					Object.assign(cachedAccount, {
+						balance: Number(cachedAccount.balance) + variables.data.amount,
+					}),
+				)
+			}
 		},
 	})
-
-	// const mutate = useMutation({
-	// 	mutationFn: getAccount,
-	// 	onMutate: async (newData) => {
-	// 		await queryClient.cancelQueries({
-	// 			queryKey: ['accounts', accountId],
-	// 		})
-
-	// 		console.log(newData)
-
-	// 		const previousData = queryClient.getQueryData(['accounts', accountId])
-
-	// 		console.log(previousData)
-
-	// 		queryClient.setQueryData(
-	// 			['accounts', accountId],
-	// 			(old: AccountProps[]) => [...old, newData],
-	// 		)
-
-	// 		return previousData
-	// 	},
-	// 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	// 	onError: (_, __, context: any) => {
-	// 		return queryClient.setQueryData(
-	// 			['accounts', accountId],
-	// 			context.previousData,
-	// 		)
-	// 	},
-	// 	onSettled: () => {
-	// 		queryClient.invalidateQueries({
-	// 			queryKey: ['accounts', accountId],
-	// 		})
-	// 	},
-	// })
 
 	async function handleCreateTransaction(data: NewTransactionForm) {
 		const session = await getSession()
@@ -189,26 +154,9 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 				},
 			})
 
-			// await updateAccountBalanceFn({
-			// 	session,
-			// 	id: accountId,
-			// })
-
-			// mutate.mutate({
-			// 	id: accountId,
-			// 	session,
-			// })
-
-			toast({
-				variant: 'default',
-				description: 'Transação cadastrada com sucesso',
-			})
-		} catch (error) {
-			console.log(error)
-			toast({
-				variant: 'destructive',
-				description: 'Erro ao cadastrar a transação',
-			})
+			toast.success('Transação cadastrada com sucesso')
+		} catch {
+			toast.error('Erro ao cadastrar a transação')
 		}
 	}
 
@@ -367,7 +315,11 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 
 				<DialogFooter className="flex items-center justify-end">
 					<DialogClose asChild>
-						<Button type="reset" form="new-transaction-form">
+						<Button
+							type="reset"
+							form="new-transaction-form"
+							variant="destructive"
+						>
 							Cancelar
 						</Button>
 					</DialogClose>

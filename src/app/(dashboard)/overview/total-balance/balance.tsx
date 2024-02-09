@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { Skeleton } from '@/components/ui/skeleton'
-import { formatPrice } from '@/lib/format-price'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
 
@@ -39,7 +38,10 @@ export function Balance() {
 				<Skeleton />
 			) : (
 				<span className="text-xl font-bold">
-					{formatPrice(totalBalance ?? 0)}
+					{totalBalance?.toLocaleString('pt-BR', {
+						style: 'currency',
+						currency: 'BRL',
+					})}
 				</span>
 			)}
 		</>

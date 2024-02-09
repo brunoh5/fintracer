@@ -1,29 +1,33 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { SyntheticEvent, useRef, useState } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useToast } from '@/components/ui/use-toast'
+import { Label } from '@/components/ui/label'
+
+const loginForm = z.object({
+	email: z.string().email(),
+	password: z.string(),
+})
+
+type LoginForm = z.infer<typeof loginForm>
 
 export function LoginForm() {
-	const { toast } = useToast()
 	const { replace } = useRouter()
 	const [isLoading, setIsLoading] = useState(false)
 
-	const emailRef = useRef<HTMLInputElement>(null)
-	const passwordRef = useRef<HTMLInputElement>(null)
+	const { register, handleSubmit } = useForm<LoginForm>({
+		resolver: zodResolver(loginForm),
+	})
 
-	async function handleLogin(event: SyntheticEvent) {
-		event.preventDefault()
-
-		setIsLoading(true)
-
-		const email = emailRef.current?.value
-		const password = passwordRef.current?.value
-
+	async function handleLogin({ email, password }: LoginForm) {
 		const response = await signIn('credentials', {
 			email,
 			password,
@@ -31,22 +35,14 @@ export function LoginForm() {
 		})
 
 		if (response?.status !== 200) {
-			toast({
-				variant: 'destructive',
-				title: 'Credenciais Invalidas',
-				description: `Tente novamente por favor`,
-			})
+			toast.error('Credenciais invalidas')
 
 			setIsLoading(false)
 
 			return
 		}
 
-		toast({
-			variant: 'default',
-			title: 'Sucesso',
-			description: 'Login feito com sucesso, aguarde que vamos te redirecionar',
-		})
+		toast.success('Login feito com sucesso')
 
 		setIsLoading(false)
 
@@ -54,33 +50,31 @@ export function LoginForm() {
 	}
 
 	return (
-		<form onSubmit={handleLogin} className="flex flex-col gap-6">
+		<form onSubmit={handleSubmit(handleLogin)} className="flex flex-col gap-6">
 			<div className="flex flex-col gap-2">
-				<label
+				<Label
 					htmlFor="email"
 					className="font-semibold leading-6 text-muted-foreground"
 				>
 					E-mail
-				</label>
+				</Label>
 				<Input
 					type="email"
 					id="email"
-					ref={emailRef}
 					placeholder="johndoe@email.com"
 					autoComplete="email"
-					required
-					className="rounded-sm"
+					{...register('email')}
 				/>
 			</div>
 
 			<div className="flex flex-col gap-2">
 				{/* <div> */}
-				<label
+				<Label
 					htmlFor="password"
 					className="block font-semibold leading-6 text-muted-foreground"
 				>
-					Senha
-				</label>
+					Preencha sua senha
+				</Label>
 				{/* <Link href="/forgotPassword" className="text-xs text-primary">
 						Forgot Password
 					</Link> */}
@@ -88,11 +82,9 @@ export function LoginForm() {
 				<Input
 					type="password"
 					id="password"
-					ref={passwordRef}
-					placeholder="*********"
 					autoComplete="current-password"
 					required
-					className="rounded-sm"
+					{...register('password')}
 				/>
 			</div>
 
