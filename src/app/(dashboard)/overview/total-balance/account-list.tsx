@@ -8,8 +8,6 @@ import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 
 import { fetchAccounts } from '@/app/api/fetch-accounts'
-import { formatPrice } from '@/lib/format-price'
-import { api } from '@/services/api'
 import { AccountProps } from '@/types'
 
 import { AccountListSkeleton } from './account-list-skeleton'
@@ -57,6 +55,7 @@ export function AccountList() {
 										{account.balance.toLocaleString('pt-BR', {
 											style: 'currency',
 											currency: 'BRL',
+											maximumFractionDigits: 2,
 										})}
 									</span>
 									<Link href={`/balances/${account.id}`}>

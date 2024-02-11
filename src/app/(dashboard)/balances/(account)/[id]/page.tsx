@@ -1,5 +1,3 @@
-import { Plus } from 'lucide-react'
-import Link from 'next/link'
 import { Suspense } from 'react'
 
 import { Header } from '@/components/header'
@@ -27,17 +25,8 @@ export default function Account({ params }: { params: { id: string } }) {
 					<h2 className="mb-2 text-[22px] text-gray-500">
 						Histórico de Transações
 					</h2>
-					<div className="flex items-center justify-center gap-4 text-gray-500">
-						<Plus size={16} />
-						<Link
-							className="text-xs"
-							href={`/balances/${params.id}/new-transaction`}
-						>
-							Crie uma nova Transação
-						</Link>
 
-						<NewTransaction accountId={params.id} />
-					</div>
+					<NewTransaction accountId={params.id} />
 				</div>
 
 				<div className="w-full px-6 py-5">

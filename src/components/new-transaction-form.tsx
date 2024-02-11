@@ -4,6 +4,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Plus } from 'lucide-react'
 import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -38,7 +39,7 @@ import {
 } from './ui/select'
 
 interface NewTransactionFormProps {
-	accountId: string
+	accountId: string | null
 }
 
 const newTransactionForm = z.object({
@@ -162,7 +163,15 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 
 	return (
 		<Dialog>
-			<DialogTrigger>Nova Transação</DialogTrigger>
+			<DialogTrigger asChild>
+				<Button
+					variant="ghost"
+					className='className="flex text-gray-500" items-center justify-center gap-4'
+				>
+					<Plus size={16} />
+					Nova Transação
+				</Button>
+			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Criar transação</DialogTitle>
@@ -228,7 +237,7 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 									value={value}
 									disabled={disabled}
 								>
-									<SelectTrigger className="h-8 w-[180px]">
+									<SelectTrigger className="h-8">
 										<SelectValue placeholder="Selecione a conta que a transação pertence" />
 									</SelectTrigger>
 									<SelectContent>
@@ -254,7 +263,7 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 									value={value}
 									disabled={disabled}
 								>
-									<SelectTrigger className="h-8 w-[180px]">
+									<SelectTrigger className="h-8">
 										<SelectValue placeholder="Selecione a categoria da transação" />
 									</SelectTrigger>
 									<SelectContent>
@@ -280,7 +289,7 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 									value={value}
 									disabled={disabled}
 								>
-									<SelectTrigger className="h-8 w-[180px]">
+									<SelectTrigger className="h-8">
 										<SelectValue placeholder="Selecione a o método de pagamento" />
 									</SelectTrigger>
 									<SelectContent>
