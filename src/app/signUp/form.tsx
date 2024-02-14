@@ -2,41 +2,33 @@
 
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { SyntheticEvent, useRef } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/services/api'
 
+const registerForm = z.object({
+	name: z.string(),
+	email: z.string().email(),
+	password: z.string(),
+})
+
+type RegisterForm = z.infer<typeof registerForm>
+
 export function SignUpForm() {
-	const { toast } = useToast()
 	const { replace } = useRouter()
+	const { register, handleSubmit } = useForm<RegisterForm>()
 
-	const nameRef = useRef<HTMLInputElement>(null)
-	const emailRef = useRef<HTMLInputElement>(null)
-	const passwordRef = useRef<HTMLInputElement>(null)
-
-	async function handleRegister(event: SyntheticEvent) {
-		event.preventDefault()
-
-		const data = {
-			email: emailRef.current?.value,
-			password: passwordRef.current?.value,
-		}
-
+	async function handleRegister(data: RegisterForm) {
 		try {
 			await api.post('/users', {
-				...data,
-				name: nameRef.current?.value,
+				data,
 			})
 		} catch {
-			toast({
-				variant: 'destructive',
-				title: 'E-mail já cadastrado',
-				description: 'Usuario já existente',
-			})
-
+			toast.error('E-mail já cadastrado')
 			return
 		}
 
@@ -49,7 +41,10 @@ export function SignUpForm() {
 	}
 
 	return (
-		<form onSubmit={handleRegister} className="flex flex-col gap-6">
+		<form
+			onSubmit={handleSubmit(handleRegister)}
+			className="flex flex-col gap-6"
+		>
 			<div>
 				<label
 					htmlFor="name"
@@ -57,13 +52,7 @@ export function SignUpForm() {
 				>
 					Digite seu nome
 				</label>
-				<Input
-					type="name"
-					id="name"
-					ref={nameRef}
-					autoComplete="name"
-					required
-				/>
+				<Input id="name" {...register('name')} autoComplete="name" required />
 			</div>
 
 			<div>
@@ -76,10 +65,10 @@ export function SignUpForm() {
 				<Input
 					type="email"
 					id="email"
-					ref={emailRef}
 					placeholder="johndoe@email.com"
 					autoComplete="email"
 					required
+					{...register('email')}
 				/>
 			</div>
 
@@ -93,10 +82,10 @@ export function SignUpForm() {
 				<Input
 					type="password"
 					id="password"
-					ref={passwordRef}
 					placeholder="*********"
 					autoComplete="new-password"
 					required
+					{...register('password')}
 				/>
 			</div>
 
