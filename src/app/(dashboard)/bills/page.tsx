@@ -14,6 +14,7 @@ export default function Bills() {
 			<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
 				<div className="flex items-center justify-between">
 					<h2 className="text-[22px] text-gray-500">Próximas Contas</h2>
+
 					<NewBillForm />
 				</div>
 
