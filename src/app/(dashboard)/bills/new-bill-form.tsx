@@ -1,209 +1,275 @@
 'use client'
 
-import { X } from 'lucide-react'
-import { SyntheticEvent, useRef, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Plus } from 'lucide-react'
+import { getSession } from 'next-auth/react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
+import { createBill } from '@/app/api/create-bill'
+import { ControlledSelect } from '@/components/controlled-select'
+import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/ui/date-picker'
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { SelectItem } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { BillsProps } from '@/types'
+
+const newBillForm = z.object({
+	supplier: z.string(),
+	amount: z.coerce.number(),
+	documentNumber: z.string().nullable(),
+	description: z.string().nullable(),
+	paymentMethod: z.string().nullable(),
+	carrier: z.string().nullable(),
+	occurrence: z.string().nullable(),
+	period: z.enum(['only', 'monthly', 'anual']),
+})
+
+type NewBillForm = z.infer<typeof newBillForm>
 
 export function NewBillForm() {
-	const [isVisible, setIsVisible] = useState(false)
+	const queryClient = useQueryClient()
+	const { register, handleSubmit, control } = useForm<NewBillForm>()
 
-	const supplierRef = useRef<HTMLInputElement>(null)
-	const originalDueDateRef = useRef<HTMLInputElement>(null)
-	const dueDateRef = useRef<HTMLInputElement>(null)
-	const amountRef = useRef<HTMLInputElement>(null)
-	const emissionDateRef = useRef<HTMLInputElement>(null)
-	const documentNumberRef = useRef<HTMLInputElement>(null)
-	const paymentDayOrderRef = useRef<HTMLInputElement>(null)
-	const descriptionRef = useRef<HTMLTextAreaElement>(null)
-	const paymentMethodRef = useRef<HTMLSelectElement>(null)
-	const carrierRef = useRef<HTMLSelectElement>(null)
-	const occurrenceRef = useRef<HTMLSelectElement>(null)
+	const [originalDueDate, setOriginalDueDate] = useState<Date | undefined>()
+	const [dueDate, setDueDate] = useState<Date | undefined>()
+	const [emissionDate, setEmissionDate] = useState<Date | undefined>()
+	const [paymentDayOrder, setPaymentDayOrder] = useState<Date | undefined>()
 
-	function handleCreateBill(e: SyntheticEvent) {
-		e.preventDefault()
+	const { mutateAsync: createBillFn } = useMutation({
+		mutationKey: ['bills'],
+		mutationFn: createBill,
+		onMutate: async (newData) => {
+			await queryClient.cancelQueries({
+				queryKey: ['bills'],
+			})
 
-		const data = {
-			supplier: supplierRef.current?.value,
-			originalDueDate: originalDueDateRef.current?.value ?? null,
-			dueDate: dueDateRef.current?.value,
-			amount: amountRef.current?.value,
-			emissionDate: emissionDateRef.current?.value ?? null,
-			documentNumber: documentNumberRef.current?.value ?? null,
-			paymentDayOrder: paymentDayOrderRef.current?.value ?? null,
-			description: descriptionRef.current?.value ?? null,
-			paymentMethod: paymentMethodRef.current?.value ?? null,
-			carrier: carrierRef.current?.value ?? null,
-			occurrence: occurrenceRef.current?.value ?? null,
+			const previousData = queryClient.getQueryData(['bills'])
+
+			queryClient.setQueryData(['bills'], (old: BillsProps[]) => [
+				...old,
+				newData,
+			])
+
+			return previousData
+		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		onError: (_, __, context: any) => {
+			queryClient.setQueryData(['bills'], context.previousData)
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({
+				queryKey: ['bills'],
+			})
+		},
+	})
+
+	async function handleCreateBill(data: NewBillForm) {
+		const session = await getSession()
+
+		console.log({
+			...data,
+			originalDueDate,
+			dueDate,
+			emissionDate,
+			paymentDayOrder,
+		})
+
+		try {
+			await createBillFn({
+				session,
+				data: {
+					...data,
+					originalDueDate,
+					dueDate,
+					emissionDate,
+					paymentDayOrder,
+				},
+			})
+			toast.success('Despesa cadastrada com sucesso')
+		} catch {
+			toast.error('Erro ao cadastrar a despesa')
 		}
-
-		console.log(data)
 	}
 
 	return (
-		<>
-			<button type="button" onClick={() => setIsVisible(!isVisible)}>
-				Adicionar nova conta
-			</button>
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button
+					variant="ghost"
+					className='className="flex text-gray-500" items-center justify-center gap-4'
+				>
+					<Plus size={16} />
+					Nova Despesa
+				</Button>
+			</DialogTrigger>
 
-			<div
-				className="absolute bottom-0 left-0 right-0 top-0 z-10 hidden items-center justify-center bg-gray-950/20 transition-all data-[active=true]:flex"
-				role="dialog"
-				aria-modal="true"
-				data-active={isVisible}
-			>
-				<div className="relative w-full max-w-[568px] rounded-2xl bg-white px-16 pb-12 pt-16">
-					<form onSubmit={handleCreateBill} className="flex w-full flex-col">
-						<div className="space-between align-center flex w-full">
-							{/* Header */}
-							<h6 className="text-xl font-bold">Conta a pagar</h6>
-							<button
-								type="button"
-								onClick={() => setIsVisible(!isVisible)}
-								className="flex items-center transition-colors hover:text-red-700"
-							>
-								<X />
-							</button>
+			<DialogContent>
+				<DialogHeader className="space-y-2">
+					<DialogTitle>Conta a pagar</DialogTitle>
+					<DialogDescription>Adicione uma nova despesa </DialogDescription>
+					<p className="text-xs font-bold">
+						<span className="text-red-700">(*)</span> Campos obrigatórios
+					</p>
+				</DialogHeader>
+
+				<form
+					onSubmit={handleSubmit(handleCreateBill)}
+					className="flex flex-col gap-4"
+					id="new-bill-form"
+				>
+					<div>
+						<Label htmlFor="supplier" className="font-bold">
+							Fornecedor<span className="text-red-700">*</span>
+						</Label>
+						<Input
+							id="supplier"
+							placeholder="Nome do fornecedor"
+							{...register('supplier')}
+						/>
+					</div>
+
+					<div className="grid grid-cols-3 gap-x-4">
+						<div>
+							<Label htmlFor="original_due_date">Venc. original</Label>
+							<DatePicker
+								date={originalDueDate}
+								onDateChange={setOriginalDueDate}
+								className="w-full overflow-hidden"
+								id="original_due_date"
+							/>
 						</div>
-						<p className="font-bold">
-							<span className="text-red-700">(*)</span> Campos obrigatórios
-						</p>
 
-						<fieldset className="flex flex-col gap-2">
-							<div>
-								<label htmlFor="supplier" className="font-bold">
-									Fornecedor<span className="text-red-700">*</span>
-								</label>
-								<Input
-									type="text"
-									ref={supplierRef}
-									id="supplier"
-									placeholder="Nome do fornecedor"
-								/>
-							</div>
+						<div>
+							<Label htmlFor="due_date">
+								Vencimento<span className="text-red-700">*</span>
+							</Label>
+							<DatePicker
+								date={dueDate}
+								onDateChange={setDueDate}
+								className="w-full overflow-hidden"
+								id="due_date"
+							/>
+						</div>
 
-							<div className="grid grid-cols-3 gap-x-4">
-								<div>
-									<label htmlFor="original_due_date" className="font-bold">
-										Venc. original
-									</label>
-									<Input
-										type="date"
-										ref={originalDueDateRef}
-										id="original_due_date"
-									/>
-								</div>
+						<div>
+							<Label htmlFor="amount" className="font-bold">
+								Valor(R$)<span className="text-red-700">*</span>
+							</Label>
+							<Input type="text" {...register('amount')} id="amount" />
+						</div>
 
-								<div>
-									<label htmlFor="due_date" className="font-bold">
-										Vencimento<span className="text-red-700">*</span>
-									</label>
-									<Input type="date" ref={dueDateRef} id="due_date" />
-								</div>
+						<div>
+							<Label htmlFor="emission_date">Data da emissão</Label>
+							<DatePicker
+								date={emissionDate}
+								onDateChange={setEmissionDate}
+								className="w-full overflow-hidden"
+								id="emission_date"
+							/>
+						</div>
 
-								<div>
-									<label htmlFor="amount" className="font-bold">
-										Valor(R$)<span className="text-red-700">*</span>
-									</label>
-									<Input type="text" ref={amountRef} id="amount" />
-								</div>
+						<div>
+							<Label htmlFor="document_number" className="font-bold">
+								N° documento
+							</Label>
+							<Input {...register('documentNumber')} id="document_number" />
+						</div>
 
-								<div>
-									<label htmlFor="emission-date" className="font-bold">
-										Data da emissão
-									</label>
-									<Input type="date" ref={emissionDateRef} id="emission-date" />
-								</div>
+						<div>
+							<Label htmlFor="payment_day_order">Competência</Label>
+							<DatePicker
+								date={paymentDayOrder}
+								onDateChange={setPaymentDayOrder}
+								className="w-full overflow-hidden"
+								id="payment_day_order"
+							/>
+						</div>
+					</div>
+					<div className="flex flex-col">
+						<Label htmlFor="description" className="font-bold">
+							Descrição
+						</Label>
+						<Textarea
+							{...register('description')}
+							id="description"
+							className="h-full max-h-20 w-full resize-none"
+						/>
+					</div>
 
-								<div>
-									<label htmlFor="document-number" className="font-bold">
-										N° documento
-									</label>
-									<Input
-										type="text"
-										ref={documentNumberRef}
-										id="document-number"
-									/>
-								</div>
+					<div>
+						<Label htmlFor="payment_method" className="font-bold">
+							Forma de pagamento
+						</Label>
+						<ControlledSelect
+							{...register('paymentMethod')}
+							placeholder="Selecione o método de pagamento"
+							control={control}
+							id="payment_method"
+						>
+							<SelectItem value="money">Dinheiro</SelectItem>
+							<SelectItem value="PIX">Pix</SelectItem>
+							<SelectItem value="credit-card">Cartão de Credito</SelectItem>
+							<SelectItem value="debit-card">Cartão de Debito</SelectItem>
+							<SelectItem value="bank-check">Cheque Bancário</SelectItem>
+							<SelectItem value="bank-transfer">
+								Transferência Bancaria
+							</SelectItem>
+						</ControlledSelect>
+					</div>
 
-								<div>
-									<label htmlFor="payment-day-order" className="font-bold">
-										Competência
-									</label>
-									<Input
-										type="date"
-										ref={paymentDayOrderRef}
-										id="payment-day-order"
-									/>
-								</div>
-							</div>
-							<div className="flex flex-col">
-								<label htmlFor="description" className="font-bold">
-									Descrição
-								</label>
-								<textarea
-									ref={descriptionRef}
-									id="description"
-									className="h-full max-h-20 w-full resize-none"
-								/>
-							</div>
+					<div className="sr-only">
+						<Label htmlFor="categoryId" className="font-bold">
+							Categoria
+						</Label>
+						<select id="categoryId">
+							<option value="">Selecione</option>
+						</select>
+					</div>
 
-							<div className="grid grid-cols-3 gap-x-4">
-								<div>
-									<label htmlFor="payment_method" className="font-bold">
-										Forma de pagamento
-									</label>
-									<select
-										ref={paymentMethodRef}
-										id="payment_method"
-										className=""
-									>
-										<option value="">Selecione</option>
-										<option value="money">Dinheiro</option>
-										<option value="PIX">Pix</option>
-										<option value="credit-card">Cartão de Credito</option>
-										<option value="debit-card">Cartão de Debito</option>
-										<option value="bank-check">Cheque Bancário</option>
-										<option value="bank-transfer">
-											Transferência Bancaria
-										</option>
-									</select>
-								</div>
+					<div>
+						<Label htmlFor="period" className="font-bold">
+							Ocorrência
+						</Label>
+						<ControlledSelect
+							{...register('period')}
+							placeholder="Selecione a ocorrência do pagamento"
+							control={control}
+							id="period"
+						>
+							<SelectItem value="only">Única</SelectItem>
+							<SelectItem value="monthly">Mensal</SelectItem>
+							<SelectItem value="anual">Anual</SelectItem>
+						</ControlledSelect>
+					</div>
+				</form>
 
-								<div>
-									<label htmlFor="carrier" className="font-bold">
-										Portador
-									</label>
-									<select ref={carrierRef} id="carrier">
-										<option value="">Selecione</option>
-									</select>
-								</div>
+				<DialogFooter className="flex items-center justify-end">
+					<DialogClose asChild>
+						<Button type="reset" form="new-bill-form" variant="destructive">
+							Cancelar
+						</Button>
+					</DialogClose>
 
-								<div>
-									<label htmlFor="categoryId" className="font-bold">
-										Categoria
-									</label>
-									<select id="categoryId">
-										<option value="">Selecione</option>
-									</select>
-								</div>
-
-								<div>
-									<label htmlFor="period" className="font-bold">
-										Ocorrência
-									</label>
-									<select ref={occurrenceRef} id="occurrence">
-										<option value="">Selecione</option>
-										<option value="only">Única</option>
-										<option value="monthly">Mensal</option>
-										<option value="anual">Anual</option>
-									</select>
-								</div>
-							</div>
-						</fieldset>
-					</form>
-				</div>
-			</div>
-		</>
+					<Button type="submit" form="new-bill-form">
+						Salvar
+					</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	)
 }

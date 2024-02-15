@@ -1,80 +1,87 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable n/handle-callback-err */
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
-import { FormEvent, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
+import { createAccount } from '@/app/api/create-account'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { toast } from '@/components/ui/use-toast'
-import { api } from '@/services/api'
+import { Label } from '@/components/ui/label'
 import { AccountProps } from '@/types'
 
+const newAccountForm = z.object({
+	type: z.string(),
+	bank: z.string(),
+	number: z.string().default(''),
+	initialAmount: z.coerce.number().default(0),
+})
+
+type NewAccountForm = z.infer<typeof newAccountForm>
+
 export function NewAccountForm() {
-	const [formattedNumber, setFormattedNumber] = useState('')
 	const queryClient = useQueryClient()
 
-	const mutation = useMutation({
-		mutationKey: ['balance/accounts'],
-		mutationFn: async (data: object) => {
-			const session = await getSession()
+	const { register, handleSubmit } = useForm<NewAccountForm>({
+		resolver: zodResolver(newAccountForm),
+	})
 
-			return api.post('/accounts', data, {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
-		},
-		onMutate: async (newAccount) => {
-			await queryClient.cancelQueries({ queryKey: ['balance/accounts'] })
+	const { mutateAsync: createAccountFn } = useMutation({
+		mutationKey: ['balance', 'accounts'],
+		mutationFn: createAccount,
+		onMutate: async (newData) => {
+			await queryClient.cancelQueries({ queryKey: ['balance', 'accounts'] })
 
-			const previousAccounts = queryClient.getQueryData(['balance/accounts'])
+			const previousAccounts = queryClient.getQueryData(['balance', 'accounts'])
 
-			queryClient.setQueryData(['balance/accounts'], (old: AccountProps[]) => [
-				...old,
-				newAccount,
-			])
+			queryClient.setQueryData(
+				['balance', 'accounts'],
+				(old: AccountProps[]) => [...old, newData],
+			)
 
 			return previousAccounts
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		onError: (err, _, context: any) => {
-			queryClient.setQueryData(['balance/accounts'], context.previousAccounts)
-			toast({
-				variant: 'destructive',
-				title: 'Um erro ocorreu',
-				description: `${err}`,
-			})
+		onError: (_, __, context: any) => {
+			queryClient.setQueryData(
+				['balance', 'accounts'],
+				context.previousAccounts,
+			)
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['balance/accounts'] })
+			queryClient.invalidateQueries({ queryKey: ['balance', 'accounts'] })
 		},
 	})
 
-	async function handleCreateAccount(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault()
+	async function handleCreateAccount(data: NewAccountForm) {
+		const session = await getSession()
 
-		const formData = new FormData(event.currentTarget)
+		console.log(data)
 
-		const data = {
-			type: formData.get('type'),
-			bank: formData.get('bank'),
-			number: formattedNumber.replace(/\s/g, ''),
-			initialAmount: Number(formData.get('initialAmount')) ?? 0,
+		try {
+			await createAccountFn({
+				session,
+				data,
+			})
+
+			toast.success('Conta cadastrada com sucesso')
+		} catch {
+			toast.error('Erro ao cadastrar a transação')
 		}
-
-		mutation.mutate(data)
-
-		setFormattedNumber('')
 	}
 
 	return (
@@ -90,45 +97,64 @@ export function NewAccountForm() {
 						</DialogHeader>
 
 						<form
-							onSubmit={handleCreateAccount}
+							id="new-account-form"
+							onSubmit={handleSubmit(handleCreateAccount)}
 							className="flex w-full flex-col items-center gap-4"
 						>
 							<div>
-								<label htmlFor="account-type">Tipo da conta</label>
-								<Input id="account-type" name="type" autoComplete="off" />
+								<Label htmlFor="account-type">Tipo da conta</Label>
+								<Input
+									id="account-type"
+									autoComplete="off"
+									{...register('type')}
+								/>
 							</div>
 
 							<div>
-								<label htmlFor="bank-name">Banco</label>
-								<Input id="bank-name" name="type" autoComplete="off" />
+								<Label htmlFor="bank-name">Banco</Label>
+								<Input
+									id="bank-name"
+									autoComplete="off"
+									{...register('bank')}
+									required
+								/>
 							</div>
 
 							<div>
-								<label htmlFor="account-number">Numero da conta</label>
+								<Label htmlFor="account-number">Numero da conta</Label>
 								<Input
 									id="account-number"
-									name="number"
 									autoComplete="off"
-									maxLength={16}
+									{...register('number')}
 								/>
 							</div>
 
 							<div>
-								<label htmlFor="initial-amount">Valor Inicial</label>
+								<Label htmlFor="initial-amount">Valor Inicial</Label>
 								<Input
 									id="initial-amount"
-									name="initialAmount"
 									autoComplete="off"
 									defaultValue={0}
+									{...register('initialAmount')}
 								/>
 							</div>
-
-							<div className="flex w-full justify-center">
-								<Button className="max-w-[192px]" type="submit">
-									Salvar
-								</Button>
-							</div>
 						</form>
+
+						<DialogFooter className="flex items-center justify-end">
+							<DialogClose asChild>
+								<Button
+									type="reset"
+									form="new-account-form"
+									variant="destructive"
+								>
+									Cancelar
+								</Button>
+							</DialogClose>
+
+							<Button type="submit" form="new-account-form">
+								Salvar
+							</Button>
+						</DialogFooter>
 					</DialogContent>
 				</Dialog>
 

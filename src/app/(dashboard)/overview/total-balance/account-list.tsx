@@ -3,12 +3,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 
-import { api } from '@/services/api'
+import { fetchAccounts } from '@/app/api/fetch-accounts'
 import { AccountProps } from '@/types'
-import { formatPrice } from '@/utils/format-price'
 
 import { AccountListSkeleton } from './account-list-skeleton'
 
@@ -20,13 +20,7 @@ export function AccountList() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/accounts', {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
-
-			return response.data.accounts
+			return fetchAccounts({ session })
 		},
 	})
 
@@ -48,22 +42,28 @@ export function AccountList() {
 								<p className="text-white">{account.type}</p>
 								<span className="text-white/70">{account.number}</span>
 							</div>
-							<div className="flex flex-col justify-between">
+							<div className="flex flex-col items-end justify-between gap-4">
 								<Image
 									src="/mastercard.png"
 									alt="Mastercard"
-									width={12}
-									height={12}
+									width={16}
+									height={16}
 									className="self-end"
 								/>
-								<div className="self flex items-center justify-between">
-									<span className="text-white">
-										{formatPrice(account.balance)}
+								<div className="flex items-center justify-between gap-2 self-end">
+									<span className="font-bold text-white">
+										{account.balance.toLocaleString('pt-BR', {
+											style: 'currency',
+											currency: 'BRL',
+											maximumFractionDigits: 2,
+										})}
 									</span>
-									<ArrowUpRight
-										size={16}
-										className="rounded-full bg-white text-primary"
-									/>
+									<Link href={`/balances/${account.id}`}>
+										<ArrowUpRight
+											size={16}
+											className="rounded-full bg-white text-primary"
+										/>
+									</Link>
 								</div>
 							</div>
 						</div>

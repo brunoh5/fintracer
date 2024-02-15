@@ -5,8 +5,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
-import { Toaster } from '@/components/ui/toaster'
-import { cn } from '@/utils/shad-cn-configs'
+import { Toaster } from '@/components/ui/sonner'
+import { cn } from '@/lib/utils'
 
 import Providers from './providers'
 
@@ -34,7 +34,7 @@ export default async function RootLayout({
 			<body className={cn('bg-background', inter.variable)}>
 				<Providers>
 					{children}
-					<Toaster />
+					<Toaster richColors />
 				</Providers>
 				<Analytics />
 				<SpeedInsights />

@@ -33,15 +33,15 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 			) : (
 				<CardContent className="grid grid-cols-3 gap-x-28 gap-y-10">
 					<div>
-						<p className="text-gray-300">Nome do Banco</p>
+						<p className="text-muted-foreground">Nome do Banco</p>
 						<p className="text-lg font-bold">{account?.bank}</p>
 					</div>
 					<div>
-						<p className="text-gray-300">Tipo da conta</p>
+						<p className="text-muted-foreground">Tipo da conta</p>
 						<p className="text-lg font-bold">{account?.type}</p>
 					</div>
 					<div>
-						<p className="text-gray-300">Saldo Atual</p>
+						<p className="text-muted-foreground">Saldo Atual</p>
 						<p className="text-lg font-bold">
 							{account &&
 								new Intl.NumberFormat('pt-BR', {
@@ -51,11 +51,11 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 						</p>
 					</div>
 					<div>
-						<p className="text-gray-300">Endereço</p>
+						<p className="text-muted-foreground">Endereço</p>
 						<p className="text-lg font-bold">Park Street Branch</p>
 					</div>
 					<div>
-						<p className="text-gray-300">Numero da conta</p>
+						<p className="text-muted-foreground">Numero da conta</p>
 						<p className="text-lg font-bold">{account?.number}</p>
 					</div>
 				</CardContent>

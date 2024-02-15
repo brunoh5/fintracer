@@ -1,14 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Plus } from 'lucide-react'
+import { getSession } from 'next-auth/react'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { createTransaction } from '@/app/api/create-transaction'
-import { Button } from '@/components/ui/button'
+import { fetchAccounts } from '@/app/api/fetch-accounts'
+import { fetchCategories } from '@/app/api/fetch-categories'
+import { AccountProps, CategoryProps } from '@/types'
+
+import { Button } from './ui/button'
+import { DatePicker } from './ui/date-picker'
 import {
 	Dialog,
 	DialogClose,
@@ -17,79 +26,152 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog'
-import { cn } from '@/utils/shad-cn-configs'
-
-import { DatePickerInput } from './date-picker-input'
-import { Calendar } from './ui/calendar'
-import {
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from './ui/form'
+} from './ui/dialog'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { Select } from './ui/select'
-import { toast } from './ui/use-toast'
+import { RadioGroup, RadioGroupItem } from './ui/radio-group'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from './ui/select'
 
 interface NewTransactionFormProps {
-	accountId?: string | null
+	accountId: string | null
 }
 
 const newTransactionForm = z.object({
-	accountId: z.string(),
-	name: z.string(),
+	name: z.string({
+		required_error: 'Please type a name for transaction',
+	}),
+	accountId: z.any(),
 	shopName: z.string(),
-	amount: z.string(),
-	paid_at: z.date(),
-	type: z.string(),
-	payment_method: z.string().nullable(),
-	categoryId: z.string(),
+	amount: z.coerce.number(),
+	type: z.any(),
+	payment_method: z.string(),
+	categoryId: z.any(),
 })
 
 type NewTransactionForm = z.infer<typeof newTransactionForm>
 
-export function NewTransaction({ accountId = null }: NewTransactionFormProps) {
+export function NewTransaction({ accountId }: NewTransactionFormProps) {
+	const queryClient = useQueryClient()
+	const [date, setDate] = useState<Date | undefined>()
+
 	const { register, handleSubmit, control } = useForm<NewTransactionForm>({
 		resolver: zodResolver(newTransactionForm),
 	})
 
+	const { data: categories } = useQuery({
+		queryKey: ['categories'],
+		queryFn: async () => {
+			const session = await getSession()
+
+			return fetchCategories({ session })
+		},
+	})
+
+	const { data: accounts } = useQuery({
+		queryKey: ['accounts'],
+		queryFn: async () => {
+			const session = await getSession()
+
+			return fetchAccounts({ session })
+		},
+	})
+
 	const { mutateAsync: createTransactionFn } = useMutation({
+		mutationKey: ['account', 'transactions', accountId],
 		mutationFn: createTransaction,
+		onMutate: async (newData) => {
+			await queryClient.cancelQueries({
+				queryKey: ['account', 'transactions', accountId],
+			})
+
+			const previousData = queryClient.getQueryData([
+				'account',
+				'transactions',
+				accountId,
+			])
+
+			queryClient.setQueryData(
+				['account', 'transactions', accountId],
+				(old: AccountProps[]) => [...old, newData],
+			)
+
+			return previousData
+		},
+		onError: (_, __, context: any) => {
+			queryClient.setQueryData(
+				['account', 'transactions', accountId],
+				context.previousData,
+			)
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({
+				queryKey: ['account', 'transactions', accountId],
+			})
+
+			queryClient.invalidateQueries({
+				queryKey: ['accounts', accountId],
+			})
+		},
+		onSuccess(_, variables, __) {
+			const cachedAccount = queryClient.getQueryData<AccountProps>([
+				'accounts',
+				accountId,
+			])
+
+			console.log(cachedAccount)
+
+			if (cachedAccount) {
+				queryClient.setQueryData(
+					['accounts', accountId],
+					Object.assign(cachedAccount, {
+						balance: Number(cachedAccount.balance) + variables.data.amount,
+					}),
+				)
+			}
+		},
 	})
 
 	async function handleCreateTransaction(data: NewTransactionForm) {
+		const session = await getSession()
+
 		try {
 			await createTransactionFn({
-				accountId: data.accountId,
-				name: data.name,
-				shopName: data.shopName,
-				amount: data.amount,
-				paid_at: data.paid_at,
-				type: data.type,
-				payment_method: data.payment_method ?? '',
-				categoryId: data.categoryId,
+				session,
+				data: {
+					name: data.name,
+					shopName: data.shopName,
+					type: data.type,
+					amount: data.amount,
+					accountId: data.accountId,
+					paid_at: date ?? null,
+					payment_method: data.payment_method ?? '',
+					categoryId: data.categoryId,
+				},
 			})
 
-			toast({
-				variant: 'default',
-				description: 'Transação cadastrada com sucesso',
-			})
-		} catch (error) {
-			toast({
-				variant: 'destructive',
-				description: 'Erro ao cadastrar a transação',
-			})
+			toast.success('Transação cadastrada com sucesso')
+		} catch {
+			toast.error('Erro ao cadastrar a transação')
 		}
 	}
 
 	return (
 		<Dialog>
-			<DialogTrigger>Nova Transação</DialogTrigger>
+			<DialogTrigger asChild>
+				<Button
+					variant="ghost"
+					className='className="flex text-gray-500" items-center justify-center gap-4'
+				>
+					<Plus size={16} />
+					Nova Transação
+				</Button>
+			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Criar transação</DialogTitle>
@@ -98,6 +180,7 @@ export function NewTransaction({ accountId = null }: NewTransactionFormProps) {
 				<form
 					id="new-transaction-form"
 					onSubmit={handleSubmit(handleCreateTransaction)}
+					className="flex flex-col gap-4"
 				>
 					<div>
 						<Label htmlFor="name">Nome da transação</Label>
@@ -110,68 +193,142 @@ export function NewTransaction({ accountId = null }: NewTransactionFormProps) {
 					</div>
 
 					<div>
-						<Label htmlFor="amount">Estabelecimento / Site</Label>
+						<Label htmlFor="amount">Valor</Label>
 						<Input type="number" id="amount" {...register('amount')} />
 					</div>
 
-					{/* <Select
-						id="accountId"
-						{...register('accountId')}
-						className="data-[active=false]:hidden"
-						data-active={accountId !== ''}
-					></Select> */}
+					<div className="flex items-center justify-center"></div>
 
-					{/* <DatePickerInput control={control} /> */}
-
-					<FormField
+					<Controller
+						name="type"
 						control={control}
-						name="paid_at"
-						render={({ field }) => (
-							<FormItem className="flex flex-col">
-								<FormLabel>Date of birth</FormLabel>
-								<Popover>
-									<PopoverTrigger asChild>
-										<FormControl>
-											<Button
-												variant={'outline'}
-												className={cn(
-													'w-[240px] pl-3 text-left font-normal',
-													!field.value && 'text-muted-foreground',
-												)}
-											>
-												{field.value ? (
-													format(field.value, 'PPP')
-												) : (
-													<span>Pick a date</span>
-												)}
-												<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-											</Button>
-										</FormControl>
-									</PopoverTrigger>
-									<PopoverContent className="w-auto p-0" align="start">
-										<Calendar
-											mode="single"
-											selected={field.value}
-											onSelect={field.onChange}
-											disabled={(date) =>
-												date > new Date() || date < new Date('1900-01-01')
-											}
-											initialFocus
-										/>
-									</PopoverContent>
-								</Popover>
-								<FormDescription>
-									Your date of birth is used to calculate your age.
-								</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
+						defaultValue="received"
+						render={({ field: { name, onChange, value, disabled } }) => {
+							return (
+								<RadioGroup
+									name={name}
+									onValueChange={onChange}
+									value={value}
+									disabled={disabled}
+									className="flex items-center justify-between gap-4"
+								>
+									<div className="flex items-center gap-2 rounded border bg-green-700 p-4 text-white">
+										<RadioGroupItem value="received" id="received" />
+										<Label htmlFor="received">Recebido</Label>
+									</div>
+									<div className="flex items-center gap-2 rounded border bg-red-700 p-4 text-white">
+										<RadioGroupItem value="sent" id="sent" />
+										<Label htmlFor="sent">Enviado</Label>
+									</div>
+								</RadioGroup>
+							)
+						}}
 					/>
+
+					<Controller
+						name="accountId"
+						control={control}
+						defaultValue={accountId}
+						render={({ field: { name, onChange, value, disabled } }) => {
+							return (
+								<Select
+									name={name}
+									onValueChange={onChange}
+									value={value}
+									disabled={disabled}
+								>
+									<SelectTrigger className="h-8">
+										<SelectValue placeholder="Selecione a conta que a transação pertence" />
+									</SelectTrigger>
+									<SelectContent>
+										{accounts?.map((account: AccountProps) => (
+											<SelectItem key={account.id} value={account.id}>
+												{account.bank}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)
+						}}
+					/>
+
+					<Controller
+						name="categoryId"
+						control={control}
+						render={({ field: { name, onChange, value, disabled } }) => {
+							return (
+								<Select
+									name={name}
+									onValueChange={onChange}
+									value={value}
+									disabled={disabled}
+								>
+									<SelectTrigger className="h-8">
+										<SelectValue placeholder="Selecione a categoria da transação" />
+									</SelectTrigger>
+									<SelectContent>
+										{categories?.map((category: CategoryProps) => (
+											<SelectItem key={category.id} value={category.id}>
+												{category.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)
+						}}
+					/>
+
+					<Controller
+						name="payment_method"
+						control={control}
+						render={({ field: { name, onChange, value, disabled } }) => {
+							return (
+								<Select
+									name={name}
+									onValueChange={onChange}
+									value={value}
+									disabled={disabled}
+								>
+									<SelectTrigger className="h-8">
+										<SelectValue placeholder="Selecione a o método de pagamento" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="money">Dinheiro</SelectItem>
+										<SelectItem value="PIX">Pix</SelectItem>
+										<SelectItem value="credit_card">
+											Cartão de Credito
+										</SelectItem>
+										<SelectItem value="debit_card">Cartão de Debito</SelectItem>
+										<SelectItem value="bank_check">Cheque Bancário</SelectItem>
+										<SelectItem value="bank_transfer">
+											Transferência Bancaria
+										</SelectItem>
+									</SelectContent>
+								</Select>
+							)
+						}}
+					/>
+
+					<div>
+						<Label htmlFor="paid_at">
+							Data do pagamento, caso tenha sido pago.
+						</Label>
+						<DatePicker
+							date={date}
+							onDateChange={setDate}
+							className="w-full"
+							id="paid_at"
+						/>
+					</div>
 				</form>
 
 				<DialogFooter className="flex items-center justify-end">
 					<DialogClose asChild>
-						<Button type="reset" form="new-transaction-form">
+						<Button
+							type="reset"
+							form="new-transaction-form"
+							variant="destructive"
+						>
 							Cancelar
 						</Button>
 					</DialogClose>

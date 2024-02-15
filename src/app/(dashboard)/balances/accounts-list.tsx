@@ -21,7 +21,7 @@ import { AccountsListSkeleton } from './accounts-list-skeleton'
 
 export function AccountList() {
 	const { data: accounts, isLoading } = useQuery<AccountProps[]>({
-		queryKey: ['balance/accounts'],
+		queryKey: ['balance', 'accounts'],
 		queryFn: async () => {
 			const session = await getSession()
 
@@ -60,7 +60,12 @@ export function AccountList() {
 										</span>
 									</div>
 									<div>
-										<p className="text-xl font-bold">${account.balance}</p>
+										<p className="text-xl font-bold">
+											{account.balance.toLocaleString('pt-BR', {
+												style: 'currency',
+												currency: 'BRL',
+											})}
+										</p>
 										<span className="text-xs text-gray-300">Total amount</span>
 									</div>
 								</div>

@@ -11,6 +11,6 @@
   },
   "aliases": {
     "components": "@/components",
-    "utils": "@/utils/shad-cn-configs"
+    "utils": "@/lib/utils"
   }
 }

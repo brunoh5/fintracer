@@ -26,8 +26,8 @@ export function BillList() {
 
 	return (
 		<TableBody className="divide-y">
-			{bills?.map((bill) => (
-				<TableRow key={bill.id}>
+			{bills?.map((bill, index) => (
+				<TableRow key={index}>
 					<TableCell
 						scope="row"
 						className="flex max-w-[72px] flex-col items-center rounded-lg bg-[#D2D2D2]/25 px-2 py-3 text-center text-gray-700"

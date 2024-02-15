@@ -11,15 +11,12 @@ import { UserProps } from '@/types'
 import { ThemeSwitch } from './theme-switch'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
-import { useToast } from './ui/use-toast'
 
 interface HeaderProps {
 	hasName?: boolean
 }
 
 export function Header({ hasName = false }: HeaderProps) {
-	const { toast } = useToast()
-
 	const { data: user } = useQuery<UserProps>({
 		queryKey: ['profile'],
 		queryFn: async () => {
@@ -31,15 +28,9 @@ export function Header({ hasName = false }: HeaderProps) {
 				},
 			})
 
-			toast({
-				variant: 'destructive',
-				title: 'Credenciais Invalidas',
-				description: `${response.data}`,
-			})
-
 			return response.data.user
 		},
-		staleTime: 1000 * 60 * 60 * 24, // 1 day
+		staleTime: Infinity,
 	})
 
 	return (

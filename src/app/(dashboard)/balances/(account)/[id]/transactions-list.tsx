@@ -43,10 +43,10 @@ export function TransactionsList({ accountId }: { accountId: string }) {
 
 	return (
 		<TableBody>
-			{transactions?.map((transaction) => (
-				<TableRow key={transaction.id}>
+			{transactions?.map((transaction, index) => (
+				<TableRow key={index}>
 					<TableCell className="text-left">
-						{dayJs(transaction.created_at).format('MMM DD YYYY')}
+						{dayJs(transaction.created_at).format('DD MMM, YYYY')}
 					</TableCell>
 					<TableCell className="text-center">{transaction.status}</TableCell>
 					<TableCell className="text-center">

@@ -6,7 +6,6 @@ import { getSession } from 'next-auth/react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/services/api'
 import { AccountProps } from '@/types'
-import { formatPrice } from '@/utils/format-price'
 
 export function Balance() {
 	const { data: totalBalance, isLoading } = useQuery<number>({
@@ -39,7 +38,10 @@ export function Balance() {
 				<Skeleton />
 			) : (
 				<span className="text-xl font-bold">
-					{formatPrice(totalBalance ?? 0)}
+					{totalBalance?.toLocaleString('pt-BR', {
+						style: 'currency',
+						currency: 'BRL',
+					})}
 				</span>
 			)}
 		</>
