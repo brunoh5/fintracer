@@ -67,6 +67,7 @@ export function NewBillForm() {
 
 			return previousData
 		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		onError: (_, __, context: any) => {
 			queryClient.setQueryData(['bills'], context.previousData)
 		},
