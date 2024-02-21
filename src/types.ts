@@ -45,4 +45,5 @@ export type BillsProps = {
 export type CategoryProps = {
 	id: string
 	name: string
+	total: string
 }

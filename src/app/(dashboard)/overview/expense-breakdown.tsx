@@ -38,52 +38,63 @@ type StatusIcons = keyof typeof statusIcons
 
 export function ExpenseBreakdown() {
 	const { data: categories } = useQuery<CategoryProps[]>({
-		queryKey: ['categories'],
+		queryKey: ['categories', 'expenses'],
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/categories', {
+			const response = await api.get('/categories/metrics', {
 				headers: {
 					Authorization: `Bearer ${session?.user}`,
 				},
 			})
 
+			console.log(response)
+
 			return response.data.categories
 		},
+		staleTime: 1000 * 60 * 10, // 10 minutes
 	})
 
 	return (
 		<Card>
 			<CardHeader>
 				<div className="flex items-center justify-between">
-					<h2 className="mb-2 text-[22px] text-gray-500">Expenses Breakdown</h2>
-					<span className="self-end font-medium text-gray-300">
+					<h2 className="mb-2 text-[22px]">Gastos do mês</h2>
+					{/* <span className="self-end font-medium text-gray-300">
 						*Compare to last month
-					</span>
+					</span> */}
 				</div>
 			</CardHeader>
 			<CardContent>
-				<div className="grid w-full gap-x-10 gap-y-6 rounded-lg sm:grid-cols-3">
+				<div className="flex w-full flex-col gap-x-10 gap-y-6 rounded-lg lg:grid lg:grid-cols-3">
 					{categories?.map((category) => (
 						<div
 							key={category.id}
-							className="flex items-center justify-between px-4 py-2"
+							className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2"
 						>
-							<div className="flex h-14 w-10 items-center rounded-lg p-2">
+							<div className="flex h-14 w-12 items-center rounded-lg p-2">
 								{categoryIcons[category.name as CategoryIcons]}
 							</div>
 							<div className="flex items-center gap-4">
 								<div className="flex flex-col">
 									<span className="text-xs text-gray-500">{category.name}</span>
-									<p className="font-semibold">$500</p>
-									<div className="flex items-center gap-2">
+									<p className="font-semibold">
+										{Number(category.transactions[0].amount).toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)}
+									</p>
+									{/* <div className="flex items-center gap-2">
 										<span className="text-xs text-gray-300">15%</span>
 										{statusIcons['maior' as StatusIcons]}
-									</div>
+									</div> */}
 								</div>
-								<div className="flex flex-col items-end">
+								{/* <div className="flex flex-col items-end">
 									<ArrowRight />
-								</div>
+								</div> */}
 							</div>
 						</div>
 					))}

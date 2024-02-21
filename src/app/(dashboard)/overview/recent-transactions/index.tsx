@@ -19,14 +19,13 @@ export function RecentTransaction() {
 		<Card>
 			<CardHeader>
 				<CardTitle>Transações Recentes</CardTitle>
-				<CardDescription>
-					<div className="flex items-center text-gray-500">
-						<Link className="text-xs" href="/transactions">
-							Ver todas
-						</Link>
-						<ChevronRight size={16} />
-					</div>
-				</CardDescription>
+
+				<div className="flex items-center text-gray-500">
+					<Link className="text-xs" href="/transactions">
+						Ver todas
+					</Link>
+					<ChevronRight size={16} />
+				</div>
 			</CardHeader>
 			<CardContent>
 				<Tabs defaultValue="all">
