@@ -70,8 +70,6 @@ export function NewAccountForm() {
 	async function handleCreateAccount(data: NewAccountForm) {
 		const session = await getSession()
 
-		console.log(data)
-
 		try {
 			await createAccountFn({
 				session,

@@ -1,10 +1,4 @@
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function AccountsListSkeleton() {
@@ -14,9 +8,7 @@ export function AccountsListSkeleton() {
 				<CardTitle className="inline-block">
 					<Skeleton className="h-5 w-[100px]" />
 				</CardTitle>
-				<CardDescription className="font-medium">
-					<Skeleton className="h-4 w-[80px]" />
-				</CardDescription>
+				<Skeleton className="h-4 w-[80px]" />
 			</CardHeader>
 			<CardContent>
 				<div className="mt-4 flex w-full flex-col gap-6">

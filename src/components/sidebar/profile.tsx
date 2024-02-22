@@ -5,7 +5,7 @@ import { MoreVertical, UserCircleIcon } from 'lucide-react'
 import Image from 'next/image'
 import { getSession } from 'next-auth/react'
 
-import { api } from '@/services/api'
+import { getProfile } from '@/app/api/get-profile'
 import { UserProps } from '@/types'
 
 import { ProfileSkeleton } from './profile-skeleton'
@@ -16,15 +16,9 @@ export function Profile() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/me', {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
-
-			return response.data.user
+			return getProfile({ session })
 		},
-		staleTime: 1000 * 60 * 60 * 24, // 1 day
+		staleTime: Infinity,
 	})
 
 	return (

@@ -3,13 +3,7 @@ import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const bills = [
 	{
@@ -35,14 +29,12 @@ export function UpcomingBill() {
 		<Card>
 			<CardHeader className="flex">
 				<CardTitle className="text-xl">Contas à Vencer</CardTitle>
-				<CardDescription>
-					<div className="flex items-center text-gray-500">
-						<Link className="text-xs" href="/dashboard/bills">
-							View all
-						</Link>
-						<ChevronRight size={16} />
-					</div>
-				</CardDescription>
+				<div className="flex items-center text-gray-500">
+					<Link className="text-xs" href="/dashboard/bills">
+						View all
+					</Link>
+					<ChevronRight size={16} />
+				</div>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-3 divide-y divide-border ">
 				{bills.map((bill, index) => (

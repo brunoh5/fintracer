@@ -3,9 +3,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
+import { getAccount } from '@/app/api/get-account'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
-import { api } from '@/services/api'
 import { AccountProps } from '@/types'
 
 import { BalanceAccountSkeleton } from './balance-account-skeleton'
@@ -16,13 +16,7 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get(`/accounts/${accountId}`, {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
-
-			return response.data.account
+			return getAccount({ session, id: accountId })
 		},
 	})
 
@@ -61,8 +55,10 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 				</CardContent>
 			)}
 			<CardFooter className="flex items-center gap-4">
-				<Button size="lg">Editar Conta</Button>
-				<Button size="lg" variant="ghost">
+				<Button size="lg" disabled>
+					Editar Conta
+				</Button>
+				<Button size="lg" variant="ghost" disabled>
 					Remove
 				</Button>
 			</CardFooter>

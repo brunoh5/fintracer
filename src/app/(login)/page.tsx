@@ -6,11 +6,11 @@ import { nextAuthOptions } from '../api/auth/[...nextauth]/options'
 import { LoginForm } from './form'
 
 export default async function Home() {
-	const session = await getServerSession(nextAuthOptions)
+	// const session = await getServerSession(nextAuthOptions)
 
-	if (session) {
-		redirect('/overview')
-	}
+	// if (session) {
+	// 	redirect('/overview')
+	// }
 
 	return (
 		<main className="flex h-screen flex-1 items-center justify-center">

@@ -1,9 +1,10 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
 import { getSession } from 'next-auth/react'
 
+import { deleteAccount } from '@/app/api/delete-account'
 import { NavLink } from '@/components/nav-link'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,6 +21,8 @@ import { AccountProps } from '@/types'
 import { AccountsListSkeleton } from './accounts-list-skeleton'
 
 export function AccountList() {
+	const queryClient = useQueryClient()
+
 	const { data: accounts, isLoading } = useQuery<AccountProps[]>({
 		queryKey: ['balance', 'accounts'],
 		queryFn: async () => {
@@ -34,6 +37,38 @@ export function AccountList() {
 			return response.data.accounts
 		},
 	})
+
+	const { mutateAsync: deleteAccountFn } = useMutation({
+		mutationKey: ['balance', 'accounts'],
+		mutationFn: deleteAccount,
+		onMutate: async () => {
+			await queryClient.cancelQueries({ queryKey: ['balance', 'accounts'] })
+
+			const previousAccounts = queryClient.getQueryData(['balance', 'accounts'])
+
+			queryClient.setQueryData(
+				['balance', 'accounts'],
+				(old: AccountProps[]) => [...old],
+			)
+
+			return previousAccounts
+		},
+		onError: (_, __, context: any) => {
+			queryClient.setQueryData(
+				['balance', 'accounts'],
+				context.previousAccounts,
+			)
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ['balance', 'accounts'] })
+		},
+	})
+
+	async function handleDeleteAccount(id: string) {
+		const session = await getSession()
+
+		await deleteAccountFn({ session, id })
+	}
 
 	return (
 		<>
@@ -61,7 +96,7 @@ export function AccountList() {
 									</div>
 									<div>
 										<p className="text-xl font-bold">
-											{account.balance.toLocaleString('pt-BR', {
+											{Number(account.balance).toLocaleString('pt-BR', {
 												style: 'currency',
 												currency: 'BRL',
 											})}
@@ -70,7 +105,12 @@ export function AccountList() {
 									</div>
 								</div>
 								<div className="flex items-center justify-between">
-									<Button variant="secondary">Remove</Button>
+									<Button
+										onClick={() => handleDeleteAccount(account.id)}
+										variant="secondary"
+									>
+										Remove
+									</Button>
 
 									<Button asChild>
 										<NavLink href={`/balances/${account.id}`}>
