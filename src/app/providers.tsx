@@ -7,10 +7,6 @@ import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ReactNode, useState } from 'react'
 
-// import { env } from '@/env'
-
-// import { server } from './api/mocks/server'
-
 export default function Providers({ children }: { children: ReactNode }) {
 	const [queryClient] = useState(
 		() =>
@@ -22,12 +18,6 @@ export default function Providers({ children }: { children: ReactNode }) {
 				},
 			}),
 	)
-
-	// if (env.NODE_ENV === 'development' || env.NODE_ENV === 'test') {
-	// 	server.listen({
-	// 		onUnhandledRequest: 'bypass',
-	// 	})
-	// }
 
 	return (
 		<SessionProvider>

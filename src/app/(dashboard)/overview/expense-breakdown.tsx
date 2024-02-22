@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { getSession } from 'next-auth/react'
 
+import { fetchCategoriesExpenses } from '@/app/api/fetch-categories-expenses'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { api } from '@/services/api'
 import { CategoryProps } from '@/types'
@@ -37,20 +38,12 @@ const statusIcons = {
 type StatusIcons = keyof typeof statusIcons
 
 export function ExpenseBreakdown() {
-	const { data: categories } = useQuery<CategoryProps[]>({
+	const { data: categories } = useQuery({
 		queryKey: ['categories', 'expenses'],
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/categories/metrics', {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
-
-			console.log(response)
-
-			return response.data.categories
+			return fetchCategoriesExpenses({ session })
 		},
 		staleTime: 1000 * 60 * 10, // 10 minutes
 	})
@@ -79,13 +72,13 @@ export function ExpenseBreakdown() {
 								<div className="flex flex-col">
 									<span className="text-xs text-gray-500">{category.name}</span>
 									<p className="font-semibold">
-										{Number(category.transactions[0].amount).toLocaleString(
+										{/* {Number(category.transactions[0].total).toLocaleString(
 											'pt-BR',
 											{
 												style: 'currency',
 												currency: 'BRL',
 											},
-										)}
+										)} */}
 									</p>
 									{/* <div className="flex items-center gap-2">
 										<span className="text-xs text-gray-300">15%</span>

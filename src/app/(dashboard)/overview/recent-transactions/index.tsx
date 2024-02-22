@@ -1,13 +1,7 @@
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { Expenses } from './expense-list'
@@ -19,7 +13,6 @@ export function RecentTransaction() {
 		<Card>
 			<CardHeader>
 				<CardTitle>Transações Recentes</CardTitle>
-
 				<div className="flex items-center text-gray-500">
 					<Link className="text-xs" href="/transactions">
 						Ver todas

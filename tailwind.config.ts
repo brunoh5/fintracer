@@ -1,22 +1,23 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-	content: [
-		'./src/pages/**/*.{ts,tsx}',
-		'./src/components/**/*.{ts,tsx}',
-		'./src/app/**/*.{ts,tsx}',
-	],
+	content: ['./src/**/*.tsx'],
 	theme: {
-		container: {
-			center: true,
-			padding: '2rem',
-			screens: {
-				'2xl': '1400px',
-			},
-		},
 		extend: {
 			fontFamily: {
 				sans: ['var(--font-inter)'],
+			},
+
+			gridTemplateColumns: {
+				app: 'minmax(16rem, 18rem) 1fr',
+			},
+
+			container: {
+				center: true,
+				padding: '2rem',
+				screens: {
+					'2xl': '1400px',
+				},
 			},
 
 			colors: {

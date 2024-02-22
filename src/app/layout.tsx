@@ -6,7 +6,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/sonner'
-import { cn } from '@/lib/utils'
 
 import Providers from './providers'
 
@@ -27,17 +26,24 @@ export default async function RootLayout({
 	children: React.ReactNode
 }) {
 	return (
-		<html lang="pt-BR" suppressHydrationWarning>
+		<html lang="pt" className="antialiased" suppressHydrationWarning>
 			<head>
-				<link rel="icon" href="/favicon.png" sizes="any" />
+				<link
+					rel="icon"
+					href="/favicon.png"
+					type="image/png"
+					sizes="<generated>"
+				/>
 			</head>
-			<body className={cn('bg-background', inter.variable)}>
-				<Providers>
-					{children}
-					<Toaster richColors />
-				</Providers>
-				<Analytics />
-				<SpeedInsights />
+			<body className={inter.variable}>
+				<div className="min-h-screen bg-background">
+					<Providers>
+						{children}
+						<Toaster richColors />
+					</Providers>
+					<Analytics />
+					<SpeedInsights />
+				</div>
 			</body>
 		</html>
 	)

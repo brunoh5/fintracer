@@ -1,93 +1,59 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 
-import { Header } from '@/components/header'
 import { Button } from '@/components/ui/button'
-import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { TransactionList } from './transaction-list'
 
 export default function Transactions() {
-	const [activeTab, setActiveTab] = useState('all')
-
 	return (
-		<div className="ml-[280px] w-screen flex-1 flex-col">
-			<Header />
+		<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
+			<h2 className="text-[22px] text-foreground">Transações Recentes</h2>
 
-			<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
-				<h2 className="text-[22px] text-gray-500">Transações Recentes</h2>
-
-				<div className="flex w-[300px] items-center justify-between font-bold text-gray-900">
-					<span
-						onClick={() => setActiveTab('all')}
-						data-active={activeTab === 'all'}
-						className="p-2 data-[active=true]:border-b-2 data-[active=true]:border-primary data-[active=true]:text-primary"
+			<Tabs defaultValue="all">
+				<TabsList className="flex w-[300px] items-center justify-between bg-transparent font-bold text-foreground">
+					<TabsTrigger
+						value="all"
+						className={twMerge(
+							'rounded-none p-2 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary',
+						)}
 					>
 						Todos
-					</span>
-					<span
-						onClick={() => setActiveTab('revenues')}
-						data-active={activeTab === 'revenues'}
-						className="p-2 data-[active=true]:border-b-2 data-[active=true]:border-primary data-[active=true]:text-primary"
+					</TabsTrigger>
+					<TabsTrigger
+						value="revenues"
+						className=" rounded-none p-2 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary"
 					>
 						Receita
-					</span>
-					<span
-						onClick={() => setActiveTab('expenses')}
-						data-active={activeTab === 'expenses'}
-						className="p-2 data-[active=true]:border-b-2 data-[active=true]:border-primary data-[active=true]:text-primary"
+					</TabsTrigger>
+					<TabsTrigger
+						value="expenses"
+						className=" rounded-nonep-2 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary"
 					>
 						Despesa
-					</span>
-				</div>
+					</TabsTrigger>
+				</TabsList>
 
-				<Table className="w-full text-center">
-					<TableHeader className="font-bold">
-						<TableRow>
-							<TableHead scope="col" className="py-3 text-left">
-								Nome
-							</TableHead>
-							<TableHead scope="col" className="px-7 py-3 text-center">
-								Estabelecimento
-							</TableHead>
-							<TableHead scope="col" className="px-7 py-3 text-center">
-								Data
-							</TableHead>
-							<TableHead scope="col" className="px-7 py-3 text-center">
-								Método de Pagamento
-							</TableHead>
-							<TableHead scope="col" className="py-3 text-center">
-								Valor
-							</TableHead>
-						</TableRow>
-					</TableHeader>
+				<TabsContent value="all">
+					<TransactionList />
+				</TabsContent>
 
-					{activeTab === 'all' && (
-						<Suspense fallback={<p>Carregando</p>}>
-							<TransactionList />
-						</Suspense>
-					)}
+				<TabsContent value="revenues">
+					<TransactionList />
+				</TabsContent>
 
-					{activeTab === 'revenues' && (
-						<Suspense fallback={<p>Carregando</p>}>
-							<TransactionList />
-						</Suspense>
-					)}
+				<TabsContent value="expenses">
+					<TransactionList />
+				</TabsContent>
+			</Tabs>
 
-					{activeTab === 'expenses' && (
-						<Suspense fallback={<p>Carregando</p>}>
-							<TransactionList />
-						</Suspense>
-					)}
-				</Table>
-
-				<div className="mb-8 mt-8 flex items-center justify-center">
-					<Button type="submit" className="w-48" disabled>
-						Load More
-					</Button>
-				</div>
-			</main>
-		</div>
+			<div className="mb-8 mt-8 flex items-center justify-center">
+				<Button type="submit" className="w-48" disabled>
+					Load More
+				</Button>
+			</div>
+		</main>
 	)
 }

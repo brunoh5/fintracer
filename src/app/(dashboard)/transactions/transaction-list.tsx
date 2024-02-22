@@ -12,7 +12,14 @@ import {
 } from 'lucide-react'
 import { getSession } from 'next-auth/react'
 
-import { TableBody, TableCell, TableRow } from '@/components/ui/table'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table'
 import { api } from '@/services/api'
 import { TransactionProps } from '@/types'
 
@@ -53,36 +60,61 @@ export function TransactionList() {
 	})
 
 	return (
-		<TableBody>
-			{isLoading ? (
-				<p>Carregando</p>
-			) : (
-				transactions?.map((transaction: TransactionProps) => (
-					<TableRow key={transaction.id}>
-						<TableCell className="flex items-center text-left">
-							{categoryIcon[transaction.category.name as Icon]}
-							<span className="font-semibold">{transaction.name}</span>
-						</TableCell>
-
-						<TableCell>{transaction.shopName}</TableCell>
-
+		<Table>
+			<TableHeader className="font-bold">
+				<TableRow>
+					<TableHead scope="col" className="py-3 text-left">
+						Nome
+					</TableHead>
+					<TableHead scope="col" className="px-7 py-3 text-center">
+						Estabelecimento
+					</TableHead>
+					<TableHead scope="col" className="px-7 py-3 text-center">
+						Data
+					</TableHead>
+					<TableHead scope="col" className="px-7 py-3 text-center">
+						Método de Pagamento
+					</TableHead>
+					<TableHead scope="col" className="py-3 text-center">
+						Valor
+					</TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody>
+				{isLoading ? (
+					<TableRow>
 						<TableCell>
-							{dayjs(transaction.created_at).format('MMM DD YYYY')}
-						</TableCell>
-
-						<TableCell>
-							{paymentMethods[transaction.payment_method as Method]}
-						</TableCell>
-
-						<TableCell className="font-semibold">
-							{new Intl.NumberFormat('pt-BR', {
-								style: 'currency',
-								currency: 'BRL',
-							}).format(transaction.amount)}
+							<p>Carregando</p>
 						</TableCell>
 					</TableRow>
-				))
-			)}
-		</TableBody>
+				) : (
+					transactions?.map((transaction: TransactionProps) => (
+						<TableRow key={transaction.id}>
+							<TableCell className="flex items-center text-left">
+								{categoryIcon[transaction.category.name as Icon]}
+								<span className="font-semibold">{transaction.name}</span>
+							</TableCell>
+
+							<TableCell>{transaction.shopName}</TableCell>
+
+							<TableCell>
+								{dayjs(transaction.created_at).format('MMM DD YYYY')}
+							</TableCell>
+
+							<TableCell>
+								{paymentMethods[transaction.payment_method as Method]}
+							</TableCell>
+
+							<TableCell className="font-semibold">
+								{new Intl.NumberFormat('pt-BR', {
+									style: 'currency',
+									currency: 'BRL',
+								}).format(transaction.amount)}
+							</TableCell>
+						</TableRow>
+					))
+				)}
+			</TableBody>
+		</Table>
 	)
 }
