@@ -29,6 +29,7 @@ export function UpcomingBill() {
 		<Card>
 			<CardHeader className="flex">
 				<CardTitle className="text-xl">Contas à Vencer</CardTitle>
+
 				<div className="flex items-center text-gray-500">
 					<Link className="text-xs" href="/dashboard/bills">
 						View all
