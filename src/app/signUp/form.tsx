@@ -24,9 +24,7 @@ export function SignUpForm() {
 
 	async function handleRegister(data: RegisterForm) {
 		try {
-			await api.post('/users', {
-				data,
-			})
+			await api.post('/users', data)
 		} catch {
 			toast.error('E-mail já cadastrado')
 			return
