@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query'
 import {
 	ArrowDown,
-	ArrowRight,
 	ArrowUp,
 	Car,
 	Clapperboard,

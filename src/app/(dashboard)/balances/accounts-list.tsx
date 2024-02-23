@@ -53,6 +53,7 @@ export function AccountList() {
 
 			return previousAccounts
 		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		onError: (_, __, context: any) => {
 			queryClient.setQueryData(
 				['balance', 'accounts'],
