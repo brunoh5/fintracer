@@ -55,12 +55,9 @@ export function ExpenseBreakdown() {
 						let currentMonthExpense = 0
 						let lastMonthExpense = 0
 
-						if (category.transactions[0] !== null) {
+						if (category.transactions[0] && category.transactions[0].total) {
 							currentMonthExpense = category.transactions[0].total
-							if (
-								category.transactions[1] !== null ||
-								category.transactions[1] !== undefined
-							) {
+							if (category.transactions[1] && category.transactions[1].total) {
 								lastMonthExpense = category.transactions[1].total
 							}
 						}

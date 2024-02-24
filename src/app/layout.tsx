@@ -28,12 +28,7 @@ export default async function RootLayout({
 	return (
 		<html lang="pt" className="antialiased" suppressHydrationWarning>
 			<head>
-				<link
-					rel="icon"
-					href="/favicon.png"
-					type="image/png"
-					sizes="<generated>"
-				/>
+				<link rel="icon" href="/favicon.svg" type="image/svg" sizes="any" />
 			</head>
 			<body className={inter.variable}>
 				<div className="min-h-screen bg-background">
