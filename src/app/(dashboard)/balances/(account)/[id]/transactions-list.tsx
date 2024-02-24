@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import dayJs from 'dayjs'
+import { format } from 'date-fns'
 import { getSession } from 'next-auth/react'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
@@ -46,7 +46,7 @@ export function TransactionsList({ accountId }: { accountId: string }) {
 			{transactions?.map((transaction, index) => (
 				<TableRow key={index}>
 					<TableCell className="text-left">
-						{dayJs(transaction.created_at).format('DD MMM, YYYY')}
+						{format(transaction.created_at, 'dd MMM, yyyy')}
 					</TableCell>
 					<TableCell className="text-center">{transaction.status}</TableCell>
 					<TableCell className="text-center">

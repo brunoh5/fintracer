@@ -7,7 +7,7 @@ import { Label } from './ui/label'
 import { Switch } from './ui/switch'
 
 export function ThemeSwitch() {
-	const { setTheme, resolvedTheme } = useTheme()
+	const { theme, setTheme, resolvedTheme } = useTheme()
 
 	return (
 		<div className="flex items-center justify-center gap-4">
@@ -16,9 +16,7 @@ export function ThemeSwitch() {
 			</Label>
 			<Switch
 				id="theme-switcher"
-				onCheckedChange={() =>
-					setTheme(resolvedTheme === 'light' ? 'dark' : 'light')
-				}
+				onCheckedChange={() => setTheme(theme === 'light' ? 'dark' : 'light')}
 				checked={resolvedTheme === 'dark'}
 			/>
 			<Label htmlFor="theme-switcher">

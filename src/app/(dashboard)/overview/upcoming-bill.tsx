@@ -1,4 +1,4 @@
-import dayJs from 'dayjs'
+import { format } from 'date-fns'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -26,7 +26,7 @@ const bills = [
 
 export function UpcomingBill() {
 	return (
-		<Card>
+		<Card className="relative">
 			<CardHeader className="flex">
 				<CardTitle className="text-xl">Contas à Vencer</CardTitle>
 
@@ -42,20 +42,20 @@ export function UpcomingBill() {
 					<div key={index} className="flex flex-1 items-center justify-between">
 						<div className="flex items-center">
 							<div className="mr-3 flex flex-col rounded bg-[#D2D2D2]/25 p-2">
-								<span className="text-xs text-gray-700">
-									{dayJs(bill.dueDate).format('MMM')}
+								<span className="text-xs text-muted-foreground">
+									{format(bill.dueDate, 'MMM')}
 								</span>
 								<p className="text-[22px] font-bold">
-									{dayJs(bill.dueDate).format('DD')}
+									{format(bill.dueDate, 'dd')}
 								</p>
 							</div>
 							<div className="mr-5 flex flex-col">
-								<span className="text-gray-700">
+								<span className="text-muted-foreground">
 									<Image src={bill.image_url} alt="" height={16} width={50} />
 								</span>
 								<p>Figma - Monthly</p>
 								<span className="text-xs text-gray-300">
-									Last Charge - {dayJs(bill.lastCharge).format('DD MMM, YYYY')}
+									Last Charge - {format(bill.lastCharge, 'dd MMM, yyyy')}
 								</span>
 							</div>
 						</div>
@@ -68,6 +68,9 @@ export function UpcomingBill() {
 					</div>
 				))}
 			</CardContent>
+			<div className="absolute inset-0 flex items-center justify-center bg-card">
+				<span className="text-muted-foreground">Em desenvolvimento</span>
+			</div>
 		</Card>
 	)
 }

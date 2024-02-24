@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import dayJs from 'dayjs'
+import { format } from 'date-fns'
 import { Bell, ChevronsRight, Search } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { getSession } from 'next-auth/react'
@@ -40,7 +40,9 @@ export function Header() {
 
 				<div className="flex items-center justify-center gap-2 text-muted-foreground">
 					<ChevronsRight />
-					<span className="text-nowrap">{dayJs().format('DD MMM, YYYY')}</span>
+					<span className="text-nowrap">
+						{format(new Date(), 'dd MMM, yyyy')}
+					</span>
 				</div>
 			</div>
 			<div className="hidden h-[416px] items-center justify-between gap-8 sm:flex">

@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import { format } from 'date-fns'
 import {
 	Car,
 	Clapperboard,
@@ -46,7 +46,7 @@ export function Transaction({ transaction, ...rest }: TransactionsProps) {
 					}).format(transaction.amount)}
 				</span>
 				<span className="text-xs text-gray-300">
-					{dayjs(transaction.created_at).format('MMM DD YYYY')}
+					{format(new Date(transaction.created_at), 'dd MMM yyyy')}
 				</span>
 			</div>
 		</div>

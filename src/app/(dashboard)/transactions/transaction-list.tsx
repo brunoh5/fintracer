@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import dayjs from 'dayjs'
+import { format } from 'date-fns'
 import {
 	Car,
 	Clapperboard,
@@ -98,7 +98,7 @@ export function TransactionList() {
 							<TableCell>{transaction.shopName}</TableCell>
 
 							<TableCell>
-								{dayjs(transaction.created_at).format('MMM DD YYYY')}
+								{format(new Date(transaction.created_at), 'dd/MM/yyyy')}
 							</TableCell>
 
 							<TableCell>

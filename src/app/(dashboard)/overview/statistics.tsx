@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function Statistics() {
 	return (
-		<Card>
+		<Card className="relative">
 			<CardHeader>
 				<CardTitle>Statistics</CardTitle>
 			</CardHeader>
@@ -36,6 +36,9 @@ export function Statistics() {
 				</div> */}
 				<BarChart />
 			</CardContent>
+			<div className="absolute inset-0 flex items-center justify-center bg-card">
+				<span className="text-muted-foreground">Em desenvolvimento</span>
+			</div>
 		</Card>
 	)
 }

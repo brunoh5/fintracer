@@ -1,4 +1,4 @@
-import dayJs from 'dayjs'
+import { format } from 'date-fns'
 import { Goal, Medal } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,7 +8,7 @@ import { MonthlyGoalForm } from './form'
 
 export function MonthlyGoal() {
 	return (
-		<Card>
+		<Card className="relative">
 			<CardHeader>
 				<CardTitle className="text-xl">Goals</CardTitle>
 			</CardHeader>
@@ -21,7 +21,9 @@ export function MonthlyGoal() {
 
 						<MonthlyGoalForm />
 					</div>
-					<p className="text-xs text-gray-900">{dayJs().format('MMM, YYYY')}</p>
+					<p className="text-xs text-gray-900">
+						{format(new Date(), 'dd MMM, yyyy')}
+					</p>
 				</div>
 
 				<Separator />
@@ -49,6 +51,9 @@ export function MonthlyGoal() {
 					</div>
 				</div>
 			</CardContent>
+			<div className="absolute inset-0 flex items-center justify-center bg-card">
+				<span className="text-muted-foreground">Em desenvolvimento</span>
+			</div>
 		</Card>
 	)
 }
