@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
 import { env } from '@/env'
+import { api } from '@/services/api'
 
 export const nextAuthOptions: NextAuthOptions = {
 	providers: [
@@ -18,13 +18,10 @@ export const nextAuthOptions: NextAuthOptions = {
 					password: string
 				}
 
-				const response = await axios.post(
-					`${env.NEXT_PUBLIC_API_URL}/sessions`,
-					{
-						email,
-						password,
-					},
-				)
+				const response = await api.post(`/sessions`, {
+					email,
+					password,
+				})
 
 				const { token } = response.data
 
