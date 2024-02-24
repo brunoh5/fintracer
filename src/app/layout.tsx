@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 		absolute: 'Fintracer',
 	},
 	description:
-		'Site de organização financeira para controle de gastos pessoais e empresariais.',
+		'Site de organização financeira para controle de gastos pessoais.',
 }
 
 export default async function RootLayout({
