@@ -17,7 +17,7 @@ export function ThemeSwitch() {
 			<Switch
 				id="theme-switcher"
 				onCheckedChange={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-				checked={resolvedTheme === 'dark'}
+				checked={resolvedTheme === 'dark' || theme === 'dark'}
 			/>
 			<Label htmlFor="theme-switcher">
 				<MoonIcon className="size-[1.2rem]" />

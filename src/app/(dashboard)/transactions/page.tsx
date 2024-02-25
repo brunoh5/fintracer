@@ -17,7 +17,7 @@ export default function Transactions() {
 					<TabsTrigger
 						value="all"
 						className={twMerge(
-							'rounded-none p-2 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary',
+							'rounded-none border-y-2 p-2 data-[state=active]:border-b-primary data-[state=active]:text-primary',
 						)}
 					>
 						Todos

@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 export const metadata: Metadata = {
 	title: {
 		template: '%s | Fintracer',
-		absolute: 'Fintracer',
+		absolute: 'Sistema para controle financeiro | Fintracer',
 	},
 	description:
 		'Site de organização financeira para controle de gastos pessoais.',

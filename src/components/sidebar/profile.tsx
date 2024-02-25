@@ -22,7 +22,7 @@ export function Profile() {
 	})
 
 	return (
-		<>
+		<div className="mt-auto flex flex-col divide-y">
 			{isLoading ? (
 				<ProfileSkeleton />
 			) : (
@@ -49,6 +49,6 @@ export function Profile() {
 					</div>
 				</div>
 			)}
-		</>
+		</div>
 	)
 }

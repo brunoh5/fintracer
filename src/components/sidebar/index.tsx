@@ -1,6 +1,12 @@
 'use client'
 
-import { ArrowRightLeft, LayoutGrid, Menu, Wallet } from 'lucide-react'
+import {
+	ArrowRightLeft,
+	LayoutGrid,
+	Menu,
+	Settings,
+	Wallet,
+} from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 
 import { LogoutButton } from '../logout-button'
@@ -35,46 +41,40 @@ export function Sidebar() {
 				forceMount
 				className="flex flex-1 flex-col gap-6 data-[state=closed]:hidden lg:data-[state=closed]:flex"
 			>
-				<div className="flex h-full flex-col justify-between">
-					<div>
-						<nav className="flex flex-col gap-4">
-							<NavLink href="/overview">
-								<LayoutGrid />
-								Dashboard
-							</NavLink>
-							<NavLink href="/balances">
-								<Wallet />
-								Contas
-							</NavLink>
-							<NavLink href="/transactions">
-								<ArrowRightLeft />
-								Transações
-							</NavLink>
-							{/* <NavLink href="/bills">
+				<nav className="flex flex-col gap-4">
+					<NavLink href="/overview">
+						<LayoutGrid />
+						Dashboard
+					</NavLink>
+					<NavLink href="/balances">
+						<Wallet />
+						Contas
+					</NavLink>
+					<NavLink href="/transactions">
+						<ArrowRightLeft />
+						Transações
+					</NavLink>
+					{/* <NavLink href="/bills">
 								<Receipt />
 								Despesas
 							</NavLink> */}
-							{/* <NavLink href="/expenses">
+					{/* <NavLink href="/expenses">
 								<CreditCard />
 								Gastos
 							</NavLink> */}
-							{/* <NavLink href="/goals">
+					{/* <NavLink href="/goals">
 								<Crosshair />
 								Objetivos
 							</NavLink> */}
-							{/* <NavLink href="/settings/account">
-								<Settings />
-								Configurações
-							</NavLink> */}
-						</nav>
-					</div>
+					<NavLink href="/settings">
+						<Settings />
+						Configurações
+					</NavLink>
+				</nav>
 
-					<LogoutButton />
-				</div>
+				<LogoutButton />
 
-				<div className="mt-auto flex flex-col divide-y">
-					<Profile />
-				</div>
+				<Profile />
 			</CollapsibleContent>
 		</Collapsible>
 	)
