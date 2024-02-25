@@ -1,9 +1,8 @@
 'use client'
 
-import { twMerge } from 'tailwind-merge'
-
+import { TabsTrigger } from '@/components/tabs-trigger'
 import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList } from '@/components/ui/tabs'
 
 import { TransactionList } from './transaction-list'
 
@@ -14,26 +13,9 @@ export default function Transactions() {
 
 			<Tabs defaultValue="all">
 				<TabsList className="flex w-[300px] items-center justify-between bg-transparent font-bold text-foreground">
-					<TabsTrigger
-						value="all"
-						className={twMerge(
-							'rounded-none border-y-2 p-2 data-[state=active]:border-b-primary data-[state=active]:text-primary',
-						)}
-					>
-						Todos
-					</TabsTrigger>
-					<TabsTrigger
-						value="revenues"
-						className=" rounded-none p-2 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary"
-					>
-						Receita
-					</TabsTrigger>
-					<TabsTrigger
-						value="expenses"
-						className=" rounded-nonep-2 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary"
-					>
-						Despesa
-					</TabsTrigger>
+					<TabsTrigger value="all">Todos</TabsTrigger>
+					<TabsTrigger value="revenues">Receita</TabsTrigger>
+					<TabsTrigger value="expenses">Despesa</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="all">

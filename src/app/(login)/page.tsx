@@ -1,6 +1,9 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
+
+import loginImg from '@/assets/login-image.jpg'
 
 import { nextAuthOptions } from '../api/auth/[...nextauth]/options'
 import { LoginForm } from './form'
@@ -13,33 +16,25 @@ export default async function Home() {
 	}
 
 	return (
-		<main className="flex h-screen flex-1 items-center justify-center">
-			<div className="flex w-full max-w-md flex-col gap-4">
+		<main className="relative flex h-screen flex-col items-center justify-center lg:grid lg:grid-cols-2">
+			<div className="relative h-full w-full overflow-hidden">
+				<Image src={loginImg} alt="" className="h-full w-full object-cover" />
+				<div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/90 via-black/60 to-black/0 p-12">
+					<p className="my-8 text-justify">
+						Nosso sistema de controle financeiro permite cadastrar contas de
+						forma fácil e eficiente, oferecendo uma visão abrangente de suas
+						finanças. Organize suas contas com praticidade e tenha o controle
+						total de seus recursos.
+					</p>
+				</div>
+			</div>
+			<div className="absolute -mt-12 flex flex-col items-center justify-center gap-4 rounded-2xl bg-black/90 p-12 lg:static">
 				<h1 className="w-full text-center text-2xl text-primary">
 					<span className="font-semibold uppercase">Fin</span>
 					tracer
 				</h1>
 
 				<LoginForm />
-
-				{/*
-				<div className="flex items-center justify-center gap-4 before:flex-1 before:border-b before:border-gray-300 before:content-[''] after:flex-1 after:border-b after:border-gray-300 after:content-['']">
-					<p>or sign in with</p>
-				</div>
-
-				 <button
-					className="my-4 flex w-full items-center justify-center gap-1 rounded bg-gray-200 px-3 py-2 text-center"
-					aria-label="Login com google"
-				>
-					<Image
-						src={googleIcon}
-						alt="google"
-						width={24}
-						height={24}
-						className="mr-4"
-					/>
-					Continue with Google
-				</button> */}
 
 				<Link href="/signUp" className="block w-full text-center text-primary">
 					Crie uma conta
