@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 
+import { NewAccountForm } from '@/components/new-account-form'
+
 import { AccountList } from './accounts-list'
-import { NewAccountForm } from './new-account-form'
 
 export const metadata: Metadata = {
 	title: 'Gerenciamento',
