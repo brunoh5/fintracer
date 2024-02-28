@@ -61,3 +61,6 @@ _This README was generated with ❤️ by [readme-md-generator](https://github.c
 - [ ] Adicionar paginação na pagina de transações
 - [ ] Adicionar text elipses no nome, adicionar funcionalidade nos botões
 - [ ] Adicionar o CRUD de usuários
+- [ ] Adicionar pagina de importação de arquivos
+- [ ] Adicionar botão de ajuda no perfil
+- [ ] Adicionar botões de criar despesa ou criar receita
