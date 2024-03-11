@@ -1,23 +1,43 @@
-import { Session } from 'next-auth'
+import { apiClient } from '@/lib/axios-client'
 
-import { api } from '@/lib/axios'
-
-interface CreateAccountRequest {
-	session: Session | null
-	data: {
-		type: string
-		bank: string
-		number: string | ''
-		initialAmount: number
-	}
+interface CreateAccountBody {
+	type:
+		| 'CURRENT_ACCOUNT'
+		| 'MACHINE_ACCOUNT'
+		| 'INVESTMENT_ACCOUNT'
+		| 'SAVINGS_ACCOUNT'
+	bank: string
+	number?: string
+	initialAmount?: number
 }
 
-export async function createAccount({ session, data }: CreateAccountRequest) {
-	const response = await api.post('/accounts', data, {
-		headers: {
-			Authorization: `Bearer ${session?.user}`,
+export interface CreateAccountResponse {
+	id: string
+	type:
+		| 'CURRENT_ACCOUNT'
+		| 'MACHINE_ACCOUNT'
+		| 'INVESTMENT_ACCOUNT'
+		| 'SAVINGS_ACCOUNT'
+	bank: string
+	number?: string
+	balance: number
+}
+
+export async function createAccount({
+	type,
+	bank,
+	number,
+	initialAmount,
+}: CreateAccountBody) {
+	const response = await apiClient.post<{ account: CreateAccountResponse }>(
+		'/accounts',
+		{
+			type,
+			bank,
+			number,
+			initialAmount,
 		},
-	})
+	)
 
 	return response.data.account
 }

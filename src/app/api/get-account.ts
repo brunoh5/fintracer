@@ -1,29 +1,26 @@
-import { Session } from 'next-auth'
-
-import { api } from '@/lib/axios'
+import { apiClient } from '@/lib/axios-client'
 
 interface FetchCategoriesRequest {
-	session: Session | null
 	id: string
 }
 
-export interface Account {
-	account: {
-		id: string
-		type: string
-		bank: string
-		bankImgUrl?: string
-		number?: string
-		balance: number
-	}
+export interface GetAccountResponse {
+	id: string
+	type:
+		| 'CURRENT_ACCOUNT'
+		| 'MACHINE_ACCOUNT'
+		| 'INVESTMENT_ACCOUNT'
+		| 'SAVINGS_ACCOUNT'
+	bank: string
+	bankImgUrl?: string
+	number?: string
+	balance: number
 }
 
-export async function getAccount({ session, id }: FetchCategoriesRequest) {
-	const response = await api.get<Account>(`/accounts/${id}`, {
-		headers: {
-			Authorization: `Bearer ${session?.user}`,
-		},
-	})
+export async function getAccount({ id }: FetchCategoriesRequest) {
+	const response = await apiClient.get<{ account: GetAccountResponse }>(
+		`/accounts/${id}`,
+	)
 
 	return response.data.account
 }

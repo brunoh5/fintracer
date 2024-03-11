@@ -27,7 +27,7 @@ type Method = keyof typeof paymentMethods
 
 export function TransactionsList({ accountId }: { accountId: string }) {
 	const { data: transactions } = useQuery<TransactionProps[]>({
-		queryKey: ['account', 'transactions', accountId],
+		queryKey: [accountId, 'transactions'],
 		queryFn: async () => {
 			const session = await getSession()
 
@@ -48,9 +48,8 @@ export function TransactionsList({ accountId }: { accountId: string }) {
 					<TableCell className="text-left">
 						{format(transaction.created_at, 'dd MMM, yyyy')}
 					</TableCell>
-					<TableCell className="text-center">{transaction.status}</TableCell>
 					<TableCell className="text-center">
-						{transactionType[transaction.type as Type]}
+						{transactionType[transaction.transaction_type as Type]}
 					</TableCell>
 					<TableCell className="text-center">
 						{paymentMethods[transaction.payment_method as Method]}

@@ -1,15 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable n/handle-callback-err */
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { createAccount } from '@/app/api/create-account'
+import { createAccount, CreateAccountResponse } from '@/app/api/create-account'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -23,62 +20,92 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { AccountProps } from '@/types'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 
-const newAccountForm = z.object({
-	type: z.string(),
+const newAccountSchema = z.object({
+	type: z.enum([
+		'CURRENT_ACCOUNT',
+		'SAVINGS_ACCOUNT',
+		'INVESTMENT_ACCOUNT',
+		'MACHINE_ACCOUNT',
+	]),
 	bank: z.string(),
-	number: z.string().default(''),
-	initialAmount: z.coerce.number().default(0),
+	number: z.optional(z.string()),
+	initialAmount: z.optional(z.coerce.number()),
 })
 
-type NewAccountForm = z.infer<typeof newAccountForm>
+type NewAccountSchema = z.infer<typeof newAccountSchema>
 
 export function NewAccountForm() {
 	const queryClient = useQueryClient()
 
-	const { register, handleSubmit } = useForm<NewAccountForm>({
-		resolver: zodResolver(newAccountForm),
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { isSubmitting },
+	} = useForm<NewAccountSchema>({
+		resolver: zodResolver(newAccountSchema),
+		defaultValues: {
+			number: '',
+			initialAmount: 0,
+			type: 'CURRENT_ACCOUNT',
+		},
 	})
+
+	function updateBalanceAccountsCache(newData: NewAccountSchema) {
+		const cached = queryClient.getQueryData<CreateAccountResponse>([
+			'balance',
+			'accounts',
+		])
+
+		if (cached) {
+			queryClient.setQueryData<CreateAccountResponse>(['balance', 'accounts'], {
+				...cached,
+				...newData,
+			})
+		}
+
+		return { cached }
+	}
 
 	const { mutateAsync: createAccountFn } = useMutation({
-		mutationKey: ['balance', 'accounts'],
 		mutationFn: createAccount,
 		onMutate: async (newData) => {
-			await queryClient.cancelQueries({ queryKey: ['balance', 'accounts'] })
+			const { cached } = updateBalanceAccountsCache(newData)
 
-			const previousAccounts = queryClient.getQueryData(['balance', 'accounts'])
-
-			queryClient.setQueryData(
-				['balance', 'accounts'],
-				(old: AccountProps[]) => [...old, newData],
-			)
-
-			return previousAccounts
+			return { previousAccounts: cached }
 		},
-		onError: (_, __, context: any) => {
-			queryClient.setQueryData(
-				['balance', 'accounts'],
-				context.previousAccounts,
-			)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['balance', 'accounts'] })
+		onError: (_, __, context) => {
+			if (context?.previousAccounts) {
+				updateBalanceAccountsCache(context.previousAccounts)
+			}
 		},
 	})
 
-	async function handleCreateAccount(data: NewAccountForm) {
-		const session = await getSession()
-
+	async function handleCreateAccount({
+		type,
+		bank,
+		number,
+		initialAmount,
+	}: NewAccountSchema) {
 		try {
 			await createAccountFn({
-				session,
-				data,
+				type,
+				bank,
+				number,
+				initialAmount,
 			})
 
 			toast.success('Conta cadastrada com sucesso')
 		} catch {
-			toast.error('Erro ao cadastrar a transação')
+			toast.error('Erro ao cadastrar a conta')
 		}
 	}
 
@@ -97,19 +124,43 @@ export function NewAccountForm() {
 						<form
 							id="new-account-form"
 							onSubmit={handleSubmit(handleCreateAccount)}
-							className="flex w-full flex-col items-center gap-4"
+							className="space-y-4"
 						>
-							<div>
-								<Label htmlFor="account-type">Tipo da conta</Label>
-								<Input
-									id="account-type"
-									autoComplete="off"
-									{...register('type')}
-								/>
-							</div>
+							<Controller
+								name="type"
+								control={control}
+								render={({ field: { name, onChange, value, disabled } }) => {
+									return (
+										<Select
+											name={name}
+											onValueChange={onChange}
+											value={value}
+											disabled={disabled}
+										>
+											<SelectTrigger className="h-8">
+												<SelectValue placeholder="Selecione o tipo da conta" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="CURRENT_ACCOUNT">
+													Conta corrente
+												</SelectItem>
+												{/* <SelectItem value="INVESTMENT_ACCOUNT">
+													Conta de investimentos
+												</SelectItem>
+												<SelectItem value="SAVINGS_ACCOUNT">
+													Poupança
+												</SelectItem>
+												<SelectItem value="MACHINE_ACCOUNT">
+													Maquininha de Cartão
+												</SelectItem> */}
+											</SelectContent>
+										</Select>
+									)
+								}}
+							/>
 
-							<div>
-								<Label htmlFor="bank-name">Banco</Label>
+							<div className="space-y-2">
+								<Label htmlFor="bank-name">Seu banco</Label>
 								<Input
 									id="bank-name"
 									autoComplete="off"
@@ -118,7 +169,7 @@ export function NewAccountForm() {
 								/>
 							</div>
 
-							<div>
+							<div className="space-y-2">
 								<Label htmlFor="account-number">Numero da conta</Label>
 								<Input
 									id="account-number"
@@ -127,7 +178,7 @@ export function NewAccountForm() {
 								/>
 							</div>
 
-							<div>
+							<div className="space-y-2">
 								<Label htmlFor="initial-amount">Valor Inicial</Label>
 								<Input
 									id="initial-amount"
@@ -135,6 +186,9 @@ export function NewAccountForm() {
 									defaultValue={0}
 									{...register('initialAmount')}
 								/>
+								<span className="text-xs">
+									Caso importe extratos, pode dar diferença no valor final
+								</span>
 							</div>
 						</form>
 
@@ -149,7 +203,11 @@ export function NewAccountForm() {
 								</Button>
 							</DialogClose>
 
-							<Button type="submit" form="new-account-form">
+							<Button
+								type="submit"
+								form="new-account-form"
+								disabled={isSubmitting}
+							>
 								Salvar
 							</Button>
 						</DialogFooter>

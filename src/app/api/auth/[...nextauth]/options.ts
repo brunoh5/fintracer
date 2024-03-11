@@ -23,8 +23,6 @@ export const nextAuthOptions: NextAuthOptions = {
 					password,
 				})
 
-				console.log(response.data)
-
 				const { token } = response.data
 
 				if (!token) {

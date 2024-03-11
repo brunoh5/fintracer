@@ -1,23 +1,24 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
 
 import { getAccount } from '@/app/api/get-account'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
-import { AccountProps } from '@/types'
 
 import { BalanceAccountSkeleton } from './balance-account-skeleton'
 
-export function ManageAccount({ accountId }: { accountId: string }) {
-	const { data: account, isLoading } = useQuery<AccountProps>({
-		queryKey: ['accounts', accountId],
-		queryFn: async () => {
-			const session = await getSession()
+enum AccountTypes {
+	CURRENT_ACCOUNT = 'Conta corrente',
+	INVESTMENT_ACCOUNT = 'Conta de investimentos',
+	SAVINGS_ACCOUNT = 'Conta poupança',
+	MACHINE_ACCOUNT = 'Maquininha de cartão',
+}
 
-			return getAccount({ session, id: accountId })
-		},
+export function ManageAccount({ accountId }: { accountId: string }) {
+	const { data: account, isLoading } = useQuery({
+		queryKey: ['accounts', accountId],
+		queryFn: async () => await getAccount({ id: accountId }),
 	})
 
 	return (
@@ -32,7 +33,9 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 					</div>
 					<div>
 						<p className="text-muted-foreground">Tipo da conta</p>
-						<p className="text-lg font-bold">{account?.type}</p>
+						<p className="text-lg font-bold">
+							{AccountTypes[account?.type as keyof typeof AccountTypes]}
+						</p>
 					</div>
 					<div>
 						<p className="text-muted-foreground">Saldo Atual</p>
@@ -45,12 +48,12 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 						</p>
 					</div>
 					<div>
-						<p className="text-muted-foreground">Endereço</p>
-						<p className="text-lg font-bold">Park Street Branch</p>
-					</div>
-					<div>
-						<p className="text-muted-foreground">Numero da conta</p>
-						<p className="text-lg font-bold">{account?.number}</p>
+						{account?.number && (
+							<>
+								<p className="text-muted-foreground">Numero da conta</p>
+								<p className="text-lg font-bold">{account?.number}</p>
+							</>
+						)}
 					</div>
 				</CardContent>
 			)}

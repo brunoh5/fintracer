@@ -39,7 +39,6 @@ export function AccountList() {
 	})
 
 	const { mutateAsync: deleteAccountFn } = useMutation({
-		mutationKey: ['balance', 'accounts'],
 		mutationFn: deleteAccount,
 		onMutate: async () => {
 			await queryClient.cancelQueries({ queryKey: ['balance', 'accounts'] })

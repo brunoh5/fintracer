@@ -1,23 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
-import { getSession } from 'next-auth/react'
-import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { createTransaction } from '@/app/api/create-transaction'
+import {
+	createTransaction,
+	CreateTransactionResponse,
+} from '@/app/api/create-transaction'
 import { fetchAccounts } from '@/app/api/fetch-accounts'
-import { fetchCategories } from '@/app/api/fetch-categories'
-import { AccountProps, CategoryProps } from '@/types'
+import {
+	AccountProps,
+	CategoryTypes,
+	PaymentMethods,
+	TransactionTypes,
+} from '@/types'
 
 import { Button } from './ui/button'
-import { DatePicker } from './ui/date-picker'
 import {
 	Dialog,
 	DialogClose,
@@ -38,121 +40,108 @@ import {
 	SelectValue,
 } from './ui/select'
 
-interface NewTransactionFormProps {
+interface NewTransactionSchemaProps {
 	accountId: string | null
 }
 
-const newTransactionForm = z.object({
+const newTransactionSchema = z.object({
 	name: z.string({
 		required_error: 'Please type a name for transaction',
 	}),
 	accountId: z.any(),
-	shopName: z.string(),
-	amount: z.coerce.number(),
-	type: z.any(),
-	payment_method: z.string(),
-	categoryId: z.any(),
+	shopName: z.optional(z.string()),
+	amount: z.string(),
+	transaction_type: z.enum(['DEBIT', 'CREDIT']),
+	payment_method: z
+		.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
+		.default('MONEY'),
+	category: z
+		.enum(['FOOD', 'HOME', 'TRANSPORT', 'OTHERS', 'SHOPPING', 'ENTERTAINMENT'])
+		.default('OTHERS'),
 })
 
-type NewTransactionForm = z.infer<typeof newTransactionForm>
+type NewTransactionSchema = z.infer<typeof newTransactionSchema>
 
-export function NewTransaction({ accountId }: NewTransactionFormProps) {
+export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 	const queryClient = useQueryClient()
-	const [date, setDate] = useState<Date | undefined>()
 
-	const { register, handleSubmit, control } = useForm<NewTransactionForm>({
-		resolver: zodResolver(newTransactionForm),
-	})
-
-	const { data: categories } = useQuery({
-		queryKey: ['categories'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return fetchCategories({ session })
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { isSubmitting },
+	} = useForm<NewTransactionSchema>({
+		resolver: zodResolver(newTransactionSchema),
+		defaultValues: {
+			transaction_type: 'DEBIT',
+			payment_method: 'MONEY',
 		},
 	})
 
 	const { data: accounts } = useQuery({
-		queryKey: ['accounts'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return fetchAccounts({ session })
-		},
+		queryKey: ['balance', 'accounts'],
+		queryFn: fetchAccounts,
 	})
 
 	const { mutateAsync: createTransactionFn } = useMutation({
-		mutationKey: ['account', 'transactions', accountId],
 		mutationFn: createTransaction,
-		onMutate: async (newData) => {
-			await queryClient.cancelQueries({
-				queryKey: ['account', 'transactions', accountId],
-			})
-
-			const previousData = queryClient.getQueryData([
-				'account',
-				'transactions',
-				accountId,
-			])
-
-			queryClient.setQueryData(
-				['account', 'transactions', accountId],
-				(old: AccountProps[]) => [...old, newData],
-			)
-
-			return previousData
-		},
-		onError: (_, __, context: any) => {
-			queryClient.setQueryData(
-				['account', 'transactions', accountId],
-				context.previousData,
-			)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({
-				queryKey: ['account', 'transactions', accountId],
-			})
-
-			queryClient.invalidateQueries({
-				queryKey: ['accounts', accountId],
-			})
-		},
-		onSuccess(_, variables, __) {
+		onMutate: async ({ amount }) => {
 			const cachedAccount = queryClient.getQueryData<AccountProps>([
 				'accounts',
 				accountId,
 			])
 
-			console.log(cachedAccount)
-
 			if (cachedAccount) {
+				queryClient.setQueryData(['accounts', accountId], {
+					...cachedAccount,
+					balance:
+						cachedAccount.balance +
+						Number(amount.replace('R$', '').trim().replace(',', '.')),
+				})
+			}
+
+			const cached = queryClient.getQueryData<CreateTransactionResponse[]>([
+				accountId,
+				'transactions',
+			])
+
+			return { previousTransactions: cached, previousAccount: cachedAccount }
+		},
+		onError: (_, __, context) => {
+			if (context?.previousTransactions) {
+				queryClient.setQueryData(
+					[accountId, 'transactions'],
+					context?.previousTransactions,
+				)
+			}
+
+			if (context?.previousAccount) {
 				queryClient.setQueryData(
 					['accounts', accountId],
-					Object.assign(cachedAccount, {
-						balance: Number(cachedAccount.balance) + variables.data.amount,
-					}),
+					context?.previousAccount,
+				)
+			}
+		},
+		onSuccess(data, _, context) {
+			if (context?.previousTransactions) {
+				queryClient.setQueryData(
+					[accountId, 'transactions'],
+					[...context.previousTransactions, data],
 				)
 			}
 		},
 	})
 
-	async function handleCreateTransaction(data: NewTransactionForm) {
-		const session = await getSession()
-
+	async function handleCreateTransaction(data: NewTransactionSchema) {
 		try {
 			await createTransactionFn({
-				session,
-				data: {
-					name: data.name,
-					shopName: data.shopName,
-					type: data.type,
-					amount: data.amount,
-					accountId: data.accountId,
-					paid_at: date ?? null,
-					payment_method: data.payment_method ?? '',
-					categoryId: data.categoryId,
-				},
+				name: data.name,
+				shopName: data.shopName,
+				transaction_type: data.transaction_type as TransactionTypes,
+				amount: data.amount,
+				accountId: data.accountId,
+				payment_method: data.payment_method as PaymentMethods,
+				category: data.category as CategoryTypes,
 			})
 
 			toast.success('Transação cadastrada com sucesso')
@@ -180,29 +169,29 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 				<form
 					id="new-transaction-form"
 					onSubmit={handleSubmit(handleCreateTransaction)}
-					className="flex flex-col gap-4"
+					className="space-y-4"
 				>
-					<div>
+					<div className="space-y-2">
 						<Label htmlFor="name">Nome da transação</Label>
 						<Input type="text" id="name" {...register('name')} />
 					</div>
 
-					<div>
+					<div className="space-y-2">
 						<Label htmlFor="shopName">Estabelecimento / Site</Label>
 						<Input type="text" id="shopName" {...register('shopName')} />
 					</div>
 
-					<div>
+					<div className="space-y-2">
 						<Label htmlFor="amount">Valor</Label>
-						<Input type="number" id="amount" {...register('amount')} />
+						<Input id="amount" {...register('amount')} />
 					</div>
 
 					<div className="flex items-center justify-center"></div>
 
 					<Controller
-						name="type"
+						name="transaction_type"
 						control={control}
-						defaultValue="received"
+						defaultValue="DEBIT"
 						render={({ field: { name, onChange, value, disabled } }) => {
 							return (
 								<RadioGroup
@@ -213,11 +202,11 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 									className="flex items-center justify-between gap-4"
 								>
 									<div className="flex items-center gap-2 rounded border bg-green-700 p-4 text-white">
-										<RadioGroupItem value="received" id="received" />
+										<RadioGroupItem value="CREDIT" id="received" />
 										<Label htmlFor="received">Recebido</Label>
 									</div>
 									<div className="flex items-center gap-2 rounded border bg-red-700 p-4 text-white">
-										<RadioGroupItem value="sent" id="sent" />
+										<RadioGroupItem value="DEBIT" id="sent" />
 										<Label htmlFor="sent">Enviado</Label>
 									</div>
 								</RadioGroup>
@@ -253,7 +242,7 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 					/>
 
 					<Controller
-						name="categoryId"
+						name="category"
 						control={control}
 						render={({ field: { name, onChange, value, disabled } }) => {
 							return (
@@ -267,11 +256,14 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 										<SelectValue placeholder="Selecione a categoria da transação" />
 									</SelectTrigger>
 									<SelectContent>
-										{categories?.map((category: CategoryProps) => (
-											<SelectItem key={category.id} value={category.id}>
-												{category.name}
-											</SelectItem>
-										))}
+										<SelectItem value="FOOD">Alimentação</SelectItem>
+										<SelectItem value="SHOPPING">Compras</SelectItem>
+										<SelectItem value="HOME">Moradia</SelectItem>
+										<SelectItem value="TRANSPORTATION">Transporte</SelectItem>
+										<SelectItem value="ENTERTAINMENT">
+											Entretenimento
+										</SelectItem>
+										<SelectItem value="OTHERS">Outros</SelectItem>
 									</SelectContent>
 								</Select>
 							)
@@ -293,14 +285,13 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 										<SelectValue placeholder="Selecione a o método de pagamento" />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="money">Dinheiro</SelectItem>
+										<SelectItem value="MONEY">Dinheiro</SelectItem>
 										<SelectItem value="PIX">Pix</SelectItem>
-										<SelectItem value="credit_card">
+										<SelectItem value="CREDIT_CARD">
 											Cartão de Credito
 										</SelectItem>
-										<SelectItem value="debit_card">Cartão de Debito</SelectItem>
-										<SelectItem value="bank_check">Cheque Bancário</SelectItem>
-										<SelectItem value="bank_transfer">
+										<SelectItem value="DEBIT_CARD">Cartão de Debito</SelectItem>
+										<SelectItem value="BANK_TRANSFER">
 											Transferência Bancaria
 										</SelectItem>
 									</SelectContent>
@@ -308,32 +299,24 @@ export function NewTransaction({ accountId }: NewTransactionFormProps) {
 							)
 						}}
 					/>
-
-					<div>
-						<Label htmlFor="paid_at">
-							Data do pagamento, caso tenha sido pago.
-						</Label>
-						<DatePicker
-							date={date}
-							onDateChange={setDate}
-							className="w-full"
-							id="paid_at"
-						/>
-					</div>
 				</form>
 
 				<DialogFooter className="flex items-center justify-end">
 					<DialogClose asChild>
 						<Button
-							type="reset"
 							form="new-transaction-form"
 							variant="destructive"
+							disabled={isSubmitting}
 						>
 							Cancelar
 						</Button>
 					</DialogClose>
 
-					<Button type="submit" form="new-transaction-form">
+					<Button
+						type="submit"
+						form="new-transaction-form"
+						disabled={isSubmitting}
+					>
 						Salvar
 					</Button>
 				</DialogFooter>

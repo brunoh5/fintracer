@@ -32,7 +32,6 @@ export default function Account({ params }: { params: { id: string } }) {
 							<TableHead className="text-left font-bold">
 								Data da Transação
 							</TableHead>
-							<TableHead className="text-center font-bold">Status</TableHead>
 							<TableHead className="text-center font-bold">
 								Tipo da Transação
 							</TableHead>

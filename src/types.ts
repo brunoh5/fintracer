@@ -1,19 +1,35 @@
+export enum CategoryTypes {
+	FOOD = 'FOOD',
+	OTHERS = 'OTHERS',
+	HOME = 'HOME',
+	TRANSPORTATION = 'TRANSPORTATION',
+	ENTERTAINMENT = 'ENTERTAINMENT',
+	SHOPPING = 'SHOPPING',
+}
+
+export enum PaymentMethods {
+	MONEY = 'MONEY',
+	CREDIT_CARD = 'CREDIT_CARD',
+	DEBIT_CARD = 'DEBIT_CARD',
+	BANK_TRANSFER = 'BANK_TRANSFER',
+	PIX = 'PIX',
+}
+
+export enum TransactionTypes {
+	DEBIT = 'DEBIT',
+	CREDIT = 'CREDIT',
+}
+
 export type TransactionProps = {
 	id: string
 	name: string
 	amount: number
 	created_at: Date
 	paid_at: Date | null
-	payment_method: string
+	payment_method: PaymentMethods
 	shopName: string
 	transaction_type: 'DEBIT' | 'CREDIT'
-	category:
-		| 'FOOD'
-		| 'OTHERS'
-		| 'HOME'
-		| 'TRANSPORT'
-		| 'ENTERTAINMENT'
-		| 'SHOPPING'
+	category: CategoryTypes
 	userId: string
 	accountId: string
 }
@@ -41,9 +57,4 @@ export type BillsProps = {
 	lastCharge: string
 	amount: number
 	userId: string
-}
-
-export type CategoryProps = {
-	id: string
-	name: string
 }
