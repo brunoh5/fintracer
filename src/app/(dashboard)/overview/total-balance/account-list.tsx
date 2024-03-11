@@ -2,7 +2,6 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import { useState } from 'react'
@@ -43,13 +42,6 @@ export function AccountList() {
 								<span className="text-white/70">{account.number}</span>
 							</div>
 							<div className="flex flex-col items-end justify-between gap-4">
-								<Image
-									src="/mastercard.png"
-									alt="Mastercard"
-									width={16}
-									height={16}
-									className="self-end"
-								/>
 								<div className="flex items-center justify-between gap-2 self-end">
 									<span className="font-bold text-white">
 										{account.balance.toLocaleString('pt-BR', {

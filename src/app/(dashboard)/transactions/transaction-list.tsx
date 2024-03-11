@@ -20,7 +20,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import { api } from '@/services/api'
+import { api } from '@/lib/axios'
 import { TransactionProps } from '@/types'
 
 const categoryIcon = {

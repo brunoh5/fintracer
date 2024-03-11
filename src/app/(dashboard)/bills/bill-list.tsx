@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { getSession } from 'next-auth/react'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { api } from '@/services/api'
+import { api } from '@/lib/axios'
 import { BillsProps } from '@/types'
 
 export function BillList() {

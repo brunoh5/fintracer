@@ -15,7 +15,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { api } from '@/services/api'
+import { api } from '@/lib/axios'
 import { AccountProps } from '@/types'
 
 import { AccountsListSkeleton } from './accounts-list-skeleton'

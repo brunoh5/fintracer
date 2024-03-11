@@ -12,7 +12,7 @@ const bills = [
 		title: 'Figma',
 		description: 'Design software',
 		amount: 150,
-		image_url: '/figma.png',
+		image_url: '',
 	},
 	{
 		lastCharge: new Date('06-17-2022'),
@@ -20,7 +20,7 @@ const bills = [
 		title: 'Adobe',
 		description: 'Design software',
 		amount: 559,
-		image_url: '/adobe.png',
+		image_url: '',
 	},
 ]
 

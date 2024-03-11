@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { Skeleton } from '@/components/ui/skeleton'
-import { api } from '@/services/api'
+import { api } from '@/lib/axios'
 import { AccountProps } from '@/types'
 
 export function Balance() {

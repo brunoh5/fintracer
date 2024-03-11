@@ -2,7 +2,7 @@ import { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
 import { env } from '@/env'
-import { api } from '@/services/api'
+import { api } from '@/lib/axios'
 
 export const nextAuthOptions: NextAuthOptions = {
 	providers: [
@@ -22,6 +22,8 @@ export const nextAuthOptions: NextAuthOptions = {
 					email,
 					password,
 				})
+
+				console.log(response.data)
 
 				const { token } = response.data
 

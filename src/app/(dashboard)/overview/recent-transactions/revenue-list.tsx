@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
-import { api } from '@/services/api'
+import { api } from '@/lib/axios'
 import { TransactionProps } from '@/types'
 
 import { Transaction } from './components/transaction'
