@@ -12,12 +12,12 @@ import { HTMLAttributes } from 'react'
 import { TransactionProps } from '@/types'
 
 const categoryIcons = {
-	Alimentação: <Utensils />,
-	Transporte: <Car />,
-	Entretenimento: <Clapperboard />,
-	Shopping: <ShoppingBag />,
-	Outros: <LayoutDashboard />,
-	Casa: <Home />,
+	FOOD: <Utensils />,
+	TRANSPORT: <Car />,
+	ENTERTAINMENT: <Clapperboard />,
+	SHOPPING: <ShoppingBag />,
+	OTHERS: <LayoutDashboard />,
+	HOME: <Home />,
 }
 
 type CategoryIcons = keyof typeof categoryIcons
@@ -31,7 +31,7 @@ export function Transaction({ transaction, ...rest }: TransactionsProps) {
 		<div className="flex items-center justify-between gap-7 py-6" {...rest}>
 			<div className="flex items-center gap-4">
 				<div className="p-2">
-					{categoryIcons[transaction.category.name as CategoryIcons]}
+					{categoryIcons[transaction.category as CategoryIcons]}
 				</div>
 				<div className="flex flex-col">
 					<p className="font-semibold">{transaction.name}</p>

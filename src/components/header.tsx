@@ -47,13 +47,13 @@ export function Header() {
 			</div>
 			<div className="hidden h-[416px] items-center justify-between gap-8 sm:flex">
 				<ThemeSwitch />
-				<Bell />
+				{/* <Bell />
 				<div className="flex justify-center gap-2">
 					<Input className="w-full rounded bg-card" />
 					<Button type="button" variant="ghost">
 						<Search size={24} className="text-[#999DA3]" />
 					</Button>
-				</div>
+				</div> */}
 			</div>
 		</header>
 	)

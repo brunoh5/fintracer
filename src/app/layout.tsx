@@ -18,6 +18,13 @@ export const metadata: Metadata = {
 	},
 	description:
 		'Site de organização financeira para controle de gastos pessoais.',
+	openGraph: {
+		type: 'website',
+		title: 'Fintracer',
+		url: 'https://fintracer.com.br',
+		description:
+			'Site de organização financeira para controle de gastos pessoais.',
+	},
 }
 
 export default async function RootLayout({

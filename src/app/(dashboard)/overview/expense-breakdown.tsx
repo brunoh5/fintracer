@@ -8,6 +8,7 @@ import {
 	Clapperboard,
 	Home,
 	LayoutDashboard,
+	Minus,
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
@@ -25,8 +26,6 @@ export function ExpenseBreakdown() {
 			return fetchExpenses({ session })
 		},
 	})
-
-	console.log(expenses?.FOOD)
 
 	return (
 		<Card>
@@ -47,15 +46,19 @@ export function ExpenseBreakdown() {
 						<div className="flex flex-col">
 							<span className="text-xs text-gray-500">Moradia</span>
 							<p className="font-semibold">
-								{expenses?.HOME &&
-									expenses?.HOME.transactions[0].total.toLocaleString('pt-BR', {
-										style: 'currency',
-										currency: 'BRL',
-									})}
+								{expenses?.HOME
+									? expenses?.HOME.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
 							</p>
 							<div className="flex items-center gap-2">
 								<span className="text-xs text-muted-foreground">
-									{expenses?.HOME && expenses?.HOME.diffBetweenMonth}%
+									{expenses?.HOME ? expenses?.HOME.diffBetweenMonth : 0}%
 								</span>
 								{expenses?.HOME && expenses?.HOME.diffBetweenMonth > 0 && (
 									<ArrowUp className="text-primary" size={16} />
@@ -63,6 +66,10 @@ export function ExpenseBreakdown() {
 
 								{expenses?.HOME && expenses?.HOME.diffBetweenMonth < 0 && (
 									<ArrowDown className="text-primary" size={16} />
+								)}
+
+								{expenses?.HOME === undefined && (
+									<Minus className="text-primary" size={16} />
 								)}
 							</div>
 						</div>
@@ -77,15 +84,19 @@ export function ExpenseBreakdown() {
 						<div className="flex flex-col">
 							<span className="text-xs text-gray-500">Alimentação</span>
 							<p className="font-semibold">
-								{expenses?.FOOD &&
-									expenses?.FOOD.transactions[0].total.toLocaleString('pt-BR', {
-										style: 'currency',
-										currency: 'BRL',
-									})}
+								{expenses?.FOOD
+									? expenses?.FOOD.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
 							</p>
 							<div className="flex items-center gap-2">
 								<span className="text-xs text-muted-foreground">
-									{expenses?.FOOD && expenses?.FOOD.diffBetweenMonth}%
+									{expenses?.FOOD ? expenses?.FOOD.diffBetweenMonth : 0}%
 								</span>
 								{expenses?.FOOD && expenses?.FOOD.diffBetweenMonth > 0 && (
 									<ArrowUp className="text-primary" size={16} />
@@ -93,6 +104,10 @@ export function ExpenseBreakdown() {
 
 								{expenses?.FOOD && expenses?.FOOD.diffBetweenMonth < 0 && (
 									<ArrowDown className="text-primary" size={16} />
+								)}
+
+								{expenses?.FOOD === undefined && (
+									<Minus className="text-primary" size={16} />
 								)}
 							</div>
 						</div>
@@ -107,18 +122,22 @@ export function ExpenseBreakdown() {
 						<div className="flex flex-col">
 							<span className="text-xs text-gray-500">Moradia</span>
 							<p className="font-semibold">
-								{expenses?.TRANSPORT &&
-									expenses?.TRANSPORT.transactions[0].total.toLocaleString(
-										'pt-BR',
-										{
-											style: 'currency',
-											currency: 'BRL',
-										},
-									)}
+								{expenses?.TRANSPORT
+									? expenses?.TRANSPORT.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
 							</p>
 							<div className="flex items-center gap-2">
 								<span className="text-xs text-muted-foreground">
-									{expenses?.TRANSPORT && expenses?.TRANSPORT.diffBetweenMonth}%
+									{expenses?.TRANSPORT
+										? expenses?.TRANSPORT.diffBetweenMonth
+										: 0}
+									%
 								</span>
 								{expenses?.TRANSPORT &&
 									expenses?.TRANSPORT.diffBetweenMonth > 0 && (
@@ -129,6 +148,10 @@ export function ExpenseBreakdown() {
 									expenses?.TRANSPORT.diffBetweenMonth < 0 && (
 										<ArrowDown className="text-primary" size={16} />
 									)}
+
+								{expenses?.TRANSPORT === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
 							</div>
 						</div>
 					</div>
@@ -142,19 +165,21 @@ export function ExpenseBreakdown() {
 						<div className="flex flex-col">
 							<span className="text-xs text-gray-500">Entretenimento</span>
 							<p className="font-semibold">
-								{expenses?.ENTERTAINMENT &&
-									expenses?.ENTERTAINMENT.transactions[0].total.toLocaleString(
-										'pt-BR',
-										{
-											style: 'currency',
-											currency: 'BRL',
-										},
-									)}
+								{expenses?.ENTERTAINMENT
+									? expenses?.ENTERTAINMENT.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
 							</p>
 							<div className="flex items-center gap-2">
 								<span className="text-xs text-muted-foreground">
-									{expenses?.ENTERTAINMENT &&
-										expenses?.ENTERTAINMENT.diffBetweenMonth}
+									{expenses?.ENTERTAINMENT
+										? expenses?.ENTERTAINMENT.diffBetweenMonth
+										: 0}
 									%
 								</span>
 								{expenses?.ENTERTAINMENT &&
@@ -166,6 +191,10 @@ export function ExpenseBreakdown() {
 									expenses?.ENTERTAINMENT.diffBetweenMonth < 0 && (
 										<ArrowDown className="text-primary" size={16} />
 									)}
+
+								{expenses?.ENTERTAINMENT === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
 							</div>
 						</div>
 					</div>
@@ -179,18 +208,20 @@ export function ExpenseBreakdown() {
 						<div className="flex flex-col">
 							<span className="text-xs text-gray-500">Compras</span>
 							<p className="font-semibold">
-								{expenses?.SHOPPING &&
-									expenses?.SHOPPING.transactions[0].total.toLocaleString(
-										'pt-BR',
-										{
-											style: 'currency',
-											currency: 'BRL',
-										},
-									)}
+								{expenses?.SHOPPING
+									? expenses?.SHOPPING.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
 							</p>
 							<div className="flex items-center gap-2">
 								<span className="text-xs text-muted-foreground">
-									{expenses?.SHOPPING && expenses?.SHOPPING.diffBetweenMonth}%
+									{expenses?.SHOPPING ? expenses?.SHOPPING.diffBetweenMonth : 0}
+									%
 								</span>
 								{expenses?.SHOPPING &&
 									expenses?.SHOPPING.diffBetweenMonth > 0 && (
@@ -201,6 +232,10 @@ export function ExpenseBreakdown() {
 									expenses?.SHOPPING.diffBetweenMonth < 0 && (
 										<ArrowDown className="text-primary" size={16} />
 									)}
+
+								{expenses?.SHOPPING === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
 							</div>
 						</div>
 					</div>
@@ -214,18 +249,19 @@ export function ExpenseBreakdown() {
 						<div className="flex flex-col">
 							<span className="text-xs text-gray-500">Outros</span>
 							<p className="font-semibold">
-								{expenses?.OTHERS &&
-									expenses?.OTHERS.transactions[0].total.toLocaleString(
-										'pt-BR',
-										{
-											style: 'currency',
-											currency: 'BRL',
-										},
-									)}
+								{expenses?.OTHERS
+									? expenses?.OTHERS.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
 							</p>
 							<div className="flex items-center gap-2">
 								<span className="text-xs text-muted-foreground">
-									{expenses?.OTHERS && expenses?.OTHERS.diffBetweenMonth}%
+									{expenses?.OTHERS ? expenses?.OTHERS.diffBetweenMonth : 0}%
 								</span>
 								{expenses?.OTHERS && expenses?.OTHERS.diffBetweenMonth > 0 && (
 									<ArrowUp className="text-primary" size={16} />
@@ -233,6 +269,10 @@ export function ExpenseBreakdown() {
 
 								{expenses?.OTHERS && expenses?.OTHERS.diffBetweenMonth < 0 && (
 									<ArrowDown className="text-primary" size={16} />
+								)}
+
+								{expenses?.OTHERS === undefined && (
+									<Minus className="text-primary" size={16} />
 								)}
 							</div>
 						</div>

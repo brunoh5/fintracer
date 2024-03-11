@@ -14,9 +14,12 @@ export function Expenses() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/users/transactions?type=sent', {
-				headers: { Authorization: `Bearer ${session?.user}` },
-			})
+			const response = await api.get(
+				'/users/transactions?transaction_type=DEBIT',
+				{
+					headers: { Authorization: `Bearer ${session?.user}` },
+				},
+			)
 
 			return response.data.transactions
 		},

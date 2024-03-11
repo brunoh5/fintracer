@@ -15,9 +15,12 @@ export function RevenueList() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/users/transactions?type=received', {
-				headers: { Authorization: `Bearer ${session?.user}` },
-			})
+			const response = await api.get(
+				'/users/transactions?transaction_type=CREDIT',
+				{
+					headers: { Authorization: `Bearer ${session?.user}` },
+				},
+			)
 
 			return response.data.transactions
 		},
