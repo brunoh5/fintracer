@@ -1,11 +1,11 @@
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 
 interface ForgotPasswordBody {
 	email: string
 }
 
 export async function forgotPassword({ email }: ForgotPasswordBody) {
-	const response = await api.post('/forgot-password', {
+	const response = await apiBackend.post('/forgot-password', {
 		email,
 	})
 

@@ -1,6 +1,6 @@
 import { Session } from 'next-auth'
 
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 
 interface DeleteAccountRequest {
 	session: Session | null
@@ -8,9 +8,9 @@ interface DeleteAccountRequest {
 }
 
 export async function deleteAccount({ session, id }: DeleteAccountRequest) {
-	await api.delete(`/accounts/${id}`, {
+	await apiBackend.delete(`/accounts/${id}`, {
 		headers: {
-			Authorization: `Bearer ${session?.user}`,
+			Authorization: `Bearer ${session?.access_token}`,
 		},
 	})
 }

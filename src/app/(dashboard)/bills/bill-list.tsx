@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { getSession } from 'next-auth/react'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 import { BillsProps } from '@/types'
 
 export function BillList() {
@@ -14,9 +14,9 @@ export function BillList() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/bills', {
+			const response = await apiBackend.get('/bills', {
 				headers: {
-					Authorization: `Bearer ${session?.user}`,
+					Authorization: `Bearer ${session?.access_token}`,
 				},
 			})
 

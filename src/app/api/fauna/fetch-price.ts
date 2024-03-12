@@ -7,7 +7,12 @@ export async function fetchPrice() {
 
 	const product = {
 		priceId: price.id,
-		amount: price.unit_amount ? price.unit_amount / 100 : null,
+		amount: price.unit_amount
+			? (price.unit_amount / 100).toLocaleString('pt-BR', {
+					style: 'currency',
+					currency: 'BRL',
+				})
+			: null,
 	}
 
 	return product

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
 import { Skeleton } from '@/components/ui/skeleton'
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 import { AccountProps } from '@/types'
 
 export function Balance() {
@@ -13,9 +13,9 @@ export function Balance() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/accounts', {
+			const response = await apiBackend.get('/accounts', {
 				headers: {
-					Authorization: `Bearer ${session?.user}`,
+					Authorization: `Bearer ${session?.access_token}`,
 				},
 			})
 

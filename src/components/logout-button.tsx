@@ -1,16 +1,20 @@
 'use client'
 
 import { LogOut } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 
 import { Button } from './ui/button'
 
 export function LogoutButton() {
+	const { push } = useRouter()
+
 	async function handleLogout() {
 		await signOut({
 			redirect: false,
-			callbackUrl: '/',
 		})
+
+		push('/')
 	}
 
 	return (

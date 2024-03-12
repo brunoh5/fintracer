@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { getSession } from 'next-auth/react'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 import { TransactionProps } from '@/types'
 
 const transactionType = {
@@ -31,9 +31,9 @@ export function TransactionsList({ accountId }: { accountId: string }) {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get(`/transactions/${accountId}/all`, {
+			const response = await apiBackend.get(`/transactions/${accountId}/all`, {
 				headers: {
-					Authorization: `Bearer ${session?.user}`,
+					Authorization: `Bearer ${session?.access_token}`,
 				},
 			})
 

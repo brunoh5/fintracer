@@ -1,6 +1,6 @@
 import { Session } from 'next-auth'
 
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 
 interface UpdateProfileRequest {
 	session: Session | null
@@ -9,9 +9,9 @@ interface UpdateProfileRequest {
 }
 
 export async function updateProfile({ session, data }: UpdateProfileRequest) {
-	await api.put('/me', data, {
+	await apiBackend.put('/me', data, {
 		headers: {
-			Authorization: `Bearer ${session?.user}`,
+			Authorization: `Bearer ${session?.access_token}`,
 		},
 	})
 }

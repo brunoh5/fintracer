@@ -1,4 +1,4 @@
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 
 interface RegisterClientBody {
 	email: string
@@ -11,7 +11,7 @@ export async function registerClient({
 	name,
 	password,
 }: RegisterClientBody) {
-	await api.post('/users', {
+	await apiBackend.post('/users', {
 		email,
 		name,
 		password,

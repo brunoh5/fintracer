@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 import { TransactionProps } from '@/types'
 
 import { Transaction } from './components/transaction'
@@ -18,7 +18,7 @@ export function RevenueList() {
 			const response = await api.get(
 				'/users/transactions?transaction_type=CREDIT',
 				{
-					headers: { Authorization: `Bearer ${session?.user}` },
+					headers: { Authorization: `Bearer ${session?.access_token}` },
 				},
 			)
 

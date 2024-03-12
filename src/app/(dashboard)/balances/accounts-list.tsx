@@ -15,7 +15,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 import { AccountProps } from '@/types'
 
 import { AccountsListSkeleton } from './accounts-list-skeleton'
@@ -28,9 +28,9 @@ export function AccountList() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/accounts', {
+			const response = await apiBackend.get('/accounts', {
 				headers: {
-					Authorization: `Bearer ${session?.user}`,
+					Authorization: `Bearer ${session?.access_token}`,
 				},
 			})
 

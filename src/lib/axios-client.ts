@@ -13,7 +13,7 @@ const axiosInstance = () => {
 	instance.interceptors.request.use(async (request) => {
 		const session = await getSession()
 		if (session) {
-			request.headers.Authorization = `Bearer ${session.user}`
+			request.headers.Authorization = `Bearer ${session?.access_token}`
 		}
 		return request
 	})
@@ -23,7 +23,7 @@ const axiosInstance = () => {
 			return response
 		},
 		(error) => {
-			console.log(`error`, error)
+			console.error(`error`, error)
 		},
 	)
 

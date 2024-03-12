@@ -20,7 +20,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 import { TransactionProps } from '@/types'
 
 const categoryIcon = {
@@ -51,8 +51,8 @@ export function TransactionList() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get('/users/transactions', {
-				headers: { Authorization: `Bearer ${session?.user}` },
+			const response = await apiBackend.get('/users/transactions', {
+				headers: { Authorization: `Bearer ${session?.access_token}` },
 			})
 
 			return response.data.transactions

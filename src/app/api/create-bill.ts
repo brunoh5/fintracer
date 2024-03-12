@@ -1,6 +1,6 @@
 import { Session } from 'next-auth'
 
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 
 interface CreateBillRequest {
 	session: Session | null
@@ -9,9 +9,9 @@ interface CreateBillRequest {
 }
 
 export async function createBill({ session, data }: CreateBillRequest) {
-	const response = await api.post('/bills', data, {
+	const response = await apiBackend.post('/bills', data, {
 		headers: {
-			Authorization: `Bearer ${session?.user}`,
+			Authorization: `Bearer ${session?.access_token}`,
 		},
 	})
 

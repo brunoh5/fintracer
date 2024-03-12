@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getSession } from 'next-auth/react'
 
-import { api } from '@/lib/axios'
+import { apiBackend } from '@/lib/axios-backend'
 import { TransactionProps } from '@/types'
 
 import { Transaction } from './components/transaction'
@@ -14,10 +14,10 @@ export function Expenses() {
 		queryFn: async () => {
 			const session = await getSession()
 
-			const response = await api.get(
+			const response = await apiBackend.get(
 				'/users/transactions?transaction_type=DEBIT',
 				{
-					headers: { Authorization: `Bearer ${session?.user}` },
+					headers: { Authorization: `Bearer ${session?.access_token}` },
 				},
 			)
 
