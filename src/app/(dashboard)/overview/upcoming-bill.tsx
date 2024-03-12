@@ -1,6 +1,5 @@
 import { format } from 'date-fns'
 import { ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -51,7 +50,7 @@ export function UpcomingBill() {
 							</div>
 							<div className="mr-5 flex flex-col">
 								<span className="text-muted-foreground">
-									<Image src={bill.image_url} alt="" height={16} width={50} />
+									{/* <Image src={bill.image_url} alt="" height={16} width={50} /> */}
 								</span>
 								<p>Figma - Monthly</p>
 								<span className="text-xs text-gray-300">

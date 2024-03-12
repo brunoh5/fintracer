@@ -2,27 +2,19 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { Bell, ChevronsRight, Search } from 'lucide-react'
+import { ChevronsRight } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import { getSession } from 'next-auth/react'
 
 import { getProfile } from '@/app/api/get-profile'
-import { UserProps } from '@/types'
 
 import { ThemeSwitch } from './theme-switch'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
 
 export function Header() {
 	const pathname = usePathname()
 
-	const { data: user } = useQuery<UserProps>({
+	const { data: user } = useQuery({
 		queryKey: ['profile'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return getProfile({ session })
-		},
+		queryFn: getProfile,
 		staleTime: Infinity,
 	})
 

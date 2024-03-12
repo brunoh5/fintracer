@@ -39,7 +39,7 @@ export function Transaction({ transaction, ...rest }: TransactionsProps) {
 				</div>
 			</div>
 			<div className="flex flex-col items-end">
-				<span className="font-semibold text-gray-900">
+				<span className="font-semibold text-foreground">
 					{new Intl.NumberFormat('pt-BR', {
 						style: 'currency',
 						currency: 'BRL',

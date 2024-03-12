@@ -1,28 +1,16 @@
-import { Session } from 'next-auth'
-
-import { api } from '@/lib/axios'
-
-interface GetProfileRequest {
-	session: Session | null
-}
+import { apiClient } from '@/lib/axios-client'
 
 interface GetProfileResponse {
-	user: {
-		id: string
-		name: string
-		email: string
-		created_at: Date
-		phone: string | null
-		avatar_url: string | null
-	}
+	id: string
+	name: string
+	email: string
+	created_at: Date
+	phone: string | null
+	avatar_url: string | null
 }
 
-export async function getProfile({ session }: GetProfileRequest) {
-	const response = await api.get<GetProfileResponse>('/me', {
-		headers: {
-			Authorization: `Bearer ${session?.user}`,
-		},
-	})
+export async function getProfile() {
+	const response = await apiClient.get<{ user: GetProfileResponse }>('/me')
 
 	return response.data.user
 }

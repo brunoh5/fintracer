@@ -7,6 +7,8 @@ export const env = createEnv({
 	server: {
 		NEXTAUTH_URL: z.string().optional(),
 		NEXTAUTH_SECRET: z.string().min(1),
+		FAUNADB_KEY: z.string(),
+		STRIPE_API_KEY: z.string(),
 	},
 	client: {
 		NEXT_PUBLIC_VERCEL_URL: z.string().min(1),

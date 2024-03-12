@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { query as q } from 'faunadb'
 import { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
 import { env } from '@/env'
 import { api } from '@/lib/axios'
+import { fauna } from '@/lib/fauna'
 
 export const nextAuthOptions: NextAuthOptions = {
 	providers: [
@@ -54,6 +57,28 @@ export const nextAuthOptions: NextAuthOptions = {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			session.user = token.user as any
 			return session
+		},
+		async signIn(params: any) {
+			const { email } = params.credentials
+
+			try {
+				await fauna.query(
+					q.If(
+						q.Not(
+							q.Exists(q.Match(q.Index('user_by_email'), q.Casefold(email))),
+						),
+						q.Create(q.Collection('users'), {
+							data: { email },
+						}),
+						q.Get(q.Match(q.Index('user_by_email'), q.Casefold(email))),
+					),
+				)
+
+				return true
+			} catch (err) {
+				console.log(err)
+				return false
+			}
 		},
 	},
 }
