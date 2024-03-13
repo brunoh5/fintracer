@@ -1,26 +1,19 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
 
-import { apiBackend } from '@/lib/axios-backend'
-import { TransactionProps } from '@/types'
+import { fetchUsersTransactions } from '@/app/api/fetch-users-transactions'
 
 import { Transaction } from './components/transaction'
 import { TransactionListSkeleton } from './transaction-list-skeleton'
 
 export function TransactionsList() {
-	const { data: transactions, isLoading } = useQuery<TransactionProps[]>({
+	const { data: transactions, isLoading } = useQuery({
 		queryKey: ['recent-transactions'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			const response = await apiBackend.get('/users/transactions', {
-				headers: { Authorization: `Bearer ${session?.access_token}` },
-			})
-
-			return response.data.transactions
-		},
+		queryFn: async () =>
+			await fetchUsersTransactions({
+				query: 'limit=5',
+			}),
 	})
 
 	return (

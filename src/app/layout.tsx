@@ -33,11 +33,15 @@ export default async function RootLayout({
 	children: React.ReactNode
 }) {
 	return (
-		<html lang="pt" className="antialiased" suppressHydrationWarning>
+		<html
+			className={`${inter.variable} antialiased`}
+			lang="pt"
+			suppressHydrationWarning
+		>
 			<head>
 				<link rel="icon" href="/favicon.svg" type="image/svg" sizes="any" />
 			</head>
-			<body className={inter.variable}>
+			<body>
 				<div className="min-h-screen bg-background">
 					<Providers>
 						{children}

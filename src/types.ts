@@ -25,7 +25,6 @@ export type TransactionProps = {
 	name: string
 	amount: number
 	created_at: Date
-	paid_at: Date | null
 	payment_method: PaymentMethods
 	shopName: string
 	transaction_type: 'DEBIT' | 'CREDIT'

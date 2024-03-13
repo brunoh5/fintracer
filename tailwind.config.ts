@@ -12,6 +12,10 @@ const config: Config = {
 				app: 'minmax(16rem, 18rem) 1fr',
 			},
 
+			gridTemplateRows: {
+				plans: 'minmax(14rem, 15rem)',
+			},
+
 			container: {
 				center: true,
 				padding: '2rem',

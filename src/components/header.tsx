@@ -8,11 +8,12 @@ import { usePathname } from 'next/navigation'
 import { getProfile } from '@/app/api/get-profile'
 
 import { ThemeSwitch } from './theme-switch'
+import { Skeleton } from './ui/skeleton'
 
 export function Header() {
 	const pathname = usePathname()
 
-	const { data: user } = useQuery({
+	const { data: user, isLoading } = useQuery({
 		queryKey: ['profile'],
 		queryFn: getProfile,
 		staleTime: Infinity,
@@ -24,9 +25,13 @@ export function Header() {
 				{pathname === '/overview' && (
 					<span className="text-nowrap text-xl font-bold">
 						Bem vindo{' '}
-						<span className="capitalize">
-							{user ? user?.name.split(' ', 1) : 'visitante'}!
-						</span>
+						{isLoading ? (
+							<Skeleton className="w-42 h-2" />
+						) : (
+							<span className="capitalize">
+								{user ? user?.name.split(' ', 1) : 'visitante'}!
+							</span>
+						)}
 					</span>
 				)}
 
@@ -37,7 +42,7 @@ export function Header() {
 					</span>
 				</div>
 			</div>
-			<div className="hidden h-[416px] items-center justify-between gap-8 sm:flex">
+			<div className="flex h-[416px] items-center justify-between gap-8">
 				<ThemeSwitch />
 				{/* <Bell />
 				<div className="flex justify-center gap-2">

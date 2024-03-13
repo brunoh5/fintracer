@@ -19,13 +19,17 @@ export function SubscribeButton() {
 			await stripe?.redirectToCheckout({ sessionId })
 		} catch (err) {
 			toast.error('Não foi possível fazer checkout')
-			console.error(err)
 		}
 	}
 
 	return (
-		<Button type="button" variant="ghost" onClick={handleSubscribe}>
-			Subscribe
+		<Button
+			className="w-full"
+			type="button"
+			variant="secondary"
+			onClick={handleSubscribe}
+		>
+			Assinar agora
 		</Button>
 	)
 }

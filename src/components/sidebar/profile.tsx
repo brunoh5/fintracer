@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { MoreVertical, UserCircleIcon } from 'lucide-react'
 import Image from 'next/image'
-import { getSession } from 'next-auth/react'
 
 import { getProfile } from '@/app/api/get-profile'
 import { UserProps } from '@/types'
@@ -13,11 +12,7 @@ import { ProfileSkeleton } from './profile-skeleton'
 export function Profile() {
 	const { data: user, isLoading } = useQuery<UserProps>({
 		queryKey: ['profile'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return getProfile({ session })
-		},
+		queryFn: getProfile,
 		staleTime: Infinity,
 	})
 

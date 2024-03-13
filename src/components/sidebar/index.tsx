@@ -4,6 +4,7 @@ import {
 	ArrowRightLeft,
 	LayoutGrid,
 	Menu,
+	Receipt,
 	Settings,
 	Wallet,
 } from 'lucide-react'
@@ -29,7 +30,10 @@ export function Sidebar() {
 			)}
 		>
 			<div className="flex items-center justify-between lg:justify-center">
-				<h1 className="text-center text-xl font-bold">Fintracer</h1>
+				<h1 className="flex items-center justify-center text-center text-xl font-bold">
+					<Receipt className="mr-4 size-6" />
+					fin.tracer
+				</h1>
 				<CollapsibleTrigger asChild className="lg:hidden">
 					<Button variant="ghost">
 						<Menu className="size-6" />
