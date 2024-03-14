@@ -27,7 +27,7 @@ export default async function Plans() {
 					<p className="text-semibold text-center text-2xl">
 						Seu período de testes acabou
 					</p>
-					<div className="grid-rows-plans grid grid-cols-1 gap-6 lg:grid-cols-2">
+					<div className="grid grid-cols-1 grid-rows-plans gap-6 lg:grid-cols-2">
 						<Card className="bg-primary/90">
 							<CardContent className="flex flex-col items-center gap-4 p-6">
 								<p className="text-nowrap text-center text-xl font-medium">

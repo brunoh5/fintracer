@@ -2,7 +2,7 @@ import { apiClient } from '@/lib/axios-client'
 import { CategoryTypes, PaymentMethods, TransactionTypes } from '@/types'
 
 interface FetchUsersTransactionRequest {
-	query: string
+	query?: string
 }
 
 export interface FetchUsersTransactionsResponse {

@@ -1,10 +1,4 @@
-import { Session } from 'next-auth'
-
-import { apiBackend } from '@/lib/axios-backend'
-
-interface FetchExpensesRequest {
-	session: Session | null
-}
+import { apiClient } from '@/lib/axios-client'
 
 type Transaction = {
 	month: number
@@ -26,14 +20,9 @@ interface FetchExpensesResponse {
 	}
 }
 
-export async function fetchExpenses({ session }: FetchExpensesRequest) {
-	const response = await apiBackend.get<FetchExpensesResponse>(
+export async function fetchExpenses() {
+	const response = await apiClient.get<FetchExpensesResponse>(
 		'/transactions/metrics',
-		{
-			headers: {
-				Authorization: `Bearer ${session?.access_token}`,
-			},
-		},
 	)
 
 	return response.data.metrics

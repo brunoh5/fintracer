@@ -12,7 +12,6 @@ import {
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
-import { getSession } from 'next-auth/react'
 
 import { fetchExpenses } from '@/app/api/fetch-expenses'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -20,11 +19,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 export function ExpenseBreakdown() {
 	const { data: expenses } = useQuery({
 		queryKey: ['expenses'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return fetchExpenses({ session })
-		},
+		queryFn: fetchExpenses,
 	})
 
 	return (

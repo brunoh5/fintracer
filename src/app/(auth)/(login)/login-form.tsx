@@ -31,17 +31,22 @@ export function LoginForm() {
 
 	async function handleLogin({ email, password }: LoginForm) {
 		try {
-			await signIn('credentials', {
+			const response = await signIn('credentials', {
 				email,
 				password,
 				redirect: false,
 			})
 
+			if (response?.status !== 200) {
+				toast.error('Credenciais invalidas')
+				return
+			}
+
 			toast.success('Login realizado com sucesso')
 
 			replace('/overview')
 		} catch {
-			toast.error('Credenciais invalidas')
+			toast.error('Um erro ocorreu, tente novamente mais tarde')
 		}
 	}
 

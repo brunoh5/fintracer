@@ -26,11 +26,7 @@ export function ProfileForm() {
 
 	const { data: profile } = useQuery({
 		queryKey: ['profile'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return getProfile({ session })
-		},
+		queryFn: getProfile,
 		staleTime: 1000 * 60 * 10, // 10 minutes
 	})
 

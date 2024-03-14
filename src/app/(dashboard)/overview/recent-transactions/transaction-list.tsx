@@ -9,7 +9,7 @@ import { TransactionListSkeleton } from './transaction-list-skeleton'
 
 export function TransactionsList() {
 	const { data: transactions, isLoading } = useQuery({
-		queryKey: ['recent-transactions'],
+		queryKey: ['users', 'transactions'],
 		queryFn: async () =>
 			await fetchUsersTransactions({
 				query: 'limit=5',

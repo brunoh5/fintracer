@@ -10,8 +10,8 @@ import {
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
-import { getSession } from 'next-auth/react'
 
+import { fetchUsersTransactions } from '@/app/api/fetch-users-transactions'
 import {
 	Table,
 	TableBody,
@@ -20,19 +20,18 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import { apiBackend } from '@/lib/axios-backend'
 import { TransactionProps } from '@/types'
 
-const categoryIcon = {
-	Casa: <Home size={24} className="mr-4" />,
-	Alimentação: <Utensils size={24} className="mr-4" />,
-	Transporte: <Car size={24} className="mr-4" />,
-	Entretenimento: <Clapperboard size={24} className="mr-4" />,
-	Shopping: <ShoppingBag size={24} className="mr-4" />,
-	Outros: <LayoutDashboard size={24} className="mr-4" />,
+const categoryIcons = {
+	FOOD: <Utensils />,
+	TRANSPORT: <Car />,
+	ENTERTAINMENT: <Clapperboard />,
+	SHOPPING: <ShoppingBag />,
+	OTHERS: <LayoutDashboard />,
+	HOME: <Home />,
 }
 
-type Icon = keyof typeof categoryIcon
+type CategoryIcons = keyof typeof categoryIcons
 
 const paymentMethods = {
 	money: 'Dinheiro',
@@ -46,17 +45,9 @@ const paymentMethods = {
 type Method = keyof typeof paymentMethods
 
 export function TransactionList() {
-	const { data: transactions, isLoading } = useQuery<TransactionProps[]>({
+	const { data: transactions, isLoading } = useQuery({
 		queryKey: ['users', 'transactions'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			const response = await apiBackend.get('/users/transactions', {
-				headers: { Authorization: `Bearer ${session?.access_token}` },
-			})
-
-			return response.data.transactions
-		},
+		queryFn: async () => await fetchUsersTransactions({ query: undefined }),
 	})
 
 	return (
@@ -91,7 +82,7 @@ export function TransactionList() {
 					transactions?.map((transaction: TransactionProps) => (
 						<TableRow key={transaction.id}>
 							<TableCell className="flex items-center text-left">
-								{categoryIcon[transaction.category.name as Icon]}
+								{categoryIcons[transaction.category as CategoryIcons]}
 								<span className="font-semibold">{transaction.name}</span>
 							</TableCell>
 

@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 
 import { fetchAccounts } from '@/app/api/fetch-accounts'
@@ -16,11 +15,7 @@ export function AccountList() {
 
 	const { data: accounts, isLoading } = useQuery<AccountProps[]>({
 		queryKey: ['total-balance/accounts'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return fetchAccounts({ session })
-		},
+		queryFn: fetchAccounts,
 	})
 
 	return (
