@@ -5,15 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import { getAccount } from '@/app/api/get-account'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
+import { AccountTypes } from '@/types'
 
 import { BalanceAccountSkeleton } from './balance-account-skeleton'
-
-enum AccountTypes {
-	CURRENT_ACCOUNT = 'Conta corrente',
-	INVESTMENT_ACCOUNT = 'Conta de investimentos',
-	SAVINGS_ACCOUNT = 'Conta poupança',
-	MACHINE_ACCOUNT = 'Maquininha de cartão',
-}
 
 export function ManageAccount({ accountId }: { accountId: string }) {
 	const { data: account, isLoading } = useQuery({

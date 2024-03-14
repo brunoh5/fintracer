@@ -25,12 +25,12 @@ const bills = [
 
 export function UpcomingBill() {
 	return (
-		<Card className="relative">
+		<Card className="relative overflow-hidden">
 			<CardHeader className="flex">
 				<CardTitle className="text-xl">Contas à Vencer</CardTitle>
 
 				<div className="flex items-center text-gray-500">
-					<Link className="text-xs" href="/dashboard/bills">
+					<Link className="text-xs" href="/bills">
 						View all
 					</Link>
 					<ChevronRight size={16} />

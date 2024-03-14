@@ -20,6 +20,13 @@ export enum TransactionTypes {
 	CREDIT = 'CREDIT',
 }
 
+export enum AccountTypes {
+	CURRENT_ACCOUNT = 'Conta corrente',
+	INVESTMENT_ACCOUNT = 'Conta de investimentos',
+	SAVINGS_ACCOUNT = 'Conta poupança',
+	MACHINE_ACCOUNT = 'Maquininha de cartão',
+}
+
 export type TransactionProps = {
 	id: string
 	name: string

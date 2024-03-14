@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { MoreVertical, UserCircleIcon } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { getProfile } from '@/app/api/get-profile'
 import { UserProps } from '@/types'
@@ -38,7 +39,9 @@ export function Profile() {
 							<span className="overflow-hidden text-sm text-white">
 								{user?.name}
 							</span>
-							<span className="text-xs text-white/20">View Profile</span>
+							<Link href="/settings" className="text-xs text-white/20">
+								Ver Perfil
+							</Link>
 						</div>
 						<MoreVertical className="absolute right-0 top-1 text-white" />
 					</div>
