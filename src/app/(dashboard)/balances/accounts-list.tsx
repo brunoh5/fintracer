@@ -2,9 +2,9 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
-import { getSession } from 'next-auth/react'
 
 import { deleteAccount } from '@/app/api/delete-account'
+import { fetchAccounts, FetchAccountsResponse } from '@/app/api/fetch-accounts'
 import { NavLink } from '@/components/nav-link'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,59 +15,48 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { apiBackend } from '@/lib/axios-backend'
-import { AccountProps } from '@/types'
 
 import { AccountsListSkeleton } from './accounts-list-skeleton'
 
 export function AccountList() {
 	const queryClient = useQueryClient()
 
-	const { data: accounts, isLoading } = useQuery<AccountProps[]>({
-		queryKey: ['balance', 'accounts'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			const response = await apiBackend.get('/accounts', {
-				headers: {
-					Authorization: `Bearer ${session?.access_token}`,
-				},
-			})
-
-			return response.data.accounts
-		},
+	const { data: resume, isLoading } = useQuery({
+		queryKey: ['resume-accounts'],
+		queryFn: fetchAccounts,
 	})
 
 	const { mutateAsync: deleteAccountFn } = useMutation({
 		mutationFn: deleteAccount,
-		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: ['balance', 'accounts'] })
+		onMutate: async ({ id }) => {
+			const cached = queryClient.getQueryData<FetchAccountsResponse>([
+				'resume-accounts',
+			])
 
-			const previousAccounts = queryClient.getQueryData(['balance', 'accounts'])
+			if (cached) {
+				const deletedAccount = cached.accounts.find(
+					(account) => account.id !== id,
+				)
 
-			queryClient.setQueryData(
-				['balance', 'accounts'],
-				(old: AccountProps[]) => [...old],
-			)
+				queryClient.setQueryData(['resume-accounts'], {
+					...cached,
+					accounts: deletedAccount,
+				})
+			}
 
-			return previousAccounts
+			return {
+				previousAccounts: cached,
+			}
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		onError: (_, __, context: any) => {
-			queryClient.setQueryData(
-				['balance', 'accounts'],
-				context.previousAccounts,
-			)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['balance', 'accounts'] })
+		onError: (_, __, context) => {
+			if (context?.previousAccounts) {
+				queryClient.setQueryData(['resume-accounts'], context.previousAccounts)
+			}
 		},
 	})
 
 	async function handleDeleteAccount(id: string) {
-		const session = await getSession()
-
-		await deleteAccountFn({ session, id })
+		await deleteAccountFn({ id })
 	}
 
 	return (
@@ -75,7 +64,7 @@ export function AccountList() {
 			{isLoading ? (
 				<AccountsListSkeleton />
 			) : (
-				accounts?.map((account, index) => (
+				resume?.accounts?.map((account, index) => (
 					<Card key={index} className="h-72">
 						<CardHeader className="flex flex-row items-center justify-between">
 							<CardTitle className="inline-block">{account.type}</CardTitle>

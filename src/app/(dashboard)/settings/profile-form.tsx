@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -27,7 +26,7 @@ export function ProfileForm() {
 	const { data: profile } = useQuery({
 		queryKey: ['profile'],
 		queryFn: getProfile,
-		staleTime: 1000 * 60 * 10, // 10 minutes
+		staleTime: 1000 * 60 * 60 * 7, // a week
 	})
 
 	const { register, handleSubmit } = useForm<ProfileForm>({
@@ -45,9 +44,7 @@ export function ProfileForm() {
 	})
 
 	async function handleEditProfile(data: ProfileForm) {
-		const session = await getSession()
-
-		await updateProfileFn({ session, data })
+		await updateProfileFn({ data })
 	}
 
 	return (

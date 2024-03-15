@@ -2,16 +2,10 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { getSession } from 'next-auth/react'
 
+import { fetchAccountTransactions } from '@/app/api/fetch-account-transactions'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { apiBackend } from '@/lib/axios-backend'
-import { TransactionProps } from '@/types'
-
-const transactionType = {
-	sent: 'Enviada',
-	received: 'Recebida',
-}
+import { TransactionTypes } from '@/types'
 
 const paymentMethods = {
 	money: 'Dinheiro',
@@ -22,23 +16,12 @@ const paymentMethods = {
 	bank_transfer: 'Transferência Bancária',
 }
 
-type Type = keyof typeof transactionType
 type Method = keyof typeof paymentMethods
 
 export function TransactionsList({ accountId }: { accountId: string }) {
-	const { data: transactions } = useQuery<TransactionProps[]>({
+	const { data: transactions } = useQuery({
 		queryKey: [accountId, 'transactions'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			const response = await apiBackend.get(`/transactions/${accountId}/all`, {
-				headers: {
-					Authorization: `Bearer ${session?.access_token}`,
-				},
-			})
-
-			return response.data.transactions
-		},
+		queryFn: async () => await fetchAccountTransactions({ accountId }),
 	})
 
 	return (
@@ -49,7 +32,11 @@ export function TransactionsList({ accountId }: { accountId: string }) {
 						{format(transaction.created_at, 'dd MMM, yyyy')}
 					</TableCell>
 					<TableCell className="text-center">
-						{transactionType[transaction.transaction_type as Type]}
+						{
+							TransactionTypes[
+								transaction.transaction_type as keyof typeof TransactionTypes
+							]
+						}
 					</TableCell>
 					<TableCell className="text-center">
 						{paymentMethods[transaction.payment_method as Method]}

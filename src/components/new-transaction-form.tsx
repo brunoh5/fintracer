@@ -78,8 +78,8 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 		},
 	})
 
-	const { data: accounts } = useQuery({
-		queryKey: ['balance', 'accounts'],
+	const { data: resume } = useQuery({
+		queryKey: ['resume-accounts'],
 		queryFn: fetchAccounts,
 	})
 
@@ -230,7 +230,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 										<SelectValue placeholder="Selecione a conta que a transação pertence" />
 									</SelectTrigger>
 									<SelectContent>
-										{accounts?.map((account: AccountProps) => (
+										{resume?.accounts?.map((account: AccountProps) => (
 											<SelectItem key={account.id} value={account.id}>
 												{account.bank}
 											</SelectItem>

@@ -10,8 +10,6 @@ import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
 } from '@/components/ui/carousel'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -37,10 +35,10 @@ export function TotalBalance() {
 							<Skeleton />
 						) : (
 							<span className="text-xl font-bold">
-								{resume?.total?.toLocaleString('pt-BR', {
+								{new Intl.NumberFormat('pt-BR', {
 									style: 'currency',
 									currency: 'BRL',
-								})}
+								}).format(Number(resume?.total))}
 							</span>
 						)}
 					</>
@@ -50,30 +48,34 @@ export function TotalBalance() {
 				</div>
 
 				<Separator />
-				<Carousel className="overflow-hidden">
+				<Carousel className="flex items-center justify-center">
 					<CarouselContent>
 						{isLoading ? (
 							<AccountListSkeleton />
 						) : (
 							resume?.accounts?.map((account) => (
-								<CarouselItem
-									key={account.id}
-									className="flex flex-col rounded-md bg-primary p-2"
-								>
-									<div className="flex flex-col">
-										<span className="text-white/70">
-											{AccountTypes[account?.type as keyof typeof AccountTypes]}
-										</span>
-										<p className="text-white">{account.bank}</p>
-										<span className="text-white/70">{account.number}</span>
-									</div>
-									<div className="flex flex-col items-end justify-between gap-4">
+								<CarouselItem key={account.id}>
+									<div className="flex items-center justify-between rounded-md bg-primary p-4">
+										<div>
+											<span className="text-nowrap text-xs text-white/70">
+												{
+													AccountTypes[
+														account?.type as keyof typeof AccountTypes
+													]
+												}
+											</span>
+											<p className="font-semibold text-white">{account.bank}</p>
+											{account.number && (
+												<span className="text-xs text-white/70">
+													{account.number}
+												</span>
+											)}
+										</div>
 										<div className="flex items-center justify-between gap-2 self-end">
-											<span className="font-bold text-white">
+											<span className="text-ellipsis text-nowrap font-bold text-white">
 												{account.balance.toLocaleString('pt-BR', {
 													style: 'currency',
 													currency: 'BRL',
-													maximumFractionDigits: 2,
 												})}
 											</span>
 											<Link href={`/balances/${account.id}`}>
@@ -88,8 +90,6 @@ export function TotalBalance() {
 								</CarouselItem>
 							))
 						)}
-						<CarouselPrevious />
-						<CarouselNext />
 					</CarouselContent>
 				</Carousel>
 			</CardContent>
