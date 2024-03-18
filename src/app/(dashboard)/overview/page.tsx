@@ -24,7 +24,7 @@ export default async function Dashboard() {
 				<div className="grid grid-cols-1 gap-y-6 lg:grid-cols-3 lg:gap-6">
 					<RecentTransaction />
 
-					<div className="col-span-2 flex flex-col gap-8">
+					<div className="col-span-2 flex flex-col gap-2 lg:grid lg:grid-rows-[320px] lg:gap-8">
 						<Statistics />
 						<ExpenseBreakdown />
 					</div>

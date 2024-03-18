@@ -15,6 +15,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { AccountTypes } from '@/types'
 
 import { AccountsListSkeleton } from './accounts-list-skeleton'
 
@@ -67,7 +68,9 @@ export function AccountList() {
 				resume?.accounts?.map((account, index) => (
 					<Card key={index} className="h-72">
 						<CardHeader className="flex flex-row items-center justify-between">
-							<CardTitle className="inline-block">{account.type}</CardTitle>
+							<CardTitle className="inline-block">
+								{AccountTypes[account?.type as keyof typeof AccountTypes]}
+							</CardTitle>
 							<CardDescription className="font-medium">
 								{account.bank}
 							</CardDescription>
@@ -77,11 +80,15 @@ export function AccountList() {
 
 							<div className="mt-4 flex w-full flex-col gap-6">
 								<div className="flex flex-col gap-4">
-									<div>
-										<p className="text-xl font-bold">{account.number}</p>
-										<span className="text-xs text-gray-300">
-											Account Number
-										</span>
+									<div className="h-[52px]">
+										{account.number && (
+											<>
+												<p className="text-xl font-bold">{account.number}</p>
+												<span className="text-xs text-gray-300">
+													Numero da conta
+												</span>
+											</>
+										)}
 									</div>
 									<div>
 										<p className="text-xl font-bold">
@@ -90,7 +97,9 @@ export function AccountList() {
 												currency: 'BRL',
 											})}
 										</p>
-										<span className="text-xs text-gray-300">Total amount</span>
+										<span className="text-xs text-gray-300">
+											Total na conta
+										</span>
 									</div>
 								</div>
 								<div className="flex items-center justify-between">
@@ -98,13 +107,16 @@ export function AccountList() {
 										onClick={() => handleDeleteAccount(account.id)}
 										variant="secondary"
 									>
-										Remove
+										Remover
 									</Button>
 
 									<Button asChild>
-										<NavLink href={`/balances/${account.id}`}>
-											Details
-											<ChevronRight size={16} />
+										<NavLink
+											href={`/balances/${account.id}`}
+											className="flex items-center gap-2 text-primary-foreground"
+										>
+											Detalhes
+											<ChevronRight size={24} />
 										</NavLink>
 									</Button>
 								</div>

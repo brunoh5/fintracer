@@ -48,14 +48,14 @@ export function TotalBalance() {
 				</div>
 
 				<Separator />
-				<Carousel className="flex items-center justify-center">
+				<Carousel>
 					<CarouselContent>
 						{isLoading ? (
 							<AccountListSkeleton />
 						) : (
 							resume?.accounts?.map((account) => (
 								<CarouselItem key={account.id}>
-									<div className="flex items-center justify-between rounded-md bg-primary p-4">
+									<div className="flex h-24 items-center justify-between rounded-md bg-primary p-4">
 										<div>
 											<span className="text-nowrap text-xs text-white/70">
 												{

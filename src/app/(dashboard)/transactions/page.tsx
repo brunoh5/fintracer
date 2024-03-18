@@ -1,7 +1,6 @@
 'use client'
 
 import { TabsTrigger } from '@/components/tabs-trigger'
-import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList } from '@/components/ui/tabs'
 
 import { TransactionList } from './transaction-list'
@@ -30,12 +29,6 @@ export default function Transactions() {
 					<TransactionList />
 				</TabsContent>
 			</Tabs>
-
-			<div className="mb-8 mt-8 flex items-center justify-center">
-				<Button type="submit" className="w-48" disabled>
-					Load More
-				</Button>
-			</div>
 		</main>
 	)
 }
