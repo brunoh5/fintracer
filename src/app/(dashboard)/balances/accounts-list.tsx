@@ -3,8 +3,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
 
-import { deleteAccount } from '@/app/api/delete-account'
-import { fetchAccounts, FetchAccountsResponse } from '@/app/api/fetch-accounts'
+import { deleteAccount } from '@/api/delete-account'
+import { fetchAccounts, FetchAccountsResponse } from '@/api/fetch-accounts'
 import { NavLink } from '@/components/nav-link'
 import { Button } from '@/components/ui/button'
 import {

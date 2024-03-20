@@ -1,8 +1,9 @@
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
+import { TabsTrigger } from '@/components/tabs-trigger'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList } from '@/components/ui/tabs'
 
 import { Expenses } from './expense-list'
 import { RevenueList } from './revenue-list'

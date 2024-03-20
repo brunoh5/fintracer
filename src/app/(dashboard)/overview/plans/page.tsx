@@ -1,7 +1,7 @@
 import { ChevronLeft, Download } from 'lucide-react'
 import Link from 'next/link'
 
-import { fetchPrice } from '@/app/api/fauna/fetch-price'
+import { fetchPrice } from '@/api/fauna/fetch-price'
 import { Whatsapp } from '@/assets/whatsapp'
 import { SubscribeButton } from '@/components/subscribe-button'
 import { Button } from '@/components/ui/button'

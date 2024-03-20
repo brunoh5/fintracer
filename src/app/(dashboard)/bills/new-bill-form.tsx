@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { createBill } from '@/app/api/create-bill'
+import { createBill } from '@/api/create-bill'
 import { ControlledSelect } from '@/components/controlled-select'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'

@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 
-import { fetchUsersTransactions } from '@/app/api/fetch-users-transactions'
+import { fetchUsersTransactions } from '@/api/fetch-users-transactions'
 
 import { Transaction } from './components/transaction'
 import { TransactionListSkeleton } from './transaction-list-skeleton'

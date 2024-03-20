@@ -1,5 +1,4 @@
 import { apiClient } from '@/lib/axios-client'
-import { CategoryTypes, PaymentMethods, TransactionTypes } from '@/types'
 
 interface FetchUsersTransactionRequest {
 	query?: string
@@ -9,11 +8,23 @@ export interface FetchUsersTransactionsResponse {
 	id: string
 	name: string
 	amount: number
-	created_at: Date
-	payment_method: PaymentMethods
+	created_at: string
+	payment_method:
+		| 'MONEY'
+		| 'PIX'
+		| 'CREDIT_CARD'
+		| 'DEBIT_CARD'
+		| 'BANK_CHECK'
+		| 'BANK_TRANSFER'
 	shopName: string
-	transaction_type: TransactionTypes
-	category: CategoryTypes
+	transaction_type: 'CREDIT' | 'DEBIT'
+	category:
+		| 'FOOD'
+		| 'OTHERS'
+		| 'HOME'
+		| 'TRANSPORTATION'
+		| 'ENTERTAINMENT'
+		| 'SHOPPING'
 	userId: string
 	accountId: string
 }

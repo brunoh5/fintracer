@@ -25,7 +25,7 @@ export function Sidebar() {
 		<Collapsible
 			className={twMerge(
 				'fixed left-0 right-0 top-0 z-20 flex flex-col gap-6 px-3 py-4 font-semibold text-card-foreground data-[state=open]:bottom-0 data-[state=open]:h-screen lg:px-7 lg:py-12',
-				'lg:right-auto lg:w-72 lg:border-r lg:border-r-muted lg:data-[state=closed]:bottom-0',
+				'lg:right-auto lg:w-56 lg:border-r lg:border-r-muted lg:data-[state=closed]:bottom-0',
 				'dark:bg-card',
 			)}
 		>
@@ -47,31 +47,31 @@ export function Sidebar() {
 			>
 				<nav className="flex flex-col gap-4">
 					<NavLink href="/overview">
-						<LayoutGrid />
+						<LayoutGrid className="size-5" />
 						Dashboard
 					</NavLink>
 					<NavLink href="/balances">
-						<Wallet />
+						<Wallet className="size-5" />
 						Contas
 					</NavLink>
 					<NavLink href="/transactions">
-						<ArrowRightLeft />
+						<ArrowRightLeft className="size-5" />
 						Transações
 					</NavLink>
 					{/* <NavLink href="/bills">
-								<Receipt />
+								<Receipt className="size-5"/>
 								Despesas
 							</NavLink> */}
 					{/* <NavLink href="/expenses">
-								<CreditCard />
+								<CreditCard className="size-5"/>
 								Gastos
 							</NavLink> */}
 					{/* <NavLink href="/goals">
-								<Crosshair />
+								<Crosshair className="size-5"/>
 								Objetivos
 							</NavLink> */}
 					<NavLink href="/settings">
-						<Settings />
+						<Settings className="size-5" />
 						Configurações
 					</NavLink>
 				</nav>

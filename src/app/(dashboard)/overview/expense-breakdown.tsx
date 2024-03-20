@@ -13,7 +13,7 @@ import {
 	Utensils,
 } from 'lucide-react'
 
-import { fetchExpenses } from '@/app/api/fetch-expenses'
+import { fetchExpenses } from '@/api/fetch-expenses'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 export function ExpenseBreakdown() {

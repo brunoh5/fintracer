@@ -10,8 +10,8 @@ import { z } from 'zod'
 import {
 	createTransaction,
 	CreateTransactionResponse,
-} from '@/app/api/create-transaction'
-import { fetchAccounts } from '@/app/api/fetch-accounts'
+} from '@/api/create-transaction'
+import { fetchAccounts } from '@/api/fetch-accounts'
 import {
 	AccountProps,
 	CategoryTypes,

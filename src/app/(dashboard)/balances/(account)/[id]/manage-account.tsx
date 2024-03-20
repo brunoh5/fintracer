@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 
-import { getAccount } from '@/app/api/get-account'
+import { getAccount } from '@/api/get-account'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { AccountTypes } from '@/types'

@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 
 export interface NavLinkProps extends LinkProps {
 	children: ReactNode
-	className: string
+	className?: string
 }
 
 export function NavLink({ className, ...props }: NavLinkProps) {

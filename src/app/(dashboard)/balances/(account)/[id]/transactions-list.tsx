@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 
-import { fetchAccountTransactions } from '@/app/api/fetch-account-transactions'
+import { fetchAccountTransactions } from '@/api/fetch-account-transactions'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { TransactionTypes } from '@/types'
 

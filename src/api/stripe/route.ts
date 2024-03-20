@@ -6,7 +6,7 @@ import { env } from '@/env'
 import { fauna } from '@/lib/fauna'
 import { stripe } from '@/lib/stripe'
 
-import { nextAuthOptions } from '../auth/[...nextauth]/options'
+import { nextAuthOptions } from '../../app/api/auth/[...nextauth]/options'
 
 type User = {
 	ref: {

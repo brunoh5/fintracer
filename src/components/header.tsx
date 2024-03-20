@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { ChevronsRight } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
-import { getProfile } from '@/app/api/get-profile'
+import { getProfile } from '@/api/get-profile'
 
 import { ThemeSwitch } from './theme-switch'
 import { Skeleton } from './ui/skeleton'

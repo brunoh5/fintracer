@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { createAccount, CreateAccountResponse } from '@/app/api/create-account'
+import { createAccount, CreateAccountResponse } from '@/api/create-account'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
