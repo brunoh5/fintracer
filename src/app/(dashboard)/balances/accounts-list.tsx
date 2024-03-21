@@ -29,29 +29,16 @@ export function AccountList() {
 
 	const { mutateAsync: deleteAccountFn } = useMutation({
 		mutationFn: deleteAccount,
-		onMutate: async ({ id }) => {
+		async onSuccess(_, { id }) {
 			const cached = queryClient.getQueryData<FetchAccountsResponse>([
 				'resume-accounts',
 			])
 
-			if (cached) {
-				const deletedAccount = cached.accounts.find(
-					(account) => account.id !== id,
-				)
-
-				queryClient.setQueryData(['resume-accounts'], {
+			if (cached && cached.accounts) {
+				queryClient.setQueryData<FetchAccountsResponse>(['resume-accounts'], {
 					...cached,
-					accounts: deletedAccount,
+					accounts: cached.accounts.filter((account) => account.id !== id),
 				})
-			}
-
-			return {
-				previousAccounts: cached,
-			}
-		},
-		onError: (_, __, context) => {
-			if (context?.previousAccounts) {
-				queryClient.setQueryData(['resume-accounts'], context.previousAccounts)
 			}
 		},
 	})
@@ -81,14 +68,16 @@ export function AccountList() {
 							<div className="mt-4 flex w-full flex-col gap-6">
 								<div className="flex flex-col gap-4">
 									<div className="h-[52px]">
-										{account.number && (
-											<>
-												<p className="text-xl font-bold">{account.number}</p>
-												<span className="text-xs text-gray-300">
-													Numero da conta
-												</span>
-											</>
-										)}
+										<p className="text-xl font-bold">
+											{account.number ? (
+												<span>account.number</span>
+											) : (
+												<span>Não informado</span>
+											)}
+										</p>
+										<span className="text-xs text-gray-300">
+											Numero da conta
+										</span>
 									</div>
 									<div>
 										<p className="text-xl font-bold">

@@ -1,40 +1,55 @@
 import { apiClient } from '@/lib/axios-client'
 
-interface FetchUsersTransactionRequest {
-	query?: string
+interface FetchUsersTransactionQuery {
+	pageIndex?: number | null
+	transaction_type: string | null
 }
 
 export interface FetchUsersTransactionsResponse {
-	id: string
-	name: string
-	amount: number
-	created_at: string
-	payment_method:
-		| 'MONEY'
-		| 'PIX'
-		| 'CREDIT_CARD'
-		| 'DEBIT_CARD'
-		| 'BANK_CHECK'
-		| 'BANK_TRANSFER'
-	shopName: string
-	transaction_type: 'CREDIT' | 'DEBIT'
-	category:
-		| 'FOOD'
-		| 'OTHERS'
-		| 'HOME'
-		| 'TRANSPORTATION'
-		| 'ENTERTAINMENT'
-		| 'SHOPPING'
-	userId: string
-	accountId: string
+	transactions: {
+		id: string
+		name: string
+		amount: number
+		created_at: string
+		userId: string
+		accountId: string
+		shopName: string
+		transaction_type: 'CREDIT' | 'DEBIT'
+		payment_method:
+			| 'MONEY'
+			| 'PIX'
+			| 'CREDIT_CARD'
+			| 'DEBIT_CARD'
+			| 'BANK_CHECK'
+			| 'BANK_TRANSFER'
+		category:
+			| 'FOOD'
+			| 'OTHERS'
+			| 'HOME'
+			| 'TRANSPORTATION'
+			| 'ENTERTAINMENT'
+			| 'SHOPPING'
+	}[]
+	meta: {
+		pageIndex: number
+		perPage: number
+		totalCount: number
+	}
 }
 
 export async function fetchUsersTransactions({
-	query,
-}: FetchUsersTransactionRequest) {
-	const response = await apiClient<{
-		transactions: FetchUsersTransactionsResponse[]
-	}>(`/users/transactions?${query}`)
+	pageIndex,
+	transaction_type,
+}: FetchUsersTransactionQuery) {
+	const response = await apiClient.get<FetchUsersTransactionsResponse>(
+		'/transactions',
+		{
+			params: {
+				pageIndex,
+				transaction_type,
+			},
+		},
+	)
 
-	return response.data.transactions
+	return response.data
 }

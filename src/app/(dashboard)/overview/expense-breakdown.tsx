@@ -14,7 +14,13 @@ import {
 } from 'lucide-react'
 
 import { fetchExpenses } from '@/api/fetch-expenses'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
 
 export function ExpenseBreakdown() {
 	const { data: expenses } = useQuery({
@@ -25,12 +31,10 @@ export function ExpenseBreakdown() {
 	return (
 		<Card>
 			<CardHeader>
-				<div className="flex items-center justify-between">
-					<h2 className="text-[22px]">Gastos do mês</h2>
-					<span className="self-end font-medium text-muted-foreground">
-						*Comparado ao mês anterior
-					</span>
-				</div>
+				<CardTitle>Gastos do mês</CardTitle>
+				<CardDescription className="text-xs text-muted-foreground">
+					Comparado ao mês anterior
+				</CardDescription>
 			</CardHeader>
 			<CardContent className="flex w-full flex-col gap-x-10 gap-y-6 rounded-lg lg:grid lg:grid-cols-3">
 				<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">

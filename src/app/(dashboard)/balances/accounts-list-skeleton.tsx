@@ -1,3 +1,7 @@
+import { ChevronRight } from 'lucide-react'
+
+import { NavLink } from '@/components/nav-link'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -23,8 +27,19 @@ export function AccountsListSkeleton() {
 						</div>
 					</div>
 					<div className="flex items-center justify-between">
-						<Skeleton className="h-12 w-[60px]" />
-						<Skeleton className="h-12 w-[100px]" />
+						<Button disabled={true} variant="secondary">
+							Remover
+						</Button>
+
+						<Button asChild>
+							<NavLink
+								href="#"
+								className="flex items-center gap-2 text-primary-foreground"
+							>
+								Detalhes
+								<ChevronRight size={24} />
+							</NavLink>
+						</Button>
 					</div>
 				</div>
 			</CardContent>
