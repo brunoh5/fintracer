@@ -2,27 +2,20 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { Bell, ChevronsRight, Search } from 'lucide-react'
+import { ChevronsRight } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import { getSession } from 'next-auth/react'
 
-import { getProfile } from '@/app/api/get-profile'
-import { UserProps } from '@/types'
+import { getProfile } from '@/api/get-profile'
 
 import { ThemeSwitch } from './theme-switch'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
+import { Skeleton } from './ui/skeleton'
 
 export function Header() {
 	const pathname = usePathname()
 
-	const { data: user } = useQuery<UserProps>({
+	const { data: user, isLoading } = useQuery({
 		queryKey: ['profile'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return getProfile({ session })
-		},
+		queryFn: getProfile,
 		staleTime: Infinity,
 	})
 
@@ -32,9 +25,13 @@ export function Header() {
 				{pathname === '/overview' && (
 					<span className="text-nowrap text-xl font-bold">
 						Bem vindo{' '}
-						<span className="capitalize">
-							{user ? user?.name.split(' ', 1) : 'visitante'}!
-						</span>
+						{isLoading ? (
+							<Skeleton className="w-42 h-2" />
+						) : (
+							<span className="capitalize">
+								{user ? user?.name.split(' ', 1) : 'visitante'}!
+							</span>
+						)}
 					</span>
 				)}
 
@@ -45,15 +42,15 @@ export function Header() {
 					</span>
 				</div>
 			</div>
-			<div className="hidden h-[416px] items-center justify-between gap-8 sm:flex">
+			<div className="flex h-[416px] items-center justify-between gap-8">
 				<ThemeSwitch />
-				<Bell />
+				{/* <Bell />
 				<div className="flex justify-center gap-2">
 					<Input className="w-full rounded bg-card" />
 					<Button type="button" variant="ghost">
 						<Search size={24} className="text-[#999DA3]" />
 					</Button>
-				</div>
+				</div> */}
 			</div>
 		</header>
 	)

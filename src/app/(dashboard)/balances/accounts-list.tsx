@@ -2,9 +2,9 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
-import { getSession } from 'next-auth/react'
 
-import { deleteAccount } from '@/app/api/delete-account'
+import { deleteAccount } from '@/api/delete-account'
+import { fetchAccounts, FetchAccountsResponse } from '@/api/fetch-accounts'
 import { NavLink } from '@/components/nav-link'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,60 +15,36 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { api } from '@/services/api'
-import { AccountProps } from '@/types'
+import { AccountTypes } from '@/types'
 
 import { AccountsListSkeleton } from './accounts-list-skeleton'
 
 export function AccountList() {
 	const queryClient = useQueryClient()
 
-	const { data: accounts, isLoading } = useQuery<AccountProps[]>({
-		queryKey: ['balance', 'accounts'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			const response = await api.get('/accounts', {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
-
-			return response.data.accounts
-		},
+	const { data: resume, isLoading } = useQuery({
+		queryKey: ['resume-accounts'],
+		queryFn: fetchAccounts,
 	})
 
 	const { mutateAsync: deleteAccountFn } = useMutation({
-		mutationKey: ['balance', 'accounts'],
 		mutationFn: deleteAccount,
-		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: ['balance', 'accounts'] })
+		async onSuccess(_, { id }) {
+			const cached = queryClient.getQueryData<FetchAccountsResponse>([
+				'resume-accounts',
+			])
 
-			const previousAccounts = queryClient.getQueryData(['balance', 'accounts'])
-
-			queryClient.setQueryData(
-				['balance', 'accounts'],
-				(old: AccountProps[]) => [...old],
-			)
-
-			return previousAccounts
-		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		onError: (_, __, context: any) => {
-			queryClient.setQueryData(
-				['balance', 'accounts'],
-				context.previousAccounts,
-			)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['balance', 'accounts'] })
+			if (cached && cached.accounts) {
+				queryClient.setQueryData<FetchAccountsResponse>(['resume-accounts'], {
+					...cached,
+					accounts: cached.accounts.filter((account) => account.id !== id),
+				})
+			}
 		},
 	})
 
 	async function handleDeleteAccount(id: string) {
-		const session = await getSession()
-
-		await deleteAccountFn({ session, id })
+		await deleteAccountFn({ id })
 	}
 
 	return (
@@ -76,10 +52,12 @@ export function AccountList() {
 			{isLoading ? (
 				<AccountsListSkeleton />
 			) : (
-				accounts?.map((account, index) => (
+				resume?.accounts?.map((account, index) => (
 					<Card key={index} className="h-72">
 						<CardHeader className="flex flex-row items-center justify-between">
-							<CardTitle className="inline-block">{account.type}</CardTitle>
+							<CardTitle className="inline-block">
+								{AccountTypes[account?.type as keyof typeof AccountTypes]}
+							</CardTitle>
 							<CardDescription className="font-medium">
 								{account.bank}
 							</CardDescription>
@@ -89,10 +67,16 @@ export function AccountList() {
 
 							<div className="mt-4 flex w-full flex-col gap-6">
 								<div className="flex flex-col gap-4">
-									<div>
-										<p className="text-xl font-bold">{account.number}</p>
+									<div className="h-[52px]">
+										<p className="text-xl font-bold">
+											{account.number ? (
+												<span>account.number</span>
+											) : (
+												<span>Não informado</span>
+											)}
+										</p>
 										<span className="text-xs text-gray-300">
-											Account Number
+											Numero da conta
 										</span>
 									</div>
 									<div>
@@ -102,7 +86,9 @@ export function AccountList() {
 												currency: 'BRL',
 											})}
 										</p>
-										<span className="text-xs text-gray-300">Total amount</span>
+										<span className="text-xs text-gray-300">
+											Total na conta
+										</span>
 									</div>
 								</div>
 								<div className="flex items-center justify-between">
@@ -110,13 +96,16 @@ export function AccountList() {
 										onClick={() => handleDeleteAccount(account.id)}
 										variant="secondary"
 									>
-										Remove
+										Remover
 									</Button>
 
 									<Button asChild>
-										<NavLink href={`/balances/${account.id}`}>
-											Details
-											<ChevronRight size={16} />
+										<NavLink
+											href={`/balances/${account.id}`}
+											className="flex items-center gap-2 text-primary-foreground"
+										>
+											Detalhes
+											<ChevronRight size={24} />
 										</NavLink>
 									</Button>
 								</div>

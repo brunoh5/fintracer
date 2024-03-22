@@ -1,32 +1,35 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import { getSession } from 'next-auth/react'
+// import { useQuery } from '@tanstack/react-query'
+// import { format } from 'date-fns'
+// import { getSession } from 'next-auth/react'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { api } from '@/services/api'
-import { BillsProps } from '@/types'
+// import { apiBackend } from '@/lib/axios-backend'
+// import { BillsProps } from '@/types'
 
 export function BillList() {
-	const { data: bills } = useQuery<BillsProps[]>({
-		queryKey: ['bills'],
-		queryFn: async () => {
-			const session = await getSession()
+	// const { data: bills } = useQuery<BillsProps[]>({
+	// 	queryKey: ['bills'],
+	// 	queryFn: async () => {
+	// 		const session = await getSession()
 
-			const response = await api.get('/bills', {
-				headers: {
-					Authorization: `Bearer ${session?.user}`,
-				},
-			})
+	// 		const response = await apiBackend.get('/bills', {
+	// 			headers: {
+	// 				Authorization: `Bearer ${session?.access_token}`,
+	// 			},
+	// 		})
 
-			return response.data.bills
-		},
-	})
+	// 		return response.data.bills
+	// 	},
+	// })
 
 	return (
 		<TableBody className="divide-y">
-			{bills?.map((bill, index) => (
+			<TableRow>
+				<TableCell>Testing</TableCell>
+			</TableRow>
+			{/* {bills?.map((bill, index) => (
 				<TableRow key={index}>
 					<TableCell
 						scope="row"
@@ -56,7 +59,7 @@ export function BillList() {
 						}).format(bill.amount)}
 					</TableCell>
 				</TableRow>
-			))}
+			))} */}
 		</TableBody>
 	)
 }

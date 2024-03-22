@@ -1,32 +1,38 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
 
-import { api } from '@/services/api'
-import { TransactionProps } from '@/types'
+import { fetchTransactions } from '@/api/fetch-transactions'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { Transaction } from './components/transaction'
+import { TransactionListSkeleton } from './transaction-list-skeleton'
 
 export function Expenses() {
-	const { data: transactions } = useQuery<TransactionProps[]>({
-		queryKey: ['recent-transactions', 'expenses'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			const response = await api.get('/users/transactions?type=sent', {
-				headers: { Authorization: `Bearer ${session?.user}` },
-			})
-
-			return response.data.transactions
-		},
+	const { data: result, isLoading: isLoadingTransactions } = useQuery({
+		queryKey: ['transactions', 'DEBIT'],
+		queryFn: async () =>
+			await fetchTransactions({
+				transaction_type: 'DEBIT',
+			}),
 	})
 
 	return (
 		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] pb-2">
-			{transactions?.map((transaction) => (
-				<Transaction key={transaction.id} transaction={transaction} />
-			))}
+			{isLoadingTransactions && <TransactionListSkeleton />}
+
+			{result?.transactions?.length === 0 && (
+				<>
+					<p>Nenhuma transação cadastrada</p>
+				</>
+			)}
+
+			<ScrollArea className="h-[480px] pr-4">
+				{result &&
+					result.transactions.map((transaction) => (
+						<Transaction key={transaction.id} transaction={transaction} />
+					))}
+			</ScrollArea>
 		</div>
 	)
 }

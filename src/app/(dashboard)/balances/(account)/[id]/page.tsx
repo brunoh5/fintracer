@@ -1,8 +1,5 @@
-import { Suspense } from 'react'
-
 import { NewTransaction } from '@/components/new-transaction-form'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 import { ManageAccount } from './manage-account'
 import { TransactionsList } from './transactions-list'
@@ -25,29 +22,7 @@ export default function Account({ params }: { params: { id: string } }) {
 				<NewTransaction accountId={params.id} />
 			</div>
 
-			<div className="w-full px-6 py-5">
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead className="text-left font-bold">
-								Data da Transação
-							</TableHead>
-							<TableHead className="text-center font-bold">Status</TableHead>
-							<TableHead className="text-center font-bold">
-								Tipo da Transação
-							</TableHead>
-							<TableHead className="text-center font-bold">
-								Método de pagamento
-							</TableHead>
-							<TableHead className="text-center font-bold">Valor</TableHead>
-						</TableRow>
-					</TableHeader>
-
-					<Suspense fallback={<p>Carregando</p>}>
-						<TransactionsList accountId={params.id} />
-					</Suspense>
-				</Table>
-			</div>
+			<TransactionsList accountId={params.id} />
 		</main>
 	)
 }

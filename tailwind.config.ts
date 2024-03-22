@@ -9,7 +9,11 @@ const config: Config = {
 			},
 
 			gridTemplateColumns: {
-				app: 'minmax(16rem, 18rem) 1fr',
+				app: 'minmax(12rem, 14rem) 1fr',
+			},
+
+			gridTemplateRows: {
+				plans: 'minmax(14rem, 15rem)',
 			},
 
 			container: {

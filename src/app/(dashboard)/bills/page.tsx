@@ -1,9 +1,7 @@
-import { Suspense } from 'react'
-
 import { Header } from '@/components/header'
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
-import { BillList } from './bill-list'
+// import { BillList } from './bill-list'
 import { NewBillForm } from './new-bill-form'
 
 export default function Bills() {
@@ -40,9 +38,9 @@ export default function Bills() {
 							</TableRow>
 						</TableHeader>
 
-						<Suspense>
+						{/* <Suspense>
 							<BillList />
-						</Suspense>
+						</Suspense> */}
 					</Table>
 				</div>
 			</main>

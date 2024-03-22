@@ -7,14 +7,14 @@ import { signOut } from 'next-auth/react'
 import { Button } from './ui/button'
 
 export function LogoutButton() {
-	const { replace } = useRouter()
+	const { push } = useRouter()
 
 	async function handleLogout() {
 		await signOut({
 			redirect: false,
 		})
 
-		replace('/')
+		push('/')
 	}
 
 	return (

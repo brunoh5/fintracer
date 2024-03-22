@@ -2,11 +2,10 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { updateProfile } from '@/app/api/update-profile'
+import { updateProfile } from '@/api/update-profile'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -38,9 +37,7 @@ export function PasswordForm() {
 	})
 
 	async function handleChangePassword(data: PasswordForm) {
-		const session = await getSession()
-
-		await updatePasswordFn({ session, data })
+		await updatePasswordFn({ data })
 	}
 
 	return (

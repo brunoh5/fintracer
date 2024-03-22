@@ -8,7 +8,7 @@ import { MonthlyGoalForm } from './form'
 
 export function MonthlyGoal() {
 	return (
-		<Card className="relative">
+		<Card className="relative overflow-hidden">
 			<CardHeader>
 				<CardTitle className="text-xl">Goals</CardTitle>
 			</CardHeader>

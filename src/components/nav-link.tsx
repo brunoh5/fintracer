@@ -7,9 +7,10 @@ import { twMerge } from 'tailwind-merge'
 
 export interface NavLinkProps extends LinkProps {
 	children: ReactNode
+	className?: string
 }
 
-export function NavLink(props: NavLinkProps) {
+export function NavLink({ className, ...props }: NavLinkProps) {
 	const pathname = usePathname()
 
 	return (
@@ -18,6 +19,7 @@ export function NavLink(props: NavLinkProps) {
 			className={twMerge(
 				'flex items-center gap-3 rounded px-4 py-3 text-muted-foreground transition-colors hover:bg-white/[0.08] ',
 				'data-[current=true]:bg-primary data-[current=true]:text-white',
+				className,
 			)}
 			{...props}
 		>

@@ -1,6 +1,5 @@
 import { format } from 'date-fns'
 import { ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,7 +11,7 @@ const bills = [
 		title: 'Figma',
 		description: 'Design software',
 		amount: 150,
-		image_url: '/figma.png',
+		image_url: '',
 	},
 	{
 		lastCharge: new Date('06-17-2022'),
@@ -20,18 +19,18 @@ const bills = [
 		title: 'Adobe',
 		description: 'Design software',
 		amount: 559,
-		image_url: '/adobe.png',
+		image_url: '',
 	},
 ]
 
 export function UpcomingBill() {
 	return (
-		<Card className="relative">
+		<Card className="relative overflow-hidden">
 			<CardHeader className="flex">
 				<CardTitle className="text-xl">Contas à Vencer</CardTitle>
 
 				<div className="flex items-center text-gray-500">
-					<Link className="text-xs" href="/dashboard/bills">
+					<Link className="text-xs" href="/bills">
 						View all
 					</Link>
 					<ChevronRight size={16} />
@@ -51,7 +50,7 @@ export function UpcomingBill() {
 							</div>
 							<div className="mr-5 flex flex-col">
 								<span className="text-muted-foreground">
-									<Image src={bill.image_url} alt="" height={16} width={50} />
+									{/* <Image src={bill.image_url} alt="" height={16} width={50} /> */}
 								</span>
 								<p>Figma - Monthly</p>
 								<span className="text-xs text-gray-300">

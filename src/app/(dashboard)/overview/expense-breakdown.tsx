@@ -8,109 +8,274 @@ import {
 	Clapperboard,
 	Home,
 	LayoutDashboard,
+	Minus,
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
-import { getSession } from 'next-auth/react'
 
-import { fetchCategoriesExpenses } from '@/app/api/fetch-categories-expenses'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { calculatePercentageDifference } from '@/lib/calculate-percentage-difference'
-
-const categoryIcons = {
-	Alimentação: <Utensils />,
-	Transporte: <Car />,
-	Entretenimento: <Clapperboard />,
-	Shopping: <ShoppingBag />,
-	Outros: <LayoutDashboard />,
-	Casa: <Home />,
-}
-
-type CategoryIcons = keyof typeof categoryIcons
+import { fetchExpenses } from '@/api/fetch-expenses'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
 
 export function ExpenseBreakdown() {
-	const { data: categories } = useQuery({
-		queryKey: ['categories', 'expenses'],
-		queryFn: async () => {
-			const session = await getSession()
-
-			return fetchCategoriesExpenses({ session })
-		},
-		staleTime: 1000 * 60 * 10, // 10 minutes
+	const { data: expenses } = useQuery({
+		queryKey: ['expenses'],
+		queryFn: fetchExpenses,
 	})
 
 	return (
 		<Card>
 			<CardHeader>
-				<div className="flex items-center justify-between">
-					<h2 className="text-[22px]">Gastos do mês</h2>
-					<span className="self-end font-medium text-muted-foreground">
-						*Comparado ao mês anterior
-					</span>
-				</div>
+				<CardTitle>Gastos do mês</CardTitle>
+				<CardDescription className="text-xs text-muted-foreground">
+					Comparado ao mês anterior
+				</CardDescription>
 			</CardHeader>
-			<CardContent>
-				<div className="flex w-full flex-col gap-x-10 gap-y-6 rounded-lg lg:grid lg:grid-cols-3">
-					{categories?.map((category) => {
-						let currentMonthExpense = 0
-						let lastMonthExpense = 0
+			<CardContent className="flex w-full flex-col gap-x-10 gap-y-6 rounded-lg lg:grid lg:grid-cols-3">
+				<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">
+					<div className="flex h-14 w-12 items-center rounded-lg p-2">
+						<Home />
+					</div>
+					<div className="flex items-center gap-4">
+						<div className="flex flex-col">
+							<span className="text-xs text-gray-500">Moradia</span>
+							<p className="font-semibold">
+								{expenses?.HOME
+									? expenses?.HOME.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
+							</p>
+							<div className="flex items-center gap-2">
+								<span className="text-xs text-muted-foreground">
+									{expenses?.HOME ? expenses?.HOME.diffBetweenMonth : 0}%
+								</span>
+								{expenses?.HOME && expenses?.HOME.diffBetweenMonth > 0 && (
+									<ArrowUp className="text-primary" size={16} />
+								)}
 
-						if (category.transactions[0] && category.transactions[0].total) {
-							currentMonthExpense = category.transactions[0].total
-							if (category.transactions[1] && category.transactions[1].total) {
-								lastMonthExpense = category.transactions[1].total
-							}
-						}
+								{expenses?.HOME && expenses?.HOME.diffBetweenMonth < 0 && (
+									<ArrowDown className="text-primary" size={16} />
+								)}
 
-						const expenseCompareInPercentage = calculatePercentageDifference(
-							lastMonthExpense,
-							currentMonthExpense,
-						)
-
-						return (
-							<div
-								key={category.id}
-								className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2"
-							>
-								<div className="flex h-14 w-12 items-center rounded-lg p-2">
-									{categoryIcons[category.name as CategoryIcons]}
-								</div>
-								<div className="flex items-center gap-4">
-									<div className="flex flex-col">
-										<span className="text-xs text-gray-500">
-											{category.name}
-										</span>
-										<p className="font-semibold">
-											{category.transactions[0] !== null
-												? currentMonthExpense.toLocaleString('pt-BR', {
-														style: 'currency',
-														currency: 'BRL',
-													})
-												: Number(0).toLocaleString('pt-BR', {
-														style: 'currency',
-														currency: 'BRL',
-													})}
-										</p>
-										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground">
-												{expenseCompareInPercentage}%
-											</span>
-											{expenseCompareInPercentage > 0 && (
-												<ArrowUp className="text-primary" size={16} />
-											)}
-
-											{expenseCompareInPercentage < 0 && (
-												<ArrowDown className="text-primary" size={16} />
-											)}
-										</div>
-									</div>
-									{/* <div className="flex flex-col items-end">
-									<ArrowRight />
-								</div> */}
-								</div>
+								{expenses?.HOME === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
 							</div>
-						)
-					})}
+						</div>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">
+					<div className="flex h-14 w-12 items-center rounded-lg p-2">
+						<Utensils />
+					</div>
+					<div className="flex items-center gap-4">
+						<div className="flex flex-col">
+							<span className="text-xs text-gray-500">Alimentação</span>
+							<p className="font-semibold">
+								{expenses?.FOOD
+									? expenses?.FOOD.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
+							</p>
+							<div className="flex items-center gap-2">
+								<span className="text-xs text-muted-foreground">
+									{expenses?.FOOD ? expenses?.FOOD.diffBetweenMonth : 0}%
+								</span>
+								{expenses?.FOOD && expenses?.FOOD.diffBetweenMonth > 0 && (
+									<ArrowUp className="text-primary" size={16} />
+								)}
+
+								{expenses?.FOOD && expenses?.FOOD.diffBetweenMonth < 0 && (
+									<ArrowDown className="text-primary" size={16} />
+								)}
+
+								{expenses?.FOOD === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">
+					<div className="flex h-14 w-12 items-center rounded-lg p-2">
+						<Car />
+					</div>
+					<div className="flex items-center gap-4">
+						<div className="flex flex-col">
+							<span className="text-xs text-gray-500">Moradia</span>
+							<p className="font-semibold">
+								{expenses?.TRANSPORT
+									? expenses?.TRANSPORT.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
+							</p>
+							<div className="flex items-center gap-2">
+								<span className="text-xs text-muted-foreground">
+									{expenses?.TRANSPORT
+										? expenses?.TRANSPORT.diffBetweenMonth
+										: 0}
+									%
+								</span>
+								{expenses?.TRANSPORT &&
+									expenses?.TRANSPORT.diffBetweenMonth > 0 && (
+										<ArrowUp className="text-primary" size={16} />
+									)}
+
+								{expenses?.TRANSPORT &&
+									expenses?.TRANSPORT.diffBetweenMonth < 0 && (
+										<ArrowDown className="text-primary" size={16} />
+									)}
+
+								{expenses?.TRANSPORT === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">
+					<div className="flex h-14 w-12 items-center rounded-lg p-2">
+						<Clapperboard />
+					</div>
+					<div className="flex items-center gap-4">
+						<div className="flex flex-col">
+							<span className="text-xs text-gray-500">Entretenimento</span>
+							<p className="font-semibold">
+								{expenses?.ENTERTAINMENT
+									? expenses?.ENTERTAINMENT.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
+							</p>
+							<div className="flex items-center gap-2">
+								<span className="text-xs text-muted-foreground">
+									{expenses?.ENTERTAINMENT
+										? expenses?.ENTERTAINMENT.diffBetweenMonth
+										: 0}
+									%
+								</span>
+								{expenses?.ENTERTAINMENT &&
+									expenses?.ENTERTAINMENT.diffBetweenMonth > 0 && (
+										<ArrowUp className="text-primary" size={16} />
+									)}
+
+								{expenses?.ENTERTAINMENT &&
+									expenses?.ENTERTAINMENT.diffBetweenMonth < 0 && (
+										<ArrowDown className="text-primary" size={16} />
+									)}
+
+								{expenses?.ENTERTAINMENT === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">
+					<div className="flex h-14 w-12 items-center rounded-lg p-2">
+						<ShoppingBag />
+					</div>
+					<div className="flex items-center gap-4">
+						<div className="flex flex-col">
+							<span className="text-xs text-gray-500">Compras</span>
+							<p className="font-semibold">
+								{expenses?.SHOPPING
+									? expenses?.SHOPPING.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
+							</p>
+							<div className="flex items-center gap-2">
+								<span className="text-xs text-muted-foreground">
+									{expenses?.SHOPPING ? expenses?.SHOPPING.diffBetweenMonth : 0}
+									%
+								</span>
+								{expenses?.SHOPPING &&
+									expenses?.SHOPPING.diffBetweenMonth > 0 && (
+										<ArrowUp className="text-primary" size={16} />
+									)}
+
+								{expenses?.SHOPPING &&
+									expenses?.SHOPPING.diffBetweenMonth < 0 && (
+										<ArrowDown className="text-primary" size={16} />
+									)}
+
+								{expenses?.SHOPPING === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">
+					<div className="flex h-14 w-12 items-center rounded-lg p-2">
+						<LayoutDashboard />
+					</div>
+					<div className="flex items-center gap-4">
+						<div className="flex flex-col">
+							<span className="text-xs text-gray-500">Outros</span>
+							<p className="font-semibold">
+								{expenses?.OTHERS
+									? expenses?.OTHERS.transactions[0].total.toLocaleString(
+											'pt-BR',
+											{
+												style: 'currency',
+												currency: 'BRL',
+											},
+										)
+									: 0}
+							</p>
+							<div className="flex items-center gap-2">
+								<span className="text-xs text-muted-foreground">
+									{expenses?.OTHERS ? expenses?.OTHERS.diffBetweenMonth : 0}%
+								</span>
+								{expenses?.OTHERS && expenses?.OTHERS.diffBetweenMonth > 0 && (
+									<ArrowUp className="text-primary" size={16} />
+								)}
+
+								{expenses?.OTHERS && expenses?.OTHERS.diffBetweenMonth < 0 && (
+									<ArrowDown className="text-primary" size={16} />
+								)}
+
+								{expenses?.OTHERS === undefined && (
+									<Minus className="text-primary" size={16} />
+								)}
+							</div>
+						</div>
+					</div>
 				</div>
 			</CardContent>
 		</Card>
