@@ -4,8 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { z } from 'zod'
 
-import { fetchUsersTransactions } from '@/api/fetch-users-transactions'
+import { fetchTransactions } from '@/api/fetch-transactions'
 import { Pagination } from '@/components/pagination'
+import { TransactionTableSkeleton } from '@/components/transaction-table-skeleton'
 import {
 	Table,
 	TableBody,
@@ -15,7 +16,6 @@ import {
 } from '@/components/ui/table'
 
 import { TransactionTableRow } from './transaction-table-row'
-import { TransactionTableSkeleton } from './transaction-table-skeleton'
 
 export function TransactionsList() {
 	const searchParams = useSearchParams()
@@ -32,7 +32,7 @@ export function TransactionsList() {
 
 	const { data: result, isLoading: isLoadingTransactions } = useQuery({
 		queryKey: ['transactions', pageIndex, transaction_type],
-		queryFn: () => fetchUsersTransactions({ pageIndex, transaction_type }),
+		queryFn: () => fetchTransactions({ pageIndex, transaction_type }),
 	})
 
 	function handlePaginate(pageIndex: number) {
@@ -78,9 +78,9 @@ export function TransactionsList() {
 
 			{result && (
 				<Pagination
-					pageIndex={0}
-					totalCount={20}
-					perPage={10}
+					pageIndex={result.meta.pageIndex}
+					totalCount={result.meta.totalCount}
+					perPage={result.meta.perPage}
 					onPageChange={handlePaginate}
 				/>
 			)}

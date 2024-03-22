@@ -18,7 +18,7 @@ export interface TransactionProps {
 		transaction_type: string
 		payment_method: TransactionPaymentMethod
 		created_at: string
-		amount: number
+		amountInCents: number
 		shopName: string
 	}
 }
@@ -37,19 +37,19 @@ export function Transaction({ transaction }: TransactionProps) {
 				{transaction.transaction_type === 'CREDIT' && (
 					<span className="font-semibold text-emerald-500 text-foreground">
 						+
-						{new Intl.NumberFormat('pt-BR', {
+						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
-						}).format(transaction.amount)}
+						})}
 					</span>
 				)}
 				{transaction.transaction_type === 'DEBIT' && (
 					<span className="font-semibold text-foreground text-rose-400">
 						-
-						{new Intl.NumberFormat('pt-BR', {
+						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
-						}).format(transaction.amount)}
+						})}
 					</span>
 				)}
 				<span className="text-xs text-gray-300">

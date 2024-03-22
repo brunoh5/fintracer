@@ -1,54 +1,93 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { format } from 'date-fns'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { z } from 'zod'
 
-import { fetchAccountTransactions } from '@/api/fetch-account-transactions'
-import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { TransactionTypes } from '@/types'
+import { fetchTransactions } from '@/api/fetch-transactions'
+import { TransactionTableRow } from '@/app/(dashboard)/transactions/transaction-table-row'
+import { Pagination } from '@/components/pagination'
+import { TransactionTableSkeleton } from '@/components/transaction-table-skeleton'
+import {
+	Table,
+	TableBody,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table'
 
-const paymentMethods = {
-	money: 'Dinheiro',
-	PIX: 'Pix',
-	credit_card: 'Cartão de credito',
-	debit_card: 'Cartão de debito',
-	bank_check: 'Cheque Bancário',
-	bank_transfer: 'Transferência Bancária',
+interface TransactionsListProps {
+	accountId: string
 }
 
-type Method = keyof typeof paymentMethods
+export function TransactionsList({ accountId }: TransactionsListProps) {
+	const searchParams = useSearchParams()
+	const { replace } = useRouter()
+	const pathname = usePathname()
+	const params = new URLSearchParams(searchParams)
 
-export function TransactionsList({ accountId }: { accountId: string }) {
-	const { data: transactions } = useQuery({
-		queryKey: [accountId, 'transactions'],
-		queryFn: async () => await fetchAccountTransactions({ accountId }),
+	const transaction_type = params.get('transaction_type')
+
+	const pageIndex = z.coerce
+		.number()
+		.transform((page) => page - 1)
+		.parse(params.get('page') ?? '1')
+
+	const { data: result, isLoading: isLoadingTransactions } = useQuery({
+		queryKey: ['transactions', pageIndex, transaction_type, accountId],
+		queryFn: () =>
+			fetchTransactions({ pageIndex, transaction_type, accountId }),
 	})
 
+	function handlePaginate(pageIndex: number) {
+		const params = new URLSearchParams(searchParams)
+
+		params.set('page', (pageIndex + 1).toString())
+
+		replace(`${pathname}?${params.toString()}`)
+	}
+
 	return (
-		<TableBody>
-			{transactions?.map((transaction, index) => (
-				<TableRow key={index}>
-					<TableCell className="text-left">
-						{format(transaction.created_at, 'dd MMM, yyyy')}
-					</TableCell>
-					<TableCell className="text-center">
-						{
-							TransactionTypes[
-								transaction.transaction_type as keyof typeof TransactionTypes
-							]
-						}
-					</TableCell>
-					<TableCell className="text-center">
-						{paymentMethods[transaction.payment_method as Method]}
-					</TableCell>
-					<TableCell className="text-center font-bold">
-						{new Intl.NumberFormat('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						}).format(transaction.amount)}
-					</TableCell>
-				</TableRow>
-			))}
-		</TableBody>
+		<div className="space-y-2.5">
+			<div className="rounded-md border">
+				<Table>
+					<TableHeader className="font-bold">
+						<TableRow>
+							<TableHead className="w-[80px]"></TableHead>
+							<TableHead>Nome</TableHead>
+							<TableHead className="w-[140px] text-center">
+								Estabelecimento
+							</TableHead>
+							<TableHead className="w-[140px] text-center">Categoria</TableHead>
+							<TableHead className="w-[140px] ">Data</TableHead>
+							<TableHead className="w-[140px] ">Pagamento</TableHead>
+							<TableHead className="w-[140px] text-center">Valor</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{isLoadingTransactions && <TransactionTableSkeleton />}
+
+						{result &&
+							result.transactions.map((transaction) => {
+								return (
+									<TransactionTableRow
+										key={transaction.id}
+										transaction={transaction}
+									/>
+								)
+							})}
+					</TableBody>
+				</Table>
+			</div>
+
+			{result && (
+				<Pagination
+					pageIndex={result.meta.pageIndex}
+					totalCount={result.meta.totalCount}
+					perPage={result.meta.perPage}
+					onPageChange={handlePaginate}
+				/>
+			)}
+		</div>
 	)
 }

@@ -27,7 +27,7 @@ export interface TransactionTableRowProps {
 		transaction_type: string
 		payment_method: TransactionPaymentMethod
 		created_at: string
-		amount: number
+		amountInCents: number
 		shopName: string
 	}
 }
@@ -79,19 +79,19 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 				{transaction.transaction_type === 'CREDIT' && (
 					<span className="text-emerald-500">
 						+
-						{new Intl.NumberFormat('pt-BR', {
+						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
-						}).format(transaction.amount)}
+						})}
 					</span>
 				)}
 				{transaction.transaction_type === 'DEBIT' && (
 					<span className="text-rose-400">
 						-
-						{new Intl.NumberFormat('pt-BR', {
+						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
-						}).format(transaction.amount)}
+						})}
 					</span>
 				)}
 			</TableCell>

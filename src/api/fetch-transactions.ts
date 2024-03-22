@@ -1,17 +1,17 @@
 import { apiClient } from '@/lib/axios-client'
 
-interface FetchUsersTransactionQuery {
+interface FetchTransactionQuery {
 	pageIndex?: number | null
-	transaction_type: string | null
+	transaction_type?: string | null
+	accountId?: string | null
 }
 
-export interface FetchUsersTransactionsResponse {
+export interface FetchTransactionsResponse {
 	transactions: {
 		id: string
 		name: string
-		amount: number
+		amountInCents: number
 		created_at: string
-		userId: string
 		accountId: string
 		shopName: string
 		transaction_type: 'CREDIT' | 'DEBIT'
@@ -37,16 +37,18 @@ export interface FetchUsersTransactionsResponse {
 	}
 }
 
-export async function fetchUsersTransactions({
+export async function fetchTransactions({
 	pageIndex,
 	transaction_type,
-}: FetchUsersTransactionQuery) {
-	const response = await apiClient.get<FetchUsersTransactionsResponse>(
+	accountId,
+}: FetchTransactionQuery) {
+	const response = await apiClient.get<FetchTransactionsResponse>(
 		'/transactions',
 		{
 			params: {
 				pageIndex,
 				transaction_type,
+				accountId,
 			},
 		},
 	)
