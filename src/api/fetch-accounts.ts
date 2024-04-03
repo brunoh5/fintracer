@@ -13,7 +13,12 @@ export interface FetchAccountsResponse {
 		number?: string
 		balance: number
 	}[]
-	total: number
+	totalBalanceInCents: number
+	meta: {
+		pageIndex: number
+		perPage: number
+		totalCount: number
+	}
 }
 
 export async function fetchAccounts() {

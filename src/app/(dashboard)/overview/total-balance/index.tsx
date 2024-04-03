@@ -18,7 +18,7 @@ import { AccountTypes } from '@/types'
 import { AccountListSkeleton } from './account-list-skeleton'
 
 export function TotalBalance() {
-	const { data: resume } = useQuery({
+	const { data: resume, isLoading } = useQuery({
 		queryKey: ['resume-accounts'],
 		queryFn: fetchAccounts,
 	})
@@ -26,7 +26,7 @@ export function TotalBalance() {
 	return (
 		<Card>
 			<CardHeader className="flex">
-				<CardTitle className="text-xl">Balanço Geral</CardTitle>
+				<CardTitle className="text-xl">Saldo Atual</CardTitle>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-3">
 				<div className="flex items-center justify-between">
@@ -36,7 +36,7 @@ export function TotalBalance() {
 								{new Intl.NumberFormat('pt-BR', {
 									style: 'currency',
 									currency: 'BRL',
-								}).format(Number(resume.total))}
+								}).format(Number(resume.totalBalanceInCents))}
 							</span>
 						) : (
 							<Skeleton className="h-5 w-[148px]" />
@@ -50,6 +50,8 @@ export function TotalBalance() {
 				<Separator />
 				<Carousel>
 					<CarouselContent>
+						{isLoading && <AccountListSkeleton />}
+
 						{resume ? (
 							resume.accounts.map((account) => (
 								<CarouselItem key={account.id}>
@@ -88,7 +90,11 @@ export function TotalBalance() {
 								</CarouselItem>
 							))
 						) : (
-							<AccountListSkeleton />
+							<CarouselItem>
+								<div className="bg-primary">
+									<span className="text-xs">Nenhuma conta cadastrada</span>
+								</div>
+							</CarouselItem>
 						)}
 					</CarouselContent>
 				</Carousel>

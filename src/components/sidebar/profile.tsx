@@ -36,6 +36,7 @@ export function Profile() {
 					)}
 					<div className="relative ml-4 flex-1">
 						<div className="mr-8 flex w-full flex-col">
+							{/* {isLoading && <Skeleton className="h-4 w-6" />} */}
 							<span className="overflow-hidden text-sm text-foreground">
 								{user?.name}
 							</span>

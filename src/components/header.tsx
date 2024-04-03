@@ -24,7 +24,7 @@ export function Header() {
 			<div className="flex items-center justify-center gap-6">
 				{pathname === '/overview' && (
 					<span className="text-nowrap text-xl font-bold">
-						Bem vindo{' '}
+						Bem vindo,{' '}
 						{isLoading ? (
 							<Skeleton className="w-42 h-2" />
 						) : (
