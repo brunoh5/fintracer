@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -43,9 +43,21 @@ export function TransactionsList() {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const params = new URLSearchParams(searchParams)
-	const { register, handleSubmit, control } = useForm<TransactionFilterSchema>()
 
+	const name = params.get('name')
 	const transaction_type = params.get('transaction_type')
+	const payment_method = params.get('payment_method')
+	const category = params.get('category')
+
+	const { register, handleSubmit, control, reset } =
+		useForm<TransactionFilterSchema>({
+			defaultValues: {
+				name: name ?? '',
+				transaction_type: transaction_type ?? 'all',
+				payment_method: payment_method ?? 'all',
+				category: category ?? 'all',
+			},
+		})
 
 	const pageIndex = z.coerce
 		.number()
@@ -53,20 +65,80 @@ export function TransactionsList() {
 		.parse(params.get('page') ?? '1')
 
 	const { data: result, isLoading: isLoadingTransactions } = useQuery({
-		queryKey: ['transactions', pageIndex, transaction_type],
-		queryFn: () => fetchTransactions({ pageIndex, transaction_type }),
+		queryKey: [
+			'transactions',
+			pageIndex,
+			name,
+			transaction_type,
+			payment_method,
+			category,
+		],
+		queryFn: () =>
+			fetchTransactions({
+				pageIndex,
+				name,
+				transaction_type: transaction_type === 'all' ? null : transaction_type,
+				payment_method: payment_method === 'all' ? null : payment_method,
+				category: category === 'all' ? null : category,
+			}),
 	})
 
 	function handlePaginate(pageIndex: number) {
-		const params = new URLSearchParams(searchParams)
+		// const params = new URLSearchParams(searchParams)
 
 		params.set('page', (pageIndex + 1).toString())
 
 		replace(`${pathname}?${params.toString()}`)
 	}
 
-	function handleFilter({ name, payment_method }: TransactionFilterSchema) {
-		console.log({ name, payment_method })
+	function handleFilter({
+		name,
+		transaction_type,
+		payment_method,
+		category,
+	}: TransactionFilterSchema) {
+		// const params = new URLSearchParams(searchParams)
+
+		if (name) {
+			params.set('name', name)
+		} else {
+			params.delete('name')
+		}
+		if (transaction_type) {
+			params.set('transaction_type', transaction_type)
+		} else {
+			params.delete('transaction_type')
+		}
+		if (payment_method) {
+			params.set('payment_method', payment_method)
+		} else {
+			params.delete('payment_method')
+		}
+		if (category) {
+			params.set('category', category)
+		} else {
+			params.delete('category')
+		}
+
+		params.set('page', '1')
+
+		replace(`${pathname}?${params.toString()}`)
+	}
+
+	function handleClearFilters() {
+		params.delete('name')
+		params.delete('transaction_type')
+		params.delete('payment_method')
+		params.delete('category')
+		params.set('page', '1')
+		replace(`${pathname}?${params.toString()}`)
+
+		reset({
+			name: '',
+			transaction_type: 'all',
+			category: 'all',
+			payment_method: 'all',
+		})
 	}
 
 	return (
@@ -75,7 +147,36 @@ export function TransactionsList() {
 				onSubmit={handleSubmit(handleFilter)}
 				className="flex items-center gap-2"
 			>
-				<Input {...register('name')} className="h-8 w-auto" />
+				<span className="text-sm font-semibold">Filtros</span>
+				<Input
+					{...register('name')}
+					className="h-8 w-[192px]"
+					placeholder="Nome da compra"
+				/>
+				<Controller
+					name="transaction_type"
+					control={control}
+					render={({ field: { name, onChange, value, disabled } }) => {
+						return (
+							<Select
+								defaultValue="all"
+								name={name}
+								onValueChange={onChange}
+								value={value}
+								disabled={disabled}
+							>
+								<SelectTrigger className="h-8 w-[160px]">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="all">Receitas/Despesas</SelectItem>
+									<SelectItem value="CREDIT">Receitas</SelectItem>
+									<SelectItem value="DEBIT">Despesas</SelectItem>
+								</SelectContent>
+							</Select>
+						)
+					}}
+				/>
 				<Controller
 					name="payment_method"
 					control={control}
@@ -88,13 +189,44 @@ export function TransactionsList() {
 								value={value}
 								disabled={disabled}
 							>
-								<SelectTrigger className="h-8 w-[180px]">
+								<SelectTrigger className="h-8 w-[160px]">
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="all">Todos métodos</SelectItem>
+									<SelectItem value="MONEY">Dinheiro</SelectItem>
+									<SelectItem value="PIX">PIX</SelectItem>
 									<SelectItem value="DEBIT_CARD">Cartão de débito</SelectItem>
 									<SelectItem value="CREDIT_CARD">Cartão de credito</SelectItem>
+									<SelectItem value="BANK_TRANSFER">TED/DOC</SelectItem>
+								</SelectContent>
+							</Select>
+						)
+					}}
+				/>
+				<Controller
+					name="category"
+					control={control}
+					render={({ field: { name, onChange, value, disabled } }) => {
+						return (
+							<Select
+								defaultValue="all"
+								name={name}
+								onValueChange={onChange}
+								value={value}
+								disabled={disabled}
+							>
+								<SelectTrigger className="h-8 w-[160px]">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="all">Todas categorias</SelectItem>
+									<SelectItem value="FOOD">Alimentação</SelectItem>
+									<SelectItem value="HOME">Moradia</SelectItem>
+									<SelectItem value="ENTERTAINMENT">Entretenimento</SelectItem>
+									<SelectItem value="TRANSPORTATION">Transporte</SelectItem>
+									<SelectItem value="SHOPPING">Compras</SelectItem>
+									<SelectItem value="OTHERS">Outros</SelectItem>
 								</SelectContent>
 							</Select>
 						)
@@ -103,6 +235,15 @@ export function TransactionsList() {
 				<Button type="submit" variant="secondary" size="xs">
 					<Search className="mr-2 size-4" />
 					Filtrar resultados
+				</Button>
+				<Button
+					onClick={handleClearFilters}
+					type="button"
+					variant="outline"
+					size="xs"
+				>
+					<X className="mr-2 size-4" />
+					Remover filtros
 				</Button>
 			</form>
 

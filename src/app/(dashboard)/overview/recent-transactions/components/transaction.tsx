@@ -45,7 +45,6 @@ export function Transaction({ transaction }: TransactionProps) {
 				)}
 				{transaction.transaction_type === 'DEBIT' && (
 					<span className="font-semibold text-foreground text-rose-400">
-						-
 						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
