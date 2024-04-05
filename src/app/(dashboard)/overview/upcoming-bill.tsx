@@ -25,7 +25,7 @@ const bills = [
 
 export function UpcomingBill() {
 	return (
-		<Card className="relative overflow-hidden">
+		<Card className="relative col-span-2 overflow-hidden">
 			<CardHeader className="flex">
 				<CardTitle className="text-xl">Contas à Vencer</CardTitle>
 

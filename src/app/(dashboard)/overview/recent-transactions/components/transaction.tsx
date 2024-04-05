@@ -35,7 +35,7 @@ export function Transaction({ transaction }: TransactionProps) {
 			</div>
 			<div className="flex flex-col items-end">
 				{transaction.transaction_type === 'CREDIT' && (
-					<span className="font-semibold text-emerald-500 text-foreground">
+					<span className="text-nowrap font-semibold text-emerald-500 text-foreground">
 						+
 						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
@@ -44,14 +44,14 @@ export function Transaction({ transaction }: TransactionProps) {
 					</span>
 				)}
 				{transaction.transaction_type === 'DEBIT' && (
-					<span className="font-semibold text-foreground text-rose-400">
+					<span className="text-nowrap font-semibold text-foreground text-rose-400">
 						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
 						})}
 					</span>
 				)}
-				<span className="text-xs text-gray-300">
+				<span className="text-nowrap text-xs text-gray-300">
 					{format(new Date(transaction.created_at), 'dd MMM yyyy')}
 				</span>
 			</div>

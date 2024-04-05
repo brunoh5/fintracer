@@ -15,7 +15,7 @@ export function TransactionsList() {
 	})
 
 	return (
-		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] pb-2">
+		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] overflow-hidden pb-2">
 			{isLoadingTransactions && <TransactionListSkeleton />}
 
 			{result?.transactions?.length === 0 && (
@@ -25,7 +25,7 @@ export function TransactionsList() {
 			)}
 
 			{result && (
-				<ScrollArea className="h-[480px] pr-4">
+				<ScrollArea className="h-[600px] pr-4">
 					{result.transactions.map((transaction) => (
 						<Transaction key={transaction.id} transaction={transaction} />
 					))}
