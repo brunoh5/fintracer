@@ -46,7 +46,7 @@ export function ExpenseBreakdown() {
 							<span className="text-xs text-gray-500">Moradia</span>
 							<p className="font-semibold">
 								{expenses?.HOME
-									? expenses?.HOME.transactions[0].total.toLocaleString(
+									? (expenses?.HOME.transactions[0].total * -1).toLocaleString(
 											'pt-BR',
 											{
 												style: 'currency',
@@ -84,7 +84,7 @@ export function ExpenseBreakdown() {
 							<span className="text-xs text-gray-500">Alimentação</span>
 							<p className="font-semibold">
 								{expenses?.FOOD
-									? expenses?.FOOD.transactions[0].total.toLocaleString(
+									? (expenses?.FOOD.transactions[0].total * -1).toLocaleString(
 											'pt-BR',
 											{
 												style: 'currency',
@@ -122,13 +122,12 @@ export function ExpenseBreakdown() {
 							<span className="text-xs text-gray-500">Moradia</span>
 							<p className="font-semibold">
 								{expenses?.TRANSPORT
-									? expenses?.TRANSPORT.transactions[0].total.toLocaleString(
-											'pt-BR',
-											{
-												style: 'currency',
-												currency: 'BRL',
-											},
-										)
+									? (
+											expenses?.TRANSPORT.transactions[0].total * -1
+										).toLocaleString('pt-BR', {
+											style: 'currency',
+											currency: 'BRL',
+										})
 									: 0}
 							</p>
 							<div className="flex items-center gap-2">
@@ -165,13 +164,12 @@ export function ExpenseBreakdown() {
 							<span className="text-xs text-gray-500">Entretenimento</span>
 							<p className="font-semibold">
 								{expenses?.ENTERTAINMENT
-									? expenses?.ENTERTAINMENT.transactions[0].total.toLocaleString(
-											'pt-BR',
-											{
-												style: 'currency',
-												currency: 'BRL',
-											},
-										)
+									? (
+											expenses?.ENTERTAINMENT.transactions[0].total * -1
+										).toLocaleString('pt-BR', {
+											style: 'currency',
+											currency: 'BRL',
+										})
 									: 0}
 							</p>
 							<div className="flex items-center gap-2">
@@ -208,13 +206,12 @@ export function ExpenseBreakdown() {
 							<span className="text-xs text-gray-500">Compras</span>
 							<p className="font-semibold">
 								{expenses?.SHOPPING
-									? expenses?.SHOPPING.transactions[0].total.toLocaleString(
-											'pt-BR',
-											{
-												style: 'currency',
-												currency: 'BRL',
-											},
-										)
+									? (
+											expenses?.SHOPPING.transactions[0].total * -1
+										).toLocaleString('pt-BR', {
+											style: 'currency',
+											currency: 'BRL',
+										})
 									: 0}
 							</p>
 							<div className="flex items-center gap-2">
@@ -224,12 +221,15 @@ export function ExpenseBreakdown() {
 								</span>
 								{expenses?.SHOPPING &&
 									expenses?.SHOPPING.diffBetweenMonth > 0 && (
-										<ArrowUp className="text-primary" size={16} />
+										<ArrowUp className="text-primary text-rose-500" size={16} />
 									)}
 
 								{expenses?.SHOPPING &&
 									expenses?.SHOPPING.diffBetweenMonth < 0 && (
-										<ArrowDown className="text-primary" size={16} />
+										<ArrowDown
+											className="text-green-500 text-primary"
+											size={16}
+										/>
 									)}
 
 								{expenses?.SHOPPING === undefined && (
@@ -249,13 +249,12 @@ export function ExpenseBreakdown() {
 							<span className="text-xs text-gray-500">Outros</span>
 							<p className="font-semibold">
 								{expenses?.OTHERS
-									? expenses?.OTHERS.transactions[0].total.toLocaleString(
-											'pt-BR',
-											{
-												style: 'currency',
-												currency: 'BRL',
-											},
-										)
+									? (
+											expenses?.OTHERS.transactions[0].total * -1
+										).toLocaleString('pt-BR', {
+											style: 'currency',
+											currency: 'BRL',
+										})
 									: 0}
 							</p>
 							<div className="flex items-center gap-2">

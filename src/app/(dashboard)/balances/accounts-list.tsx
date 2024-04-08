@@ -70,7 +70,7 @@ export function AccountList() {
 									<div className="h-[52px]">
 										<p className="text-xl font-bold">
 											{account.number ? (
-												<span>account.number</span>
+												<span>{account.number}</span>
 											) : (
 												<span>Não informado</span>
 											)}

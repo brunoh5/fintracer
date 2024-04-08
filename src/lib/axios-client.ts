@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Session } from 'next-auth'
 import { getSession } from 'next-auth/react'
 
 import { env } from '@/env'
@@ -8,13 +9,17 @@ const axiosInstance = () => {
 		baseURL: env.NEXT_PUBLIC_API_URL,
 	}
 
+	let session: Session | null
+
 	const instance = axios.create(defaultOptions)
 
 	instance.interceptors.request.use(async (request) => {
-		const session = await getSession()
-		if (session) {
-			request.headers.Authorization = `Bearer ${session?.access_token}`
+		if (!session) {
+			session = await getSession()
 		}
+
+		request.headers.Authorization = `Bearer ${session?.access_token}`
+
 		return request
 	})
 

@@ -66,10 +66,10 @@ export function Sidebar() {
 						<ArrowRightLeft className="size-5" />
 						Transações
 					</NavLink>
-					{/* <NavLink href="/bills" onClick={() => setIsSidebarOpen(false)}>
-								<Receipt className="size-5"/>
-								Despesas
-							</NavLink> */}
+					<NavLink href="/bills" onClick={() => setIsSidebarOpen(false)}>
+						<Receipt className="size-5" />
+						Despesas
+					</NavLink>
 					{/* <NavLink href="/expenses">
 								<CreditCard className="size-5"/>
 								Gastos
