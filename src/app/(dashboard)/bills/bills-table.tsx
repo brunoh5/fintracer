@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useContext } from 'react'
 import { z } from 'zod'
 
 import { getBill } from '@/api/get-bill'
@@ -13,10 +14,15 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
+import { BillsContext } from '@/contexts/BillsContext'
 
 import { BillTableRow } from './bill-table-row'
 
 export function BillsTable() {
+	const { bills } = useContext(BillsContext)
+
+	console.log(bills)
+
 	const searchParams = useSearchParams()
 	const { replace } = useRouter()
 	const pathname = usePathname()

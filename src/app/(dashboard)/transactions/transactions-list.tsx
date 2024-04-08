@@ -40,9 +40,9 @@ type TransactionFilterSchema = z.infer<typeof transactionFilterSchema>
 
 export function TransactionsList() {
 	const searchParams = useSearchParams()
+	const params = new URLSearchParams(searchParams)
 	const { replace } = useRouter()
 	const pathname = usePathname()
-	const params = new URLSearchParams(searchParams)
 
 	const name = params.get('name')
 	const transaction_type = params.get('transaction_type')

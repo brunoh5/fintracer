@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next'
 
 import { Header } from '@/components/header'
 import { Sidebar } from '@/components/sidebar'
+import { BillsContextProvider } from '@/contexts/BillsContext'
 
 // import { SubscribeArea } from '@/components/subscribe-area'
 import { nextAuthOptions } from '../api/auth/[...nextauth]/options'
@@ -27,7 +28,7 @@ export default async function DashboardLayout({
 
 				<Header />
 
-				{children}
+				<BillsContextProvider>{children}</BillsContextProvider>
 			</div>
 		</div>
 	)
