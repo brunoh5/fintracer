@@ -1,5 +1,10 @@
 import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { Search } from 'lucide-react'
+import { useState } from 'react'
 
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 
 interface BillTableRowProps {
@@ -10,19 +15,38 @@ interface BillTableRowProps {
 		title: string
 		description: string
 		lastCharge: string
-		amount: number
+		amountInCents: number
 		userId: string
 	}
 }
 
 export function BillTableRow({ bill }: BillTableRowProps) {
+	const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+
 	return (
 		<TableRow>
 			<TableCell>
-				<div className="flex max-w-[72px] flex-col items-center rounded-lg bg-[#D2D2D2]/25 px-2 py-3 text-center text-gray-700">
+				<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+					<DialogTrigger asChild>
+						<Button variant="outline" size="xs">
+							<Search className="size-3" />
+							<span className="sr-only">Detalhes da despesa</span>
+						</Button>
+					</DialogTrigger>
+
+					{/* <TransactionDetails
+						transactionId={transaction.id}
+						open={isDetailsOpen}
+					/> */}
+				</Dialog>
+			</TableCell>
+			<TableCell>
+				<div className="flex flex-col items-center rounded-lg bg-muted-foreground/10 px-2 py-3 text-center text-foreground">
 					<span>{format(bill.dueDate, 'MMM')}</span>
-					<span className="text-[22px] font-extrabold">
-						{format(bill.dueDate, 'dd')}
+					<span className="text-xl font-extrabold">
+						{format(bill.dueDate, 'dd', {
+							locale: ptBR,
+						})}
 					</span>
 				</div>
 			</TableCell>
@@ -37,10 +61,10 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 				{bill.lastCharge && format(bill.lastCharge, 'dd MMM, yyyy')}
 			</TableCell>
 			<TableCell className="py-8 font-extrabold text-muted-foreground">
-				{new Intl.NumberFormat('pt-BR', {
+				{(bill.amountInCents / 100).toLocaleString('pt-BR', {
 					style: 'currency',
 					currency: 'BRL',
-				}).format(bill.amount)}
+				})}
 			</TableCell>
 		</TableRow>
 	)

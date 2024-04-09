@@ -13,7 +13,7 @@ interface GetBillsResponse {
 		title: string
 		description: string
 		lastCharge: string
-		amount: number
+		amountInCents: number
 		userId: string
 	}[]
 	meta: {

@@ -84,8 +84,6 @@ export function TransactionsList() {
 	})
 
 	function handlePaginate(pageIndex: number) {
-		// const params = new URLSearchParams(searchParams)
-
 		params.set('page', (pageIndex + 1).toString())
 
 		replace(`${pathname}?${params.toString()}`)
@@ -97,8 +95,6 @@ export function TransactionsList() {
 		payment_method,
 		category,
 	}: TransactionFilterSchema) {
-		// const params = new URLSearchParams(searchParams)
-
 		if (name) {
 			params.set('name', name)
 		} else {
