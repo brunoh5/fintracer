@@ -2,7 +2,8 @@ import { apiClient } from '@/lib/axios-client'
 
 interface FetchBillQuery {
 	pageIndex?: number
-	title: string | null
+	title?: string | null
+	status?: string | null
 }
 
 interface GetBillsResponse {
@@ -15,6 +16,7 @@ interface GetBillsResponse {
 		lastCharge: string
 		amountInCents: number
 		userId: string
+		paid_at: string
 	}[]
 	meta: {
 		perPage: number
@@ -23,11 +25,12 @@ interface GetBillsResponse {
 	}
 }
 
-export async function getBill({ pageIndex, title }: FetchBillQuery) {
+export async function getBill({ pageIndex, title, status }: FetchBillQuery) {
 	const response = await apiClient.get<GetBillsResponse>('/bills', {
 		params: {
 			pageIndex,
 			title,
+			status,
 		},
 	})
 

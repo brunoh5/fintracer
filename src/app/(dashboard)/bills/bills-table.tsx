@@ -27,9 +27,9 @@ export function BillsTable() {
 						<TableRow>
 							<TableHead className="w-[80px]"></TableHead>
 							<TableHead className="w-[80px]">Vencimento</TableHead>
-							<TableHead>Descrição</TableHead>
-							<TableHead>Ultima Cobrança</TableHead>
-							<TableHead>Valor</TableHead>
+							<TableHead className="w-auto">Descrição</TableHead>
+							<TableHead className="w-[112px] text-center">Status</TableHead>
+							<TableHead className="w-[112px] text-center">Valor</TableHead>
 						</TableRow>
 					</TableHeader>
 

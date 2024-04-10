@@ -17,10 +17,12 @@ type Bill = {
 	lastCharge: string
 	amountInCents: number
 	userId: string
+	paid_at: string
 }
 
 interface FilterBillData {
-	title?: string
+	title?: string | null
+	status?: string | null
 }
 
 interface BillsContextType {
@@ -47,6 +49,7 @@ export function BillsContextProvider({ children }: BillsContextProviderProps) {
 	const pathname = usePathname()
 
 	const title = params.get('title')
+	const status = params.get('status')
 
 	const pageIndex = z.coerce
 		.number()
@@ -54,11 +57,12 @@ export function BillsContextProvider({ children }: BillsContextProviderProps) {
 		.parse(params.get('page') ?? '1')
 
 	const { data: result } = useQuery({
-		queryKey: ['bills', pageIndex, title],
+		queryKey: ['bills', pageIndex, title, status],
 		queryFn: () =>
 			getBill({
 				pageIndex,
 				title,
+				status: status === 'all' ? null : status,
 			}),
 	})
 
@@ -68,11 +72,17 @@ export function BillsContextProvider({ children }: BillsContextProviderProps) {
 		replace(`${pathname}?${params.toString()}`)
 	}
 
-	function handleFilter({ title }: FilterBillData) {
+	function handleFilter({ title, status }: FilterBillData) {
 		if (title) {
 			params.set('title', title)
 		} else {
 			params.delete('title')
+		}
+
+		if (status) {
+			params.set('status', status)
+		} else {
+			params.delete('status')
 		}
 
 		params.set('page', '1')

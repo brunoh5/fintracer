@@ -17,6 +17,7 @@ interface BillTableRowProps {
 		lastCharge: string
 		amountInCents: number
 		userId: string
+		paid_at: string
 	}
 }
 
@@ -29,7 +30,7 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 				<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
 					<DialogTrigger asChild>
 						<Button variant="outline" size="xs">
-							<Search className="size-3" />
+							<Search className="size-5" />
 							<span className="sr-only">Detalhes da despesa</span>
 						</Button>
 					</DialogTrigger>
@@ -41,26 +42,39 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 				</Dialog>
 			</TableCell>
 			<TableCell>
-				<div className="flex flex-col items-center rounded-lg bg-muted-foreground/10 px-2 py-3 text-center text-foreground">
-					<span>{format(bill.dueDate, 'MMM')}</span>
-					<span className="text-xl font-extrabold">
-						{format(bill.dueDate, 'dd', {
+				<div className="flex flex-col items-center rounded-lg bg-muted-foreground/10 p-2 text-center text-foreground">
+					<span className="capitalize">
+						{format(bill.dueDate, 'MMM', {
 							locale: ptBR,
 						})}
 					</span>
+					<span className="text-xl font-extrabold">
+						{format(bill.dueDate, 'dd')}
+					</span>
 				</div>
 			</TableCell>
-			<TableCell
-				scope="row"
-				className="flex-start flex w-[304px] flex-col py-8 text-left"
-			>
+			<TableCell className="space-y-1">
 				<span className="font-extrabold">{bill.title}</span>
-				<p className="text-justify text-sm text-gray-300">{bill.description}</p>
+				<p className="text-justify text-sm text-muted-foreground">
+					{bill.description}
+				</p>
 			</TableCell>
-			<TableCell className="px-7 py-8 text-gray-700">
-				{bill.lastCharge && format(bill.lastCharge, 'dd MMM, yyyy')}
+			<TableCell>
+				{!bill.paid_at && (
+					<div className="flex items-center gap-2">
+						<div className="size-2 rounded-full bg-rose-500" />
+						<span>Não pago</span>
+					</div>
+				)}
+
+				{bill.paid_at && (
+					<div className="flex items-center gap-2">
+						<div className="size-2 rounded-full bg-emerald-500" />
+						<span>Pago</span>
+					</div>
+				)}
 			</TableCell>
-			<TableCell className="py-8 font-extrabold text-muted-foreground">
+			<TableCell className="text-center font-extrabold text-muted-foreground">
 				{(bill.amountInCents / 100).toLocaleString('pt-BR', {
 					style: 'currency',
 					currency: 'BRL',
