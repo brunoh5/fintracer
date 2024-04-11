@@ -15,7 +15,7 @@ export function UpcomingBill() {
 	return (
 		<Card className="col-span-2">
 			<CardHeader className="flex">
-				<CardTitle className="text-xl">Contas à Vencer</CardTitle>
+				<CardTitle>Próximas contas</CardTitle>
 
 				<div className="flex items-center text-muted-foreground">
 					<Link className="text-xs" href="/bills">

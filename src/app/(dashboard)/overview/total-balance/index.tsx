@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 import { fetchAccounts } from '@/api/fetch-accounts'
@@ -26,25 +26,26 @@ export function TotalBalance() {
 	return (
 		<Card>
 			<CardHeader className="flex">
-				<CardTitle className="text-xl">Saldo Atual</CardTitle>
+				<CardTitle>Saldo Atual</CardTitle>
+				<div className="flex items-center text-muted-foreground">
+					<Link className="text-xs" href="/balances">
+						Ver todas
+					</Link>
+					<ChevronRight size={16} />
+				</div>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-3">
 				<div className="flex items-center justify-between">
-					<>
-						{resume ? (
-							<span className="text-xl font-bold">
-								{new Intl.NumberFormat('pt-BR', {
-									style: 'currency',
-									currency: 'BRL',
-								}).format(Number(resume.totalBalanceInCents))}
-							</span>
-						) : (
-							<Skeleton className="h-5 w-[148px]" />
-						)}
-					</>
-					<Link href="/balances" className="text-xs text-muted-foreground">
-						Todas as contas
-					</Link>
+					{resume ? (
+						<span className="text-xl font-bold">
+							{new Intl.NumberFormat('pt-BR', {
+								style: 'currency',
+								currency: 'BRL',
+							}).format(Number(resume.totalBalanceInCents))}
+						</span>
+					) : (
+						<Skeleton className="h-5 w-[148px]" />
+					)}
 				</div>
 
 				<Separator />

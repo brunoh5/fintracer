@@ -1,6 +1,8 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
 import {
 	Bar,
@@ -50,6 +52,11 @@ export function MonthlyExpensesByYearChart() {
 								tickLine={false}
 								axisLine={false}
 								dy={16}
+								tickFormatter={(value: string) =>
+									format(new Date(value), 'MMM/yy', {
+										locale: ptBR,
+									})
+								}
 							/>
 							<YAxis
 								stroke="#888"
