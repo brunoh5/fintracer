@@ -51,7 +51,7 @@ export function Expense({ title, expense }: ExpenseProps) {
 				<div className="flex flex-col">
 					<span className="text-xs text-muted-foreground">{title}</span>
 					<p className="font-semibold">
-						{amount.toLocaleString('pt-BR', {
+						{(amount < 0 ? amount * -1 : amount).toLocaleString('pt-BR', {
 							style: 'currency',
 							currency: 'BRL',
 						})}

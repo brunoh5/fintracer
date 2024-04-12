@@ -14,8 +14,8 @@ import {
 import { Expense } from './expense'
 
 export function ExpenseBreakdown() {
-	const { data: expenses } = useQuery({
-		queryKey: ['expenses'],
+	const { data: metrics } = useQuery({
+		queryKey: ['metrics'],
 		queryFn: fetchExpenses,
 	})
 
@@ -31,46 +31,45 @@ export function ExpenseBreakdown() {
 				<Expense
 					title="Moradia"
 					expense={
-						expenses && expenses.find((expense) => expense.category === 'HOME')
+						metrics && metrics.find((expense) => expense.category === 'HOME')
 					}
 				/>
 
 				<Expense
 					title="Alimentação"
 					expense={
-						expenses && expenses.find((expense) => expense.category === 'FOOD')
+						metrics && metrics.find((expense) => expense.category === 'FOOD')
 					}
 				/>
 
 				<Expense
 					title="Transporte"
 					expense={
-						expenses &&
-						expenses.find((expense) => expense.category === 'TRANSPORTATION')
+						metrics &&
+						metrics.find((expense) => expense.category === 'TRANSPORTATION')
 					}
 				/>
 
 				<Expense
 					title="Entretenimento"
 					expense={
-						expenses &&
-						expenses.find((expense) => expense.category === 'ENTERTAINMENT')
+						metrics &&
+						metrics.find((expense) => expense.category === 'ENTERTAINMENT')
 					}
 				/>
 
 				<Expense
 					title="Compras"
 					expense={
-						expenses &&
-						expenses.find((expense) => expense.category === 'SHOPPING')
+						metrics &&
+						metrics.find((expense) => expense.category === 'SHOPPING')
 					}
 				/>
 
 				<Expense
 					title="Outros"
 					expense={
-						expenses &&
-						expenses.find((expense) => expense.category === 'OTHERS')
+						metrics && metrics.find((expense) => expense.category === 'OTHERS')
 					}
 				/>
 			</CardContent>

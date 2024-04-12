@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/axios-client'
 
 interface FetchExpensesResponse {
-	expenses: {
+	metrics: {
 		category: string
 		amount: number
 		diffBetweenMonth: number
@@ -13,5 +13,5 @@ export async function fetchExpenses() {
 		'/transactions/metrics',
 	)
 
-	return response.data.expenses
+	return response.data.metrics
 }
