@@ -34,7 +34,7 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
 		.parse(params.get('page') ?? '1')
 
 	const { data: result, isLoading: isLoadingTransactions } = useQuery({
-		queryKey: ['transactions', pageIndex, transaction_type, accountId],
+		queryKey: ['transactions', accountId, pageIndex, transaction_type],
 		queryFn: () =>
 			fetchTransactions({ pageIndex, transaction_type, accountId }),
 	})

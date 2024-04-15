@@ -6,6 +6,7 @@ export interface CreateTransactionBody {
 	name: string
 	shopName?: string
 	amount: string
+	created_at?: Date
 	transaction_type: TransactionTypes
 	payment_method: PaymentMethods
 	category: CategoryTypes
@@ -30,6 +31,7 @@ export async function createTransaction({
 	payment_method,
 	transaction_type,
 	shopName,
+	created_at,
 }: CreateTransactionBody) {
 	const response = await apiClient.post('/transactions', {
 		accountId,
@@ -39,6 +41,7 @@ export async function createTransaction({
 		payment_method,
 		transaction_type,
 		shopName,
+		created_at,
 	})
 
 	return response.data.transaction

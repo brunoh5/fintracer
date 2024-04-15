@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -12,6 +13,8 @@ import {
 	CreateTransactionResponse,
 } from '@/api/create-transaction'
 import { fetchAccounts } from '@/api/fetch-accounts'
+import { FetchTransactionsResponse } from '@/api/fetch-transactions'
+import { GetAccountResponse } from '@/api/get-account'
 import {
 	AccountProps,
 	CategoryTypes,
@@ -20,6 +23,7 @@ import {
 } from '@/types'
 
 import { Button } from './ui/button'
+import { DatePicker } from './ui/date-picker'
 import {
 	Dialog,
 	DialogClose,
@@ -49,8 +53,9 @@ const newTransactionSchema = z.object({
 		required_error: 'Please type a name for transaction',
 	}),
 	accountId: z.any(),
-	shopName: z.optional(z.string()),
+	shopName: z.string().optional(),
 	amount: z.string(),
+	created_at: z.date().optional(),
 	transaction_type: z.enum(['DEBIT', 'CREDIT']),
 	payment_method: z
 		.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
@@ -64,12 +69,14 @@ type NewTransactionSchema = z.infer<typeof newTransactionSchema>
 
 export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 	const queryClient = useQueryClient()
+	const [isOpen, setIsOpen] = useState(false)
 
 	const {
 		register,
 		handleSubmit,
 		control,
 		formState: { isSubmitting },
+		reset,
 	} = useForm<NewTransactionSchema>({
 		resolver: zodResolver(newTransactionSchema),
 		defaultValues: {
@@ -81,54 +88,52 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 	const { data: resume } = useQuery({
 		queryKey: ['resume-accounts'],
 		queryFn: fetchAccounts,
+		enabled: isOpen,
 	})
 
 	const { mutateAsync: createTransactionFn } = useMutation({
 		mutationFn: createTransaction,
-		onMutate: async ({ amount }) => {
-			const cachedAccount = queryClient.getQueryData<AccountProps>([
+		onSuccess(data: CreateTransactionResponse) {
+			const account = queryClient.getQueryData<GetAccountResponse>([
 				'accounts',
 				accountId,
 			])
 
-			if (cachedAccount) {
+			let total = 0
+
+			if (account) {
+				if (data.transaction_type === 'DEBIT') {
+					total = account?.balance - data.amount / 100
+				}
+
+				if (data.transaction_type === 'CREDIT') {
+					total = account?.balance + data.amount / 100
+				}
+
 				queryClient.setQueryData(['accounts', accountId], {
-					...cachedAccount,
-					balance:
-						cachedAccount.balance +
-						Number(amount.replace('R$', '').trim().replace(',', '.')),
+					...account,
+					balance: total,
 				})
 			}
 
-			const cached = queryClient.getQueryData<CreateTransactionResponse[]>([
-				accountId,
-				'transactions',
-			])
+			const accountTransactionsList =
+				queryClient.getQueriesData<FetchTransactionsResponse>({
+					queryKey: ['transactions', accountId],
+				})
 
-			return { previousTransactions: cached, previousAccount: cachedAccount }
-		},
-		onError: (_, __, context) => {
-			if (context?.previousTransactions) {
-				queryClient.setQueryData(
-					[accountId, 'transactions'],
-					context?.previousTransactions,
-				)
-			}
+			accountTransactionsList.forEach(([cacheKey, cacheData]) => {
+				if (!cacheData) {
+					// eslint-disable-next-line no-useless-return
+					return
+				}
 
-			if (context?.previousAccount) {
-				queryClient.setQueryData(
-					['accounts', accountId],
-					context?.previousAccount,
-				)
-			}
-		},
-		onSuccess(data, _, context) {
-			if (context?.previousTransactions) {
-				queryClient.setQueryData(
-					[accountId, 'transactions'],
-					[...context.previousTransactions, data],
-				)
-			}
+				queryClient.setQueryData(cacheKey, {
+					...cacheData,
+					transactions: [...cacheData.transactions, data],
+				})
+			})
+
+			setIsOpen((state) => !state)
 		},
 	})
 
@@ -142,6 +147,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 				accountId: data.accountId,
 				payment_method: data.payment_method as PaymentMethods,
 				category: data.category as CategoryTypes,
+				created_at: data.created_at,
 			})
 
 			toast.success('Transação cadastrada com sucesso')
@@ -151,7 +157,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 	}
 
 	return (
-		<Dialog>
+		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
 				<Button
 					variant="ghost"
@@ -296,6 +302,25 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 										</SelectItem>
 									</SelectContent>
 								</Select>
+							)
+						}}
+					/>
+
+					<Controller
+						name="created_at"
+						control={control}
+						render={({ field: { onChange, value } }) => {
+							return (
+								<div className="flex items-center gap-4">
+									<DatePicker
+										date={value}
+										onDateChange={onChange}
+										className="w-full"
+									/>
+									<Button onClick={() => reset({ created_at: undefined })}>
+										Limpar data
+									</Button>
+								</div>
 							)
 						}}
 					/>
