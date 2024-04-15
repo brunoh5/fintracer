@@ -28,61 +28,42 @@ export function ExpenseBreakdown() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="grid grid-cols-2 gap-x-10 gap-y-6 lg:grid-cols-3">
-				<Expense
-					title="Moradia"
-					expense={
-						metrics
-							? metrics?.find((expense) => expense.category === 'HOME')
-							: undefined
-					}
-				/>
+				{metrics && (
+					<>
+						<Expense
+							title="Moradia"
+							expense={metrics.find((item) => item.category === 'HOME')}
+						/>
+						<Expense
+							title="Alimentação"
+							expense={metrics.find((item) => item.category === 'FOOD')}
+						/>
 
-				<Expense
-					title="Alimentação"
-					expense={
-						metrics
-							? metrics?.find((expense) => expense.category === 'FOOD')
-							: undefined
-					}
-				/>
+						<Expense
+							title="Transporte"
+							expense={metrics.find(
+								(item) => item.category === 'TRANSPORTATION',
+							)}
+						/>
 
-				<Expense
-					title="Transporte"
-					expense={
-						metrics
-							? metrics?.find(
-									(expense) => expense.category === 'TRANSPORTATION',
-								)
-							: undefined
-					}
-				/>
+						<Expense
+							title="Entretenimento"
+							expense={metrics.find(
+								(item) => item.category === 'ENTERTAINMENT',
+							)}
+						/>
 
-				<Expense
-					title="Entretenimento"
-					expense={
-						metrics
-							? metrics?.find((expense) => expense.category === 'ENTERTAINMENT')
-							: undefined
-					}
-				/>
+						<Expense
+							title="Compras"
+							expense={metrics.find((item) => item.category === 'SHOPPING')}
+						/>
 
-				<Expense
-					title="Compras"
-					expense={
-						metrics
-							? metrics?.find((expense) => expense.category === 'SHOPPING')
-							: undefined
-					}
-				/>
-
-				<Expense
-					title="Outros"
-					expense={
-						metrics
-							? metrics?.find((expense) => expense.category === 'OTHERS')
-							: undefined
-					}
-				/>
+						<Expense
+							title="Outros"
+							expense={metrics.find((item) => item.category === 'OTHERS')}
+						/>
+					</>
+				)}
 			</CardContent>
 		</Card>
 	)
