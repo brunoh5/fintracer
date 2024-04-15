@@ -32,35 +32,46 @@ export function ExpenseBreakdown() {
 					<>
 						<Expense
 							title="Moradia"
-							expense={metrics.find((item) => item.category === 'HOME')}
+							expense={
+								metrics.find((item) => item.category === 'HOME') ?? undefined
+							}
 						/>
 						<Expense
 							title="Alimentação"
-							expense={metrics.find((item) => item.category === 'FOOD')}
+							expense={
+								metrics.find((item) => item.category === 'FOOD') ?? undefined
+							}
 						/>
 
 						<Expense
 							title="Transporte"
-							expense={metrics.find(
-								(item) => item.category === 'TRANSPORTATION',
-							)}
+							expense={
+								metrics.find((item) => item.category === 'TRANSPORTATION') ??
+								undefined
+							}
 						/>
 
 						<Expense
 							title="Entretenimento"
-							expense={metrics.find(
-								(item) => item.category === 'ENTERTAINMENT',
-							)}
+							expense={
+								metrics.find((item) => item.category === 'ENTERTAINMENT') ??
+								undefined
+							}
 						/>
 
 						<Expense
 							title="Compras"
-							expense={metrics.find((item) => item.category === 'SHOPPING')}
+							expense={
+								metrics.find((item) => item.category === 'SHOPPING') ??
+								undefined
+							}
 						/>
 
 						<Expense
 							title="Outros"
-							expense={metrics.find((item) => item.category === 'OTHERS')}
+							expense={
+								metrics.find((item) => item.category === 'OTHERS') ?? undefined
+							}
 						/>
 					</>
 				)}
