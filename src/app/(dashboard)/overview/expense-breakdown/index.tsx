@@ -31,45 +31,56 @@ export function ExpenseBreakdown() {
 				<Expense
 					title="Moradia"
 					expense={
-						metrics && metrics.find((expense) => expense.category === 'HOME')
+						metrics
+							? metrics?.find((expense) => expense.category === 'HOME')
+							: undefined
 					}
 				/>
 
 				<Expense
 					title="Alimentação"
 					expense={
-						metrics && metrics.find((expense) => expense.category === 'FOOD')
+						metrics
+							? metrics?.find((expense) => expense.category === 'FOOD')
+							: undefined
 					}
 				/>
 
 				<Expense
 					title="Transporte"
 					expense={
-						metrics &&
-						metrics.find((expense) => expense.category === 'TRANSPORTATION')
+						metrics
+							? metrics?.find(
+									(expense) => expense.category === 'TRANSPORTATION',
+								)
+							: undefined
 					}
 				/>
 
 				<Expense
 					title="Entretenimento"
 					expense={
-						metrics &&
-						metrics.find((expense) => expense.category === 'ENTERTAINMENT')
+						metrics
+							? metrics?.find((expense) => expense.category === 'ENTERTAINMENT')
+							: undefined
 					}
 				/>
 
 				<Expense
 					title="Compras"
 					expense={
-						metrics &&
-						metrics.find((expense) => expense.category === 'SHOPPING')
+						metrics
+							? metrics?.find((expense) => expense.category === 'SHOPPING')
+							: undefined
 					}
 				/>
 
 				<Expense
 					title="Outros"
 					expense={
-						metrics && metrics.find((expense) => expense.category === 'OTHERS')
+						metrics
+							? metrics?.find((expense) => expense.category === 'OTHERS')
+							: undefined
 					}
 				/>
 			</CardContent>

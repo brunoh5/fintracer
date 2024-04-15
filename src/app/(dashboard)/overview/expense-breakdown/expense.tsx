@@ -37,8 +37,13 @@ const transactionCategoryIconMap: Record<string, ReactNode> = {
 }
 
 export function Expense({ title, expense }: ExpenseProps) {
-	const amount = expense ? expense.amount : 0
-	const diffBetweenMonth = expense ? expense.diffBetweenMonth : 0
+	let amount = 0
+	let diffBetweenMonth = 0
+
+	if (expense) {
+		amount = expense.amount
+		diffBetweenMonth = expense.diffBetweenMonth
+	}
 
 	return (
 		<div className="grid grid-cols-[3rem_1fr_1.5rem] items-center px-4 py-2">
