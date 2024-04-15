@@ -1,6 +1,8 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
 import {
 	Bar,
@@ -21,10 +23,11 @@ import {
 } from '@/components/ui/card'
 
 export function MonthlyExpensesByYearChart() {
-	const { data: monthlyExpenses } = useQuery({
-		queryKey: ['monthly-expenses-by-year'],
-		queryFn: getMonthlyExpensesByYear,
-	})
+	const { data: monthlyExpenses, isLoading: isLoadingMonthlyExpenses } =
+		useQuery({
+			queryKey: ['monthly-expenses-by-year'],
+			queryFn: getMonthlyExpensesByYear,
+		})
 
 	return (
 		<Card className="relative">
@@ -35,7 +38,13 @@ export function MonthlyExpensesByYearChart() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				{monthlyExpenses ? (
+				{isLoadingMonthlyExpenses && (
+					<div className="flex h-[210px] w-full items-center justify-center">
+						<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+					</div>
+				)}
+
+				{monthlyExpenses && (
 					<ResponsiveContainer width="100%" height={240}>
 						<BarChart data={monthlyExpenses} style={{ fontSize: 12 }}>
 							<XAxis
@@ -43,6 +52,11 @@ export function MonthlyExpensesByYearChart() {
 								tickLine={false}
 								axisLine={false}
 								dy={16}
+								tickFormatter={(value: string) =>
+									format(new Date(value), 'MMM/yy', {
+										locale: ptBR,
+									})
+								}
 							/>
 							<YAxis
 								stroke="#888"
@@ -62,10 +76,6 @@ export function MonthlyExpensesByYearChart() {
 							<Bar dataKey="total" fill="#16a34a" strokeWidth={2} />
 						</BarChart>
 					</ResponsiveContainer>
-				) : (
-					<div className="flex h-[210px] w-full items-center justify-center">
-						<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-					</div>
 				)}
 			</CardContent>
 		</Card>

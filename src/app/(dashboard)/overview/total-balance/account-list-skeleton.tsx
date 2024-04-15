@@ -1,24 +1,28 @@
 import { ArrowUpRight } from 'lucide-react'
 
+import { CarouselItem } from '@/components/ui/carousel'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function AccountListSkeleton() {
 	return (
-		<div className="flex items-center justify-between rounded bg-primary p-4">
-			<div className="flex flex-col">
-				<span className="text-white/70">Tipo de conta</span>
-				<Skeleton className="h-4 w-[80px]" />
-				<Skeleton className="h-4 w-[80px]" />
-			</div>
-			<div className="flex flex-col justify-between">
-				<div className="self flex items-center justify-between">
-					<Skeleton className="h-4 w-[80px]" />
-					<ArrowUpRight
-						size={16}
-						className="rounded-full bg-white text-primary"
-					/>
+		<CarouselItem>
+			<div className="flex h-24 items-center justify-between rounded-md bg-primary p-4">
+				<div>
+					<Skeleton className="h-4 w-[90px]" />
+					<Skeleton className="h-6 w-[90px]" />
+					<Skeleton className="h-4 w-[90px]" />
+				</div>
+				<div className="flex items-center justify-between gap-2 self-end">
+					<Skeleton className="h-4 w-[90px]" />
+					<div>
+						<ArrowUpRight
+							size={16}
+							className="rounded-full bg-white text-primary"
+						/>
+						<span className="sr-only">Detalhes da conta</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		</CarouselItem>
 	)
 }

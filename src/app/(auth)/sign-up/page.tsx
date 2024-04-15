@@ -54,7 +54,7 @@ export default function SignUp() {
 	}
 
 	return (
-		<div>
+		<div className="p-8">
 			<Button asChild variant="ghost" className="absolute right-8 top-8">
 				<Link href="/">Fazer login</Link>
 			</Button>

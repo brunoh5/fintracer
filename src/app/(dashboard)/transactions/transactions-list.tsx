@@ -15,15 +15,19 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 
+import { TransactionTableFilters } from './transaction-table-filters'
 import { TransactionTableRow } from './transaction-table-row'
 
 export function TransactionsList() {
 	const searchParams = useSearchParams()
+	const params = new URLSearchParams(searchParams)
 	const { replace } = useRouter()
 	const pathname = usePathname()
-	const params = new URLSearchParams(searchParams)
 
+	const name = params.get('name')
 	const transaction_type = params.get('transaction_type')
+	const payment_method = params.get('payment_method')
+	const category = params.get('category')
 
 	const pageIndex = z.coerce
 		.number()
@@ -31,13 +35,25 @@ export function TransactionsList() {
 		.parse(params.get('page') ?? '1')
 
 	const { data: result, isLoading: isLoadingTransactions } = useQuery({
-		queryKey: ['transactions', pageIndex, transaction_type],
-		queryFn: () => fetchTransactions({ pageIndex, transaction_type }),
+		queryKey: [
+			'transactions',
+			pageIndex,
+			name,
+			transaction_type,
+			payment_method,
+			category,
+		],
+		queryFn: () =>
+			fetchTransactions({
+				pageIndex,
+				name,
+				transaction_type: transaction_type === 'all' ? null : transaction_type,
+				payment_method: payment_method === 'all' ? null : payment_method,
+				category: category === 'all' ? null : category,
+			}),
 	})
 
 	function handlePaginate(pageIndex: number) {
-		const params = new URLSearchParams(searchParams)
-
 		params.set('page', (pageIndex + 1).toString())
 
 		replace(`${pathname}?${params.toString()}`)
@@ -45,6 +61,8 @@ export function TransactionsList() {
 
 	return (
 		<div className="space-y-2.5">
+			<TransactionTableFilters />
+
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader className="font-bold">
