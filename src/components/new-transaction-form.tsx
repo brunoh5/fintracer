@@ -101,6 +101,8 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 				accountId,
 			])
 
+			console.log(data)
+
 			let total = 0
 
 			if (account) {
@@ -131,7 +133,12 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 
 				queryClient.setQueryData(cacheKey, {
 					...cacheData,
-					transactions: [...cacheData.transactions, data],
+					transactions: [
+						...cacheData.transactions,
+						Object.assign(data, {
+							amountInCents: data.amount,
+						}),
+					],
 				})
 			})
 
