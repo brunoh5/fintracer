@@ -101,8 +101,6 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 				accountId,
 			])
 
-			console.log(data)
-
 			let total = 0
 
 			if (account) {

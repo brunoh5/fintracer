@@ -20,14 +20,14 @@ interface TransactionCategoryProps {
 	category: TransactionCategory
 }
 
-const transactionCategoryMap: Record<TransactionCategory, string> = {
-	FOOD: 'Alimentação',
-	OTHERS: 'Outros',
-	HOME: 'Moradia',
-	TRANSPORTATION: 'Transporte',
-	ENTERTAINMENT: 'Entretenimento',
-	SHOPPING: 'Compras',
-}
+// const transactionCategoryMap: Record<TransactionCategory, string> = {
+// 	FOOD: 'Alimentação',
+// 	OTHERS: 'Outros',
+// 	HOME: 'Moradia',
+// 	TRANSPORTATION: 'Transporte',
+// 	ENTERTAINMENT: 'Entretenimento',
+// 	SHOPPING: 'Compras',
+// }
 
 const transactionCategoryIconMap: Record<TransactionCategory, ReactNode> = {
 	FOOD: <Utensils className="size-5" />,
@@ -40,11 +40,12 @@ const transactionCategoryIconMap: Record<TransactionCategory, ReactNode> = {
 
 export function TransactionCategory({ category }: TransactionCategoryProps) {
 	return (
-		<div className="flex items-center gap-2">
-			{transactionCategoryIconMap[category]}
-			<span className="font-medium text-muted-foreground">
-				{transactionCategoryMap[category]}
-			</span>
-		</div>
+		<span>{transactionCategoryIconMap[category]}</span>
+		// <div className="flex items-center gap-2">
+		// 	{transactionCategoryIconMap[category]}
+		// 	<span className="font-medium text-muted-foreground">
+		// 		{transactionCategoryMap[category]}
+		// 	</span>
+		// </div>
 	)
 }

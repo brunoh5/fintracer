@@ -1,10 +1,14 @@
 'use client'
 
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Search } from 'lucide-react'
+import { Search, Trash } from 'lucide-react'
 import { useState } from 'react'
 
+import { deleteTransaction } from '@/api/delete-transaction'
+import { FetchTransactionsResponse } from '@/api/fetch-transactions'
+import { GetAccountResponse } from '@/api/get-account'
 import { TransactionCategory } from '@/components/transaction-category'
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import { Button } from '@/components/ui/button'
@@ -17,6 +21,7 @@ export interface TransactionTableRowProps {
 	transaction: {
 		id: string
 		name: string
+		accountId: string
 		category:
 			| 'FOOD'
 			| 'OTHERS'
@@ -38,11 +43,64 @@ const paymentMethodsMap: Record<TransactionPaymentMethod, string> = {
 	CREDIT_CARD: 'Cartão de credito',
 	DEBIT_CARD: 'Cartão de debito',
 	BANK_CHECK: 'Cheque bancário',
-	BANK_TRANSFER: 'Transferência bancária',
+	BANK_TRANSFER: 'TED / DOC',
 }
 
 export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
+	const queryClient = useQueryClient()
+
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+
+	const { mutateAsync: deleteTransactionFn } = useMutation({
+		mutationFn: deleteTransaction,
+		onSuccess(data, transactionId) {
+			const accountId = transaction.accountId
+			const account = queryClient.getQueryData<GetAccountResponse>([
+				'accounts',
+				accountId,
+			])
+
+			let total = 0
+
+			if (account) {
+				if (data.transaction_type === 'DEBIT') {
+					total = (account?.balanceInCents + data.amount) * 100
+				}
+
+				if (data.transaction_type === 'CREDIT') {
+					total = (account?.balanceInCents - data.amount) * 100
+				}
+
+				queryClient.setQueryData(['accounts', accountId], {
+					...account,
+					balanceInCents: total,
+				})
+			}
+
+			const accountTransactionsList =
+				queryClient.getQueriesData<FetchTransactionsResponse>({
+					queryKey: ['transactions', accountId],
+				})
+
+			accountTransactionsList.forEach(([cacheKey, cacheData]) => {
+				if (!cacheData) {
+					// eslint-disable-next-line no-useless-return
+					return
+				}
+
+				const filteredTransactions = cacheData.transactions.filter(
+					(transaction) => transaction.id !== transactionId,
+				)
+
+				cacheData.meta.totalCount -= 1
+
+				queryClient.setQueryData(cacheKey, {
+					...cacheData,
+					transactions: filteredTransactions,
+				})
+			})
+		},
+	})
 
 	return (
 		<TableRow>
@@ -61,14 +119,16 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 					/>
 				</Dialog>
 			</TableCell>
-			<TableCell className="font-semibold">{transaction.name}</TableCell>
+			<TableCell>
+				<div className="flex items-center gap-2">
+					<TransactionCategory category={transaction.category} />
+					<span className="font-semibold">{transaction.name}</span>
+				</div>
+			</TableCell>
 			<TableCell>
 				{transaction.shopName ? transaction.shopName : 'Não Informado'}
 			</TableCell>
-			<TableCell>
-				<TransactionCategory category={transaction.category} />
-			</TableCell>
-			<TableCell>
+			<TableCell className="text-center">
 				{formatDistanceToNow(transaction.created_at, {
 					locale: ptBR,
 					addSuffix: true,
@@ -94,6 +154,15 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 						})}
 					</span>
 				)}
+			</TableCell>
+			<TableCell>
+				<Button
+					variant="outline"
+					size="xs"
+					onClick={() => deleteTransactionFn(transaction.id)}
+				>
+					<Trash className="size-3 text-rose-500" />
+				</Button>
 			</TableCell>
 		</TableRow>
 	)
