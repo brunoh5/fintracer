@@ -14,7 +14,7 @@ export interface GetAccountResponse {
 	bank: string
 	bankImgUrl?: string
 	number?: string
-	balance: number
+	balanceInCents: number
 }
 
 export async function getAccount({ id }: FetchCategoriesRequest) {

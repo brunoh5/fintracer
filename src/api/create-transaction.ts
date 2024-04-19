@@ -5,7 +5,7 @@ export interface CreateTransactionBody {
 	accountId: string
 	name: string
 	shopName?: string
-	amount: string
+	amount: number
 	created_at?: Date
 	transaction_type: TransactionTypes
 	payment_method: PaymentMethods

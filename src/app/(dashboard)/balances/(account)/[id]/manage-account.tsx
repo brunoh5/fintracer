@@ -12,7 +12,7 @@ import { BalanceAccountSkeleton } from './balance-account-skeleton'
 export function ManageAccount({ accountId }: { accountId: string }) {
 	const { data: account, isLoading: isLoadingAccount } = useQuery({
 		queryKey: ['accounts', accountId],
-		queryFn: async () => await getAccount({ id: accountId }),
+		queryFn: () => getAccount({ id: accountId }),
 	})
 
 	return (
@@ -41,20 +41,11 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 						<div>
 							<p className="text-muted-foreground">Saldo Atual</p>
 							<p className="text-lg font-bold">
-								{account &&
-									new Intl.NumberFormat('pt-BR', {
-										style: 'currency',
-										currency: 'BRL',
-									}).format(account.balance)}
+								{(account.balanceInCents / 100).toLocaleString('pt-BR', {
+									style: 'currency',
+									currency: 'BRL',
+								})}
 							</p>
-						</div>
-						<div>
-							{account?.number && (
-								<>
-									<p className="text-muted-foreground">Numero da conta</p>
-									<p className="text-lg font-bold">{account?.number}</p>
-								</>
-							)}
 						</div>
 					</CardContent>
 

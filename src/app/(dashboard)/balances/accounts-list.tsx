@@ -81,7 +81,7 @@ export function AccountList() {
 									</div>
 									<div>
 										<p className="text-xl font-bold">
-											{Number(account.balance).toLocaleString('pt-BR', {
+											{(account.balance / 100).toLocaleString('pt-BR', {
 												style: 'currency',
 												currency: 'BRL',
 											})}

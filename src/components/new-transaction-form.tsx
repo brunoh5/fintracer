@@ -22,6 +22,7 @@ import {
 	TransactionTypes,
 } from '@/types'
 
+import { PriceInput } from './price-input'
 import { Button } from './ui/button'
 import { DatePicker } from './ui/date-picker'
 import {
@@ -82,6 +83,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 		defaultValues: {
 			transaction_type: 'DEBIT',
 			payment_method: 'MONEY',
+			amount: '0',
 		},
 	})
 
@@ -103,11 +105,11 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 
 			if (account) {
 				if (data.transaction_type === 'DEBIT') {
-					total = account?.balance - data.amount / 100
+					total = (account?.balanceInCents - data.amount) / 100
 				}
 
 				if (data.transaction_type === 'CREDIT') {
-					total = account?.balance + data.amount / 100
+					total = (account?.balanceInCents + data.amount) / 100
 				}
 
 				queryClient.setQueryData(['accounts', accountId], {
@@ -143,7 +145,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 				name: data.name,
 				shopName: data.shopName,
 				transaction_type: data.transaction_type as TransactionTypes,
-				amount: data.amount,
+				amount: Number(data.amount),
 				accountId: data.accountId,
 				payment_method: data.payment_method as PaymentMethods,
 				category: data.category as CategoryTypes,
@@ -189,7 +191,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 
 					<div className="space-y-2">
 						<Label htmlFor="amount">Valor</Label>
-						<Input id="amount" {...register('amount')} />
+						<PriceInput name="amount" control={control} />
 					</div>
 
 					<div className="flex items-center justify-center"></div>
