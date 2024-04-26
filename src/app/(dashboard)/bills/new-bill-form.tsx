@@ -1,15 +1,16 @@
 'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
-import { getSession } from 'next-auth/react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { createBill } from '@/api/create-bill'
+import { fetchAccounts } from '@/api/fetch-accounts'
+import { GetBillsResponse } from '@/api/get-bill'
 import { ControlledSelect } from '@/components/controlled-select'
+import { PriceInput } from '@/components/price-input'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import {
@@ -24,18 +25,30 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { SelectItem } from '@/components/ui/select'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { BillsProps } from '@/types'
+import { AccountProps } from '@/types'
 
 const newBillForm = z.object({
-	supplier: z.string(),
-	amount: z.coerce.number(),
-	documentNumber: z.string().nullable(),
-	description: z.string().nullable(),
-	paymentMethod: z.string().nullable(),
-	carrier: z.string().nullable(),
-	occurrence: z.string().nullable(),
+	title: z.string(),
+	description: z.string().optional(),
+	amount: z.string(),
+	dueDate: z.date(),
+	paid_at: z.date().optional(),
+	payment_method: z
+		.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
+		.default('MONEY'),
+	accountId: z.string().optional(),
+	// documentNumber: z.string().nullable(),
+	// description: z.string().nullable(),
+	// carrier: z.string().nullable(),
+	// occurrence: z.string().nullable(),
 	period: z.enum(['only', 'monthly', 'anual']),
 })
 
@@ -43,62 +56,63 @@ type NewBillForm = z.infer<typeof newBillForm>
 
 export function NewBillForm() {
 	const queryClient = useQueryClient()
-	const { register, handleSubmit, control } = useForm<NewBillForm>()
+	const {
+		register,
+		handleSubmit,
+		control,
+		reset,
+		formState: { isSubmitting },
+	} = useForm<NewBillForm>()
 
-	const [originalDueDate, setOriginalDueDate] = useState<Date | undefined>()
-	const [dueDate, setDueDate] = useState<Date | undefined>()
-	const [emissionDate, setEmissionDate] = useState<Date | undefined>()
-	const [paymentDayOrder, setPaymentDayOrder] = useState<Date | undefined>()
+	const { data: resume } = useQuery({
+		queryKey: ['resume-accounts'],
+		queryFn: fetchAccounts,
+	})
+
+	async function handleResetForm() {
+		reset({
+			title: '',
+			description: '',
+			amount: '0',
+			dueDate: new Date(),
+			paid_at: undefined,
+			period: 'monthly',
+		})
+	}
 
 	const { mutateAsync: createBillFn } = useMutation({
 		mutationKey: ['bills'],
 		mutationFn: createBill,
-		onMutate: async (newData) => {
-			await queryClient.cancelQueries({
+		async onSuccess(data: unknown) {
+			const billsList = queryClient.getQueriesData<GetBillsResponse>({
 				queryKey: ['bills'],
 			})
 
-			const previousData = queryClient.getQueryData(['bills'])
+			billsList.forEach(([cacheKey, cacheData]) => {
+				if (!cacheData) {
+					// eslint-disable-next-line no-useless-return
+					return
+				}
 
-			queryClient.setQueryData(['bills'], (old: BillsProps[]) => [
-				...old,
-				newData,
-			])
-
-			return previousData
-		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		onError: (_, __, context: any) => {
-			queryClient.setQueryData(['bills'], context.previousData)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({
-				queryKey: ['bills'],
+				queryClient.setQueryData(cacheKey, {
+					...cacheData,
+					bills: [data, ...cacheData.bills],
+				})
 			})
+
+			handleResetForm()
 		},
 	})
 
 	async function handleCreateBill(data: NewBillForm) {
-		const session = await getSession()
-
-		console.log({
-			...data,
-			originalDueDate,
-			dueDate,
-			emissionDate,
-			paymentDayOrder,
-		})
-
 		try {
 			await createBillFn({
-				session,
-				data: {
-					...data,
-					originalDueDate,
-					dueDate,
-					emissionDate,
-					paymentDayOrder,
-				},
+				title: data.title,
+				description: data.description,
+				dueDate: data.dueDate,
+				paid_at: data.paid_at,
+				amount: Number(data.amount),
+				period: data.period,
 			})
 			toast.success('Despesa cadastrada com sucesso')
 		} catch {
@@ -122,9 +136,6 @@ export function NewBillForm() {
 				<DialogHeader className="space-y-2">
 					<DialogTitle>Conta a pagar</DialogTitle>
 					<DialogDescription>Adicione uma nova despesa </DialogDescription>
-					<p className="text-xs font-bold">
-						<span className="text-red-700">(*)</span> Campos obrigatórios
-					</p>
 				</DialogHeader>
 
 				<form
@@ -133,71 +144,33 @@ export function NewBillForm() {
 					id="new-bill-form"
 				>
 					<div>
-						<Label htmlFor="supplier" className="font-bold">
-							Fornecedor<span className="text-red-700">*</span>
+						<Label htmlFor="title" className="font-bold">
+							Título
 						</Label>
-						<Input
-							id="supplier"
-							placeholder="Nome do fornecedor"
-							{...register('supplier')}
-						/>
+						<Input id="title" {...register('title')} />
 					</div>
 
-					<div className="grid grid-cols-3 gap-x-4">
+					<div className="grid grid-cols-2 gap-x-4">
 						<div>
-							<Label htmlFor="original_due_date">Venc. original</Label>
-							<DatePicker
-								date={originalDueDate}
-								onDateChange={setOriginalDueDate}
-								className="w-full overflow-hidden"
-								id="original_due_date"
+							<Label htmlFor="dueDate">Data de vencimento</Label>
+							<Controller
+								name="dueDate"
+								control={control}
+								render={({ field: { onChange, value } }) => {
+									return (
+										<DatePicker
+											date={value}
+											onDateChange={onChange}
+											className="w-full"
+										/>
+									)
+								}}
 							/>
 						</div>
 
 						<div>
-							<Label htmlFor="due_date">
-								Vencimento<span className="text-red-700">*</span>
-							</Label>
-							<DatePicker
-								date={dueDate}
-								onDateChange={setDueDate}
-								className="w-full overflow-hidden"
-								id="due_date"
-							/>
-						</div>
-
-						<div>
-							<Label htmlFor="amount" className="font-bold">
-								Valor(R$)<span className="text-red-700">*</span>
-							</Label>
-							<Input type="text" {...register('amount')} id="amount" />
-						</div>
-
-						<div>
-							<Label htmlFor="emission_date">Data da emissão</Label>
-							<DatePicker
-								date={emissionDate}
-								onDateChange={setEmissionDate}
-								className="w-full overflow-hidden"
-								id="emission_date"
-							/>
-						</div>
-
-						<div>
-							<Label htmlFor="document_number" className="font-bold">
-								N° documento
-							</Label>
-							<Input {...register('documentNumber')} id="document_number" />
-						</div>
-
-						<div>
-							<Label htmlFor="payment_day_order">Competência</Label>
-							<DatePicker
-								date={paymentDayOrder}
-								onDateChange={setPaymentDayOrder}
-								className="w-full overflow-hidden"
-								id="payment_day_order"
-							/>
+							<Label htmlFor="amount">Valor</Label>
+							<PriceInput name="amount" control={control} />
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -212,33 +185,69 @@ export function NewBillForm() {
 					</div>
 
 					<div>
+						<Label htmlFor="accountId">Selecione uma conta</Label>
+						<Controller
+							name="accountId"
+							control={control}
+							render={({ field: { name, onChange, value, disabled } }) => {
+								return (
+									<Select
+										name={name}
+										onValueChange={onChange}
+										value={value}
+										disabled={disabled}
+									>
+										<SelectTrigger className="h-8">
+											<SelectValue placeholder="Selecione a conta que a transação pertence" />
+										</SelectTrigger>
+										<SelectContent>
+											{resume?.accounts?.map((account: AccountProps) => (
+												<SelectItem key={account.id} value={account.id}>
+													{account.bank}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								)
+							}}
+						/>
+					</div>
+
+					<div>
 						<Label htmlFor="payment_method" className="font-bold">
 							Forma de pagamento
 						</Label>
-						<ControlledSelect
-							{...register('paymentMethod')}
-							placeholder="Selecione o método de pagamento"
+						<Controller
+							name="payment_method"
 							control={control}
-							id="payment_method"
-						>
-							<SelectItem value="money">Dinheiro</SelectItem>
-							<SelectItem value="PIX">Pix</SelectItem>
-							<SelectItem value="credit-card">Cartão de Credito</SelectItem>
-							<SelectItem value="debit-card">Cartão de Debito</SelectItem>
-							<SelectItem value="bank-check">Cheque Bancário</SelectItem>
-							<SelectItem value="bank-transfer">
-								Transferência Bancaria
-							</SelectItem>
-						</ControlledSelect>
-					</div>
-
-					<div className="sr-only">
-						<Label htmlFor="categoryId" className="font-bold">
-							Categoria
-						</Label>
-						<select id="categoryId">
-							<option value="">Selecione</option>
-						</select>
+							render={({ field: { name, onChange, value, disabled } }) => {
+								return (
+									<Select
+										name={name}
+										onValueChange={onChange}
+										value={value}
+										disabled={disabled}
+									>
+										<SelectTrigger className="h-8">
+											<SelectValue placeholder="Selecione a o método de pagamento" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="MONEY">Dinheiro</SelectItem>
+											<SelectItem value="PIX">Pix</SelectItem>
+											<SelectItem value="CREDIT_CARD">
+												Cartão de Credito
+											</SelectItem>
+											<SelectItem value="DEBIT_CARD">
+												Cartão de Debito
+											</SelectItem>
+											<SelectItem value="BANK_TRANSFER">
+												Transferência Bancaria
+											</SelectItem>
+										</SelectContent>
+									</Select>
+								)
+							}}
+						/>
 					</div>
 
 					<div>
@@ -260,12 +269,18 @@ export function NewBillForm() {
 
 				<DialogFooter className="flex items-center justify-end">
 					<DialogClose asChild>
-						<Button type="reset" form="new-bill-form" variant="destructive">
+						<Button
+							type="button"
+							form="new-bill-form"
+							variant="destructive"
+							disabled={isSubmitting}
+							onClick={handleResetForm}
+						>
 							Cancelar
 						</Button>
 					</DialogClose>
 
-					<Button type="submit" form="new-bill-form">
+					<Button type="submit" form="new-bill-form" disabled={isSubmitting}>
 						Salvar
 					</Button>
 				</DialogFooter>

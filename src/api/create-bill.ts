@@ -1,19 +1,16 @@
-import { Session } from 'next-auth'
+import { apiClient } from '@/lib/axios-client'
 
-import { apiBackend } from '@/lib/axios-backend'
-
-interface CreateBillRequest {
-	session: Session | null
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	data: any
+export interface CreateBillRequest {
+	title: string
+	description?: string
+	dueDate: Date | string
+	paid_at?: Date | string
+	amount: number
+	period: 'monthly' | 'only' | 'anual'
 }
 
-export async function createBill({ session, data }: CreateBillRequest) {
-	const response = await apiBackend.post('/bills', data, {
-		headers: {
-			Authorization: `Bearer ${session?.access_token}`,
-		},
-	})
+export async function createBill(data: CreateBillRequest) {
+	const response = await apiClient.post('/bills', data)
 
 	return response.data.bill
 }

@@ -23,26 +23,8 @@ export interface CreateTransactionResponse {
 	category: CategoryTypes
 }
 
-export async function createTransaction({
-	accountId,
-	amount,
-	category,
-	name,
-	payment_method,
-	transaction_type,
-	shopName,
-	created_at,
-}: CreateTransactionBody) {
-	const response = await apiClient.post('/transactions', {
-		accountId,
-		amount,
-		category,
-		name,
-		payment_method,
-		transaction_type,
-		shopName,
-		created_at,
-	})
+export async function createTransaction(data: CreateTransactionBody) {
+	const response = await apiClient.post('/transactions', data)
 
 	return response.data.transaction
 }

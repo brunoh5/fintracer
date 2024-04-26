@@ -27,6 +27,7 @@ export function PriceInput({ ...rest }: PriceInputProps) {
 			render={({ field: { name, onChange, value } }) => (
 				<Input
 					name={name}
+					id={name}
 					value={formatCurrency(value)}
 					onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ''))}
 				/>

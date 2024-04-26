@@ -95,7 +95,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 
 	const { mutateAsync: createTransactionFn } = useMutation({
 		mutationFn: createTransaction,
-		onSuccess(data: CreateTransactionResponse) {
+		async onSuccess(data: CreateTransactionResponse) {
 			const account = queryClient.getQueryData<GetAccountResponse>([
 				'accounts',
 				accountId,

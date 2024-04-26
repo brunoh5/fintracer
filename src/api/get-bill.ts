@@ -6,7 +6,7 @@ interface FetchBillQuery {
 	status?: string | null
 }
 
-interface GetBillsResponse {
+export interface GetBillsResponse {
 	bills: {
 		id: string
 		dueDate: string
