@@ -38,10 +38,10 @@ export function TotalBalance() {
 				<div className="flex items-center justify-between">
 					{resume ? (
 						<span className="text-xl font-bold">
-							{new Intl.NumberFormat('pt-BR', {
+							{(resume.totalBalanceInCents / 100).toLocaleString('pt-BR', {
 								style: 'currency',
 								currency: 'BRL',
-							}).format(Number(resume.totalBalanceInCents))}
+							})}
 						</span>
 					) : (
 						<Skeleton className="h-5 w-[148px]" />
@@ -74,7 +74,7 @@ export function TotalBalance() {
 										</div>
 										<div className="flex items-center justify-between gap-2 self-end">
 											<span className="text-ellipsis text-nowrap font-bold text-white">
-												{account.balance.toLocaleString('pt-BR', {
+												{(account.balance / 100).toLocaleString('pt-BR', {
 													style: 'currency',
 													currency: 'BRL',
 												})}

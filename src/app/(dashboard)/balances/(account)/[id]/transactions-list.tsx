@@ -53,15 +53,15 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
 				<Table>
 					<TableHeader className="font-bold">
 						<TableRow>
-							<TableHead className="w-[80px]"></TableHead>
+							<TableHead className="w-[40px]"></TableHead>
 							<TableHead>Nome</TableHead>
 							<TableHead className="w-[140px] text-center">
 								Estabelecimento
 							</TableHead>
-							<TableHead className="w-[140px] text-center">Categoria</TableHead>
-							<TableHead className="w-[140px] ">Data</TableHead>
-							<TableHead className="w-[140px] ">Pagamento</TableHead>
+							<TableHead className="w-[140px] text-center">Data</TableHead>
+							<TableHead className="w-[140px] text-center">Pagamento</TableHead>
 							<TableHead className="w-[140px] text-center">Valor</TableHead>
+							<TableHead className="w-[40px]"></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>

@@ -131,7 +131,12 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 
 				queryClient.setQueryData(cacheKey, {
 					...cacheData,
-					transactions: [...cacheData.transactions, data],
+					transactions: [
+						...cacheData.transactions,
+						Object.assign(data, {
+							amountInCents: data.amount,
+						}),
+					],
 				})
 			})
 
