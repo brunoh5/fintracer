@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { ChevronsRight } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
@@ -38,7 +39,9 @@ export function Header() {
 				<div className="flex items-center justify-center gap-2 text-muted-foreground">
 					<ChevronsRight />
 					<span className="text-nowrap">
-						{format(new Date(), 'dd MMM, yyyy')}
+						{format(new Date(), 'dd MMM, yyyy', {
+							locale: ptBR,
+						})}
 					</span>
 				</div>
 			</div>

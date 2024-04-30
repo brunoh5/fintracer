@@ -30,6 +30,7 @@ export function BillsTable() {
 							<TableHead className="w-auto">Descrição</TableHead>
 							<TableHead className="w-[112px] text-center">Status</TableHead>
 							<TableHead className="w-[112px] text-center">Valor</TableHead>
+							<TableHead className="w-[80px]"></TableHead>
 						</TableRow>
 					</TableHeader>
 

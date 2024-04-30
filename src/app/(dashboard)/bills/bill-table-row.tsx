@@ -1,11 +1,35 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
+import { fetchAccounts } from '@/api/fetch-accounts'
+import { PriceInput } from '@/components/price-input'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { DatePicker } from '@/components/ui/date-picker'
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 import { TableCell, TableRow } from '@/components/ui/table'
+import { AccountProps } from '@/types'
 
 interface BillTableRowProps {
 	bill: {
@@ -21,15 +45,48 @@ interface BillTableRowProps {
 	}
 }
 
+const payBillSchema = z.object({
+	accountId: z.string(),
+	paid_at: z.date().optional(),
+	amount: z.string().optional(),
+})
+
+type PayBillSchema = z.infer<typeof payBillSchema>
+
 export function BillTableRow({ bill }: BillTableRowProps) {
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+	const [isPayOpen, setIsPayOpen] = useState(false)
+
+	const {
+		handleSubmit,
+		control,
+		formState: { isSubmitting },
+		reset,
+	} = useForm<PayBillSchema>({
+		resolver: zodResolver(payBillSchema),
+		defaultValues: {
+			accountId: '',
+			paid_at: new Date(),
+			amount: '0',
+		},
+	})
+
+	const { data: resume } = useQuery({
+		queryKey: ['resume-accounts'],
+		queryFn: fetchAccounts,
+		enabled: isPayOpen,
+	})
+
+	function handlePayBill(data: PayBillSchema) {
+		console.log(data)
+	}
 
 	return (
 		<TableRow>
 			<TableCell>
 				<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
 					<DialogTrigger asChild>
-						<Button variant="outline" size="xs">
+						<Button type="button" variant="outline" size="xs">
 							<Search className="size-5" />
 							<span className="sr-only">Detalhes da despesa</span>
 						</Button>
@@ -79,6 +136,108 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 					style: 'currency',
 					currency: 'BRL',
 				})}
+			</TableCell>
+			<TableCell>
+				<Dialog open={isPayOpen} onOpenChange={setIsPayOpen}>
+					<DialogTrigger asChild>
+						<Button type="button" variant="ghost" size="xs">
+							Pagar
+						</Button>
+					</DialogTrigger>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle>Pagar Despesa</DialogTitle>
+						</DialogHeader>
+						<form
+							id="pay-bill-form"
+							className="space-y-4"
+							onSubmit={handleSubmit(handlePayBill)}
+						>
+							<Controller
+								name="accountId"
+								control={control}
+								render={({ field: { name, onChange, value, disabled } }) => {
+									return (
+										<Select
+											name={name}
+											onValueChange={onChange}
+											value={value}
+											disabled={disabled}
+										>
+											<SelectTrigger className="h-8">
+												<SelectValue placeholder="Selecione a conta para pagamento" />
+											</SelectTrigger>
+											<SelectContent>
+												{resume?.accounts?.map((account: AccountProps) => (
+													<SelectItem key={account.id} value={account.id}>
+														{account.bank}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									)
+								}}
+							/>
+
+							<Controller
+								name="paid_at"
+								control={control}
+								render={({ field: { onChange, value } }) => {
+									return (
+										<div className="flex items-center gap-4">
+											<DatePicker
+												date={value}
+												onDateChange={onChange}
+												className="w-full"
+											/>
+											<Button
+												type="button"
+												onClick={() => reset({ paid_at: new Date() })}
+											>
+												Limpar data
+											</Button>
+										</div>
+									)
+								}}
+							/>
+
+							<div className="space-y-2">
+								<Label htmlFor="amount">
+									Especificar valor se for diferente
+								</Label>
+								<PriceInput name="amount" control={control} />
+							</div>
+						</form>
+
+						<DialogFooter className="flex items-center justify-end">
+							<DialogClose asChild>
+								<Button
+									type="button"
+									form="pay-bill-form"
+									variant="destructive"
+									disabled={isSubmitting}
+									onClick={() => {
+										reset({
+											accountId: '',
+											paid_at: new Date(),
+											amount: '0',
+										})
+									}}
+								>
+									Cancelar
+								</Button>
+							</DialogClose>
+
+							<Button
+								type="submit"
+								form="pay-bill-form"
+								disabled={isSubmitting}
+							>
+								Pagar
+							</Button>
+						</DialogFooter>
+					</DialogContent>
+				</Dialog>
 			</TableCell>
 		</TableRow>
 	)

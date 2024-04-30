@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 
@@ -52,7 +53,9 @@ export function Transaction({ transaction }: TransactionProps) {
 					</span>
 				)}
 				<span className="text-nowrap text-xs text-gray-300">
-					{format(new Date(transaction.created_at), 'dd MMM yyyy')}
+					{format(new Date(transaction.created_at), 'dd MMM yyyy', {
+						locale: ptBR,
+					})}
 				</span>
 			</div>
 		</div>

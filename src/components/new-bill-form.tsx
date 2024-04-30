@@ -1,13 +1,12 @@
 'use client'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { createBill } from '@/api/create-bill'
-import { fetchAccounts } from '@/api/fetch-accounts'
 import { GetBillsResponse } from '@/api/get-bill'
 import { ControlledSelect } from '@/components/controlled-select'
 import { PriceInput } from '@/components/price-input'
@@ -33,7 +32,6 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { AccountProps } from '@/types'
 
 const newBillForm = z.object({
 	title: z.string(),
@@ -44,11 +42,6 @@ const newBillForm = z.object({
 	payment_method: z
 		.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
 		.default('MONEY'),
-	accountId: z.string().optional(),
-	// documentNumber: z.string().nullable(),
-	// description: z.string().nullable(),
-	// carrier: z.string().nullable(),
-	// occurrence: z.string().nullable(),
 	period: z.enum(['only', 'monthly', 'anual']),
 })
 
@@ -63,11 +56,6 @@ export function NewBillForm() {
 		reset,
 		formState: { isSubmitting },
 	} = useForm<NewBillForm>()
-
-	const { data: resume } = useQuery({
-		queryKey: ['resume-accounts'],
-		queryFn: fetchAccounts,
-	})
 
 	async function handleResetForm() {
 		reset({
@@ -181,35 +169,6 @@ export function NewBillForm() {
 							{...register('description')}
 							id="description"
 							className="h-full max-h-20 w-full resize-none"
-						/>
-					</div>
-
-					<div>
-						<Label htmlFor="accountId">Selecione uma conta</Label>
-						<Controller
-							name="accountId"
-							control={control}
-							render={({ field: { name, onChange, value, disabled } }) => {
-								return (
-									<Select
-										name={name}
-										onValueChange={onChange}
-										value={value}
-										disabled={disabled}
-									>
-										<SelectTrigger className="h-8">
-											<SelectValue placeholder="Selecione a conta que a transação pertence" />
-										</SelectTrigger>
-										<SelectContent>
-											{resume?.accounts?.map((account: AccountProps) => (
-												<SelectItem key={account.id} value={account.id}>
-													{account.bank}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								)
-							}}
 						/>
 					</div>
 

@@ -1,5 +1,6 @@
+import { NewBillForm } from '@/components/new-bill-form'
+
 import { BillsTable } from './bills-table'
-import { NewBillForm } from './new-bill-form'
 
 export default function Bills() {
 	return (
