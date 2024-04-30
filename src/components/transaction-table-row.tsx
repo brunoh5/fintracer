@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 
-import { TransactionDetails } from './transaction-details'
+import { TransactionDetails } from '../app/(dashboard)/transactions/transaction-details'
 
 export interface TransactionTableRowProps {
 	transaction: {

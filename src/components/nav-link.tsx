@@ -15,7 +15,7 @@ export function NavLink({ className, ...props }: NavLinkProps) {
 
 	return (
 		<Link
-			data-current={pathname === props.href}
+			data-current={pathname.includes(String(props.href))}
 			className={twMerge(
 				'flex items-center gap-2 rounded px-3 py-2 text-muted-foreground transition-colors hover:bg-white/[0.08]',
 				'data-[current=true]:bg-primary data-[current=true]:text-white',

@@ -21,7 +21,7 @@ export function ManageAccount({ accountId }: { accountId: string }) {
 
 			{account && (
 				<>
-					<CardContent className="grid grid-cols-3 gap-x-28 gap-y-10">
+					<CardContent className="grid grid-cols-3 gap-x-28 gap-y-10 p-6">
 						<div>
 							<p className="text-muted-foreground">Nome do Banco</p>
 							<p className="text-lg font-bold">{account?.bank}</p>

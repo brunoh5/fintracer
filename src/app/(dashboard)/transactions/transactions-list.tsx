@@ -6,6 +6,8 @@ import { z } from 'zod'
 
 import { fetchTransactions } from '@/api/fetch-transactions'
 import { Pagination } from '@/components/pagination'
+import { TransactionTableFilters } from '@/components/transaction-table-filters'
+import { TransactionTableRow } from '@/components/transaction-table-row'
 import { TransactionTableSkeleton } from '@/components/transaction-table-skeleton'
 import {
 	Table,
@@ -14,9 +16,6 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-
-import { TransactionTableFilters } from './transaction-table-filters'
-import { TransactionTableRow } from './transaction-table-row'
 
 export function TransactionsList() {
 	const searchParams = useSearchParams()
