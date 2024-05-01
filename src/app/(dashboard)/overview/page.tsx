@@ -15,7 +15,7 @@ export default async function Dashboard() {
 	return (
 		<>
 			<main className="relative flex flex-col gap-y-8 pb-8 pl-6 pr-8 pt-4">
-				<div className="grid grid-cols-1 gap-y-6 lg:grid-cols-3 lg:gap-y-0">
+				<div className="grid grid-cols-1 gap-y-6 lg:grid-cols-3 lg:gap-6">
 					<TotalBalance />
 					{/* <MonthlyGoal /> */}
 					<UpcomingBill />

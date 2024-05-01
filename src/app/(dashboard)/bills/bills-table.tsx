@@ -16,11 +16,27 @@ import { BillTableFilters } from './bill-table-filters'
 import { BillTableRow } from './bill-table-row'
 
 export function BillsTable() {
-	const { bills, handlePaginate, meta } = useContext(BillsContext)
+	const { bills, handlePaginate, meta, billsStatus } = useContext(BillsContext)
 
 	return (
 		<div className="space-y-2.5">
+			<div className="flex items-center gap-2">
+				<p>Status</p>
+				<div className="flex items-center gap-2">
+					<div className="size-2 rounded-full bg-rose-500" />
+					<span>Não pago:</span>
+					<p>
+						{billsStatus &&
+							(billsStatus?.notPaidInCents / 100).toLocaleString('pt-BR', {
+								style: 'currency',
+								currency: 'BRL',
+							})}
+					</p>
+				</div>
+			</div>
+
 			<BillTableFilters />
+
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader className="font-bold">

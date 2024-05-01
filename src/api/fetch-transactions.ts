@@ -33,6 +33,10 @@ export interface FetchTransactionsResponse {
 			| 'ENTERTAINMENT'
 			| 'SHOPPING'
 	}[]
+	transactionsStatus: {
+		totalRevenueInCents: number
+		totalExpenseInCents: number
+	}
 	meta: {
 		pageIndex: number
 		perPage: number

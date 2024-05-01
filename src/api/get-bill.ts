@@ -18,6 +18,10 @@ export interface GetBillsResponse {
 		userId: string
 		paid_at: string
 	}[]
+	totalInCents: number
+	billsStatus: {
+		notPaidInCents: number
+	}
 	meta: {
 		perPage: number
 		totalCount: number

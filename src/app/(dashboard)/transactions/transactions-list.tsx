@@ -9,6 +9,7 @@ import { Pagination } from '@/components/pagination'
 import { TransactionTableFilters } from '@/components/transaction-table-filters'
 import { TransactionTableRow } from '@/components/transaction-table-row'
 import { TransactionTableSkeleton } from '@/components/transaction-table-skeleton'
+import { TransactionsStatus } from '@/components/transactions-status'
 import {
 	Table,
 	TableBody,
@@ -60,6 +61,11 @@ export function TransactionsList() {
 
 	return (
 		<div className="space-y-2.5">
+			<TransactionsStatus
+				totalExpenseInCents={result?.transactionsStatus.totalExpenseInCents}
+				totalRevenueInCents={result?.transactionsStatus.totalRevenueInCents}
+			/>
+
 			<TransactionTableFilters />
 
 			<div className="rounded-md border">

@@ -8,7 +8,7 @@ import { z } from 'zod'
 
 import { getBill } from '@/api/get-bill'
 
-type Bill = {
+export type Bill = {
 	id: string
 	dueDate: string
 	logoUrl: string
@@ -27,6 +27,9 @@ interface FilterBillData {
 
 interface BillsContextType {
 	bills?: Bill[]
+	billsStatus?: {
+		notPaidInCents: number
+	}
 	meta?: {
 		perPage: number
 		totalCount: number
@@ -94,8 +97,9 @@ export function BillsContextProvider({ children }: BillsContextProviderProps) {
 		<BillsContext.Provider
 			value={{
 				bills: result?.bills,
-				handlePaginate,
+				billsStatus: result?.billsStatus,
 				meta: result?.meta,
+				handlePaginate,
 				handleFilter,
 			}}
 		>

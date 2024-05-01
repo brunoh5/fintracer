@@ -18,23 +18,21 @@ export function Profile() {
 	})
 
 	return (
-		<div className="mt-auto">
-			<div className="flex items-center gap-4">
-				<UserCircleIcon className="size-4" />
-				<div className="mr-8 flex w-full flex-col text-ellipsis">
-					{isLoading && <Skeleton className="h-4 w-[80px]" />}
+		<div className="mt-auto flex items-center gap-4">
+			<UserCircleIcon className="size-6" />
+			<div className="flex flex-col text-ellipsis">
+				{isLoading && <Skeleton className="h-4 w-[80px]" />}
 
-					{user && (
-						<span className=" text-nowrap text-sm text-foreground">
-							{user.name}
-						</span>
-					)}
-					<Link href="/settings">
-						<Button type="button" variant="ghost" size="xs">
-							Ver Perfil
-						</Button>
-					</Link>
-				</div>
+				{user && (
+					<p className="w-[110px] overflow-hidden text-ellipsis text-nowrap text-sm text-foreground">
+						{user.name}
+					</p>
+				)}
+				<Link href="/settings">
+					<Button type="button" variant="ghost" size="xs">
+						Ver Perfil
+					</Button>
+				</Link>
 			</div>
 		</div>
 	)
