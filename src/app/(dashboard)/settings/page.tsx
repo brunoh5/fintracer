@@ -1,14 +1,8 @@
-'use client'
-
-import { Tabs } from '@radix-ui/react-tabs'
 import { Metadata } from 'next'
 
-import { TabsTrigger } from '@/components/tabs-trigger'
 import { Card, CardContent } from '@/components/ui/card'
-import { TabsList } from '@/components/ui/tabs'
 
-import { PasswordForm } from './password-form'
-import { ProfileForm } from './profile-form'
+import { ProfileTabs } from './profile-tabs'
 
 export const metadata: Metadata = {
 	title: 'Configurações',
@@ -20,14 +14,7 @@ export default function Settings() {
 			<Card className="pt-6">
 				<h2 className="sr-only">Atualizar perfil ou senha</h2>
 				<CardContent>
-					<Tabs defaultValue="profile">
-						<TabsList className="mb-8 flex w-[300px] items-center justify-start gap-4 bg-transparent font-bold text-foreground">
-							<TabsTrigger value="profile">Perfil</TabsTrigger>
-							<TabsTrigger value="security">Segurança</TabsTrigger>
-						</TabsList>
-						<ProfileForm />
-						<PasswordForm />
-					</Tabs>
+					<ProfileTabs />
 				</CardContent>
 			</Card>
 		</main>
