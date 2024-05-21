@@ -5,18 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { z } from 'zod'
 
 import { fetchTransactions } from '@/api/fetch-transactions'
-import { Pagination } from '@/components/pagination'
-import { TransactionTableFilters } from '@/components/transaction-table-filters'
-import { TransactionTableRow } from '@/components/transaction-table-row'
-import { TransactionTableSkeleton } from '@/components/transaction-table-skeleton'
-import { TransactionsStatus } from '@/components/transactions-status'
-import {
-	Table,
-	TableBody,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table'
+import { TransactionsTable } from '@/components/transactions-table'
 
 interface TransactionsListProps {
 	accountId: string
@@ -68,52 +57,10 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
 	}
 
 	return (
-		<div className="space-y-2.5">
-			<TransactionsStatus
-				totalExpenseInCents={result?.transactionsStatus.totalExpenseInCents}
-				totalRevenueInCents={result?.transactionsStatus.totalRevenueInCents}
-			/>
-			<TransactionTableFilters />
-
-			<div className="rounded-md border">
-				<Table>
-					<TableHeader className="font-bold">
-						<TableRow>
-							<TableHead className="w-[40px]"></TableHead>
-							<TableHead>Nome</TableHead>
-							<TableHead className="w-[140px] text-center">
-								Estabelecimento
-							</TableHead>
-							<TableHead className="w-[140px] text-center">Data</TableHead>
-							<TableHead className="w-[140px] text-center">Pagamento</TableHead>
-							<TableHead className="w-[140px] text-center">Valor</TableHead>
-							<TableHead className="w-[40px]"></TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{isLoadingTransactions && <TransactionTableSkeleton />}
-
-						{result &&
-							result.transactions.map((transaction) => {
-								return (
-									<TransactionTableRow
-										key={transaction.id}
-										transaction={transaction}
-									/>
-								)
-							})}
-					</TableBody>
-				</Table>
-			</div>
-
-			{result && (
-				<Pagination
-					pageIndex={result.meta.pageIndex}
-					totalCount={result.meta.totalCount}
-					perPage={result.meta.perPage}
-					onPageChange={handlePaginate}
-				/>
-			)}
-		</div>
+		<TransactionsTable
+			data={result}
+			handlePaginate={handlePaginate}
+			isLoadingTransactions={isLoadingTransactions}
+		/>
 	)
 }

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 
-import { TransactionDetailsSkeleton } from './transaction-details-skeleton'
+import { TransactionDetailsSkeleton } from './details-skeleton'
 
 interface TransactionsDetailsProps {
 	transactionId: string

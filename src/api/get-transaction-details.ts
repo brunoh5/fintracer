@@ -10,12 +10,12 @@ interface GetTransactionDetailsResponse {
 		name: string
 		amount: number
 		created_at: string
+		accountId: string
 		payment_method:
 			| 'MONEY'
 			| 'PIX'
 			| 'CREDIT_CARD'
 			| 'DEBIT_CARD'
-			| 'BANK_CHECK'
 			| 'BANK_TRANSFER'
 		shopName: string
 		transaction_type: 'CREDIT' | 'DEBIT'

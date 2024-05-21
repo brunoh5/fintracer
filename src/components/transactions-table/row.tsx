@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Search, Trash } from 'lucide-react'
+import { Pencil, Search, Trash } from 'lucide-react'
 import { useState } from 'react'
 
 import { deleteTransaction } from '@/api/delete-transaction'
@@ -15,7 +15,8 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 
-import { TransactionDetails } from '../app/(dashboard)/transactions/transaction-details'
+import { TransactionDetails } from './details'
+import { EditTransaction } from './edit-transaction'
 
 export interface TransactionTableRowProps {
 	transaction: {
@@ -50,6 +51,7 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 	const queryClient = useQueryClient()
 
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+	const [isEditOpen, setIsEditOpen] = useState(false)
 
 	const { mutateAsync: deleteTransactionFn } = useMutation({
 		mutationFn: deleteTransaction,
@@ -154,6 +156,18 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 						})}
 					</span>
 				)}
+			</TableCell>
+			<TableCell>
+				<Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+					<DialogTrigger asChild>
+						<Button variant="outline" size="xs">
+							<Pencil className="size-3" />
+							<span className="sr-only">Editar transação</span>
+						</Button>
+					</DialogTrigger>
+
+					<EditTransaction transactionId={transaction.id} open={isEditOpen} />
+				</Dialog>
 			</TableCell>
 			<TableCell>
 				<Button

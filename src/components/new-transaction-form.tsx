@@ -15,12 +15,7 @@ import {
 import { fetchAccounts } from '@/api/fetch-accounts'
 import { FetchTransactionsResponse } from '@/api/fetch-transactions'
 import { GetAccountResponse } from '@/api/get-account'
-import {
-	AccountProps,
-	CategoryTypes,
-	PaymentMethods,
-	TransactionTypes,
-} from '@/types'
+import { CategoryTypes, PaymentMethods, TransactionTypes } from '@/types'
 
 import { PriceInput } from './price-input'
 import { Button } from './ui/button'
@@ -62,7 +57,14 @@ const newTransactionSchema = z.object({
 		.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
 		.default('MONEY'),
 	category: z
-		.enum(['FOOD', 'HOME', 'TRANSPORT', 'OTHERS', 'SHOPPING', 'ENTERTAINMENT'])
+		.enum([
+			'FOOD',
+			'HOME',
+			'TRANSPORTATION',
+			'OTHERS',
+			'SHOPPING',
+			'ENTERTAINMENT',
+		])
 		.default('OTHERS'),
 })
 
@@ -243,7 +245,7 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 										<SelectValue placeholder="Selecione a conta que a transação pertence" />
 									</SelectTrigger>
 									<SelectContent>
-										{resume?.accounts?.map((account: AccountProps) => (
+										{resume?.accounts?.map((account) => (
 											<SelectItem key={account.id} value={account.id}>
 												{account.bank}
 											</SelectItem>
@@ -324,7 +326,10 @@ export function NewTransaction({ accountId }: NewTransactionSchemaProps) {
 										onDateChange={onChange}
 										className="w-full"
 									/>
-									<Button onClick={() => reset({ created_at: undefined })}>
+									<Button
+										type="button"
+										onClick={() => reset({ created_at: undefined })}
+									>
 										Limpar data
 									</Button>
 								</div>

@@ -14,7 +14,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 
-import { DateRangePicker } from './date-range-picker'
+import { DateRangePicker } from '../date-range-picker'
 
 const transactionFilterSchema = z.object({
 	date: z.object({
