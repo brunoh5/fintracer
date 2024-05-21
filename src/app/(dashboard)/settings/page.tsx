@@ -1,6 +1,7 @@
 'use client'
 
 import { Tabs } from '@radix-ui/react-tabs'
+import { Metadata } from 'next'
 
 import { TabsTrigger } from '@/components/tabs-trigger'
 import { Card, CardContent } from '@/components/ui/card'
@@ -8,6 +9,10 @@ import { TabsList } from '@/components/ui/tabs'
 
 import { PasswordForm } from './password-form'
 import { ProfileForm } from './profile-form'
+
+export const metadata: Metadata = {
+	title: 'Configurações',
+}
 
 export default function Settings() {
 	return (

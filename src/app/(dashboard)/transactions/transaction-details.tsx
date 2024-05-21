@@ -66,7 +66,7 @@ export function TransactionDetails({
 						<TableRow>
 							<TableCell>Realizado</TableCell>
 							<TableCell className="flex justify-end">
-								{format(new Date(transaction.created_at), 'dd/mm/yyyy', {
+								{format(new Date(transaction.created_at), 'dd/LL/yyyy', {
 									locale: ptBR,
 								})}
 							</TableCell>

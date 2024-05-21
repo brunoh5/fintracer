@@ -1,6 +1,12 @@
+import { Metadata } from 'next'
+
 import { NewBillForm } from '@/components/new-bill-form'
 
 import { BillsTable } from './bills-table'
+
+export const metadata: Metadata = {
+	title: 'Despesas',
+}
 
 export default function Bills() {
 	return (

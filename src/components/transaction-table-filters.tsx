@@ -1,3 +1,4 @@
+import { endOfMonth, format, startOfMonth } from 'date-fns'
 import { Search, X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Controller, useForm } from 'react-hook-form'
@@ -13,10 +14,15 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 
+import { DateRangePicker } from './date-range-picker'
+
 const transactionFilterSchema = z.object({
+	date: z.object({
+		from: z.date().optional(),
+		to: z.date().optional(),
+	}),
 	name: z.string().optional(),
 	category: z.string().optional(),
-	date: z.string().optional(),
 	transaction_type: z.string().optional(),
 	payment_method: z.string().optional(),
 })
@@ -24,11 +30,14 @@ const transactionFilterSchema = z.object({
 type TransactionFilterSchema = z.infer<typeof transactionFilterSchema>
 
 export function TransactionTableFilters() {
+	console.log(format(new Date().toISOString(), 'yyyy-mm-dd'))
 	const searchParams = useSearchParams()
 	const params = new URLSearchParams(searchParams)
 	const { replace } = useRouter()
 	const pathname = usePathname()
 
+	const from = params.get('from')
+	const to = params.get('to')
 	const name = params.get('name')
 	const transaction_type = params.get('transaction_type')
 	const payment_method = params.get('payment_method')
@@ -41,15 +50,30 @@ export function TransactionTableFilters() {
 				transaction_type: transaction_type ?? 'all',
 				payment_method: payment_method ?? 'all',
 				category: category ?? 'all',
+				date: {
+					from: from ? new Date(from) : startOfMonth(new Date()),
+					to: to ? new Date(to) : endOfMonth(new Date()),
+				},
 			},
 		})
 
 	function handleFilter({
+		date,
 		name,
 		transaction_type,
 		payment_method,
 		category,
 	}: TransactionFilterSchema) {
+		if (date.from) {
+			params.set('from', String(format(date.from, 'yyyy-LL-dd')))
+		} else {
+			params.delete('from')
+		}
+		if (date.to) {
+			params.set('to', String(format(date.to, 'yyyy-LL-dd')))
+		} else {
+			params.delete('to')
+		}
 		if (name) {
 			params.set('name', name)
 		} else {
@@ -81,6 +105,8 @@ export function TransactionTableFilters() {
 		params.delete('transaction_type')
 		params.delete('payment_method')
 		params.delete('category')
+		params.delete('from')
+		params.delete('to')
 		params.set('page', '1')
 		replace(`${pathname}?${params.toString()}`)
 
@@ -89,6 +115,10 @@ export function TransactionTableFilters() {
 			transaction_type: 'all',
 			category: 'all',
 			payment_method: 'all',
+			date: {
+				from: startOfMonth(new Date()),
+				to: endOfMonth(new Date()),
+			},
 		})
 	}
 
@@ -98,6 +128,7 @@ export function TransactionTableFilters() {
 			className="grid grid-cols-2 gap-2 lg:flex lg:items-center"
 		>
 			<span className="col-span-2 text-sm font-semibold">Filtros</span>
+			<DateRangePicker name="date" control={control} />
 			<Input
 				{...register('name')}
 				className="h-8 w-[192px]"

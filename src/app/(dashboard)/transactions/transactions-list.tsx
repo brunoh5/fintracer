@@ -24,6 +24,8 @@ export function TransactionsList() {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 
+	const from = params.get('from')
+	const to = params.get('to')
 	const name = params.get('name')
 	const transaction_type = params.get('transaction_type')
 	const payment_method = params.get('payment_method')
@@ -38,6 +40,8 @@ export function TransactionsList() {
 		queryKey: [
 			'transactions',
 			pageIndex,
+			from,
+			to,
 			name,
 			transaction_type,
 			payment_method,
@@ -46,6 +50,8 @@ export function TransactionsList() {
 		queryFn: () =>
 			fetchTransactions({
 				pageIndex,
+				from,
+				to,
 				name,
 				transaction_type: transaction_type === 'all' ? null : transaction_type,
 				payment_method: payment_method === 'all' ? null : payment_method,

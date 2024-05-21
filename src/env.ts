@@ -22,8 +22,11 @@ export const env = createEnv({
 			.enum(['production', 'preview', 'development'])
 			.default('development'),
 		NEXT_PUBLIC_API_URL: z.string(),
+		NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET: z.string(),
 	},
 	experimental__runtimeEnv: {
+		NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET:
+			process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET,
 		NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
 		NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
 		NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,

@@ -1,4 +1,10 @@
+import { Metadata } from 'next'
+
 import { TransactionsList } from './transactions-list'
+
+export const metadata: Metadata = {
+	title: 'Transações',
+}
 
 export default function Transactions() {
 	return (

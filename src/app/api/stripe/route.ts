@@ -6,7 +6,7 @@ import { env } from '@/env'
 import { fauna } from '@/lib/fauna'
 import { stripe } from '@/lib/stripe'
 
-import { nextAuthOptions } from '../../app/api/auth/[...nextauth]/options'
+import { nextAuthOptions } from '../auth/[...nextauth]/options'
 
 type User = {
 	ref: {
@@ -33,7 +33,6 @@ export async function POST() {
 	if (!customerId) {
 		const stripeCustomer = await stripe.customers.create({
 			email: session.user.email,
-			// metadata:
 		})
 
 		await fauna.query(
