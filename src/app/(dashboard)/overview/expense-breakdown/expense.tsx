@@ -56,10 +56,13 @@ export function Expense({ title, expense }: ExpenseProps) {
 				<div className="flex flex-col">
 					<span className="text-xs text-muted-foreground">{title}</span>
 					<p className="font-semibold">
-						{(amount < 0 ? amount * -1 : amount).toLocaleString('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						})}
+						{(amount < 0 ? (amount * -1) / 100 : amount / 100).toLocaleString(
+							'pt-BR',
+							{
+								style: 'currency',
+								currency: 'BRL',
+							},
+						)}
 					</p>
 					<ExpenseDiff diffBetweenMonth={diffBetweenMonth} />
 				</div>

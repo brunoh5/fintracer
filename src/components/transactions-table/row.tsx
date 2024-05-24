@@ -124,13 +124,13 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 			<TableCell>
 				<div className="flex items-center gap-2">
 					<TransactionCategory category={transaction.category} />
-					<span className="font-semibold">{transaction.name}</span>
+					<span className="text-nowrap font-semibold">{transaction.name}</span>
 				</div>
 			</TableCell>
 			<TableCell>
 				{transaction.shopName ? transaction.shopName : 'Não Informado'}
 			</TableCell>
-			<TableCell className="text-center">
+			<TableCell className="text-nowrap text-center">
 				{formatDistanceToNow(transaction.created_at, {
 					locale: ptBR,
 					addSuffix: true,

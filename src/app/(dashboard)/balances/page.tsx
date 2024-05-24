@@ -13,7 +13,7 @@ export default function Balances() {
 		<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
 			<h2 className="text-[22px] text-muted-foreground">Contas</h2>
 
-			<div className="grid w-full grid-cols-1 gap-y-8 sm:grid-cols-3 sm:grid-rows-[288px] sm:gap-x-6">
+			<div className="flex w-full flex-col gap-y-6 lg:grid lg:grid-cols-3 lg:grid-rows-[288px] lg:gap-8">
 				<AccountList />
 
 				<NewAccountForm />

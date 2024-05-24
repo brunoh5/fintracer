@@ -20,10 +20,12 @@ export function Header() {
 		staleTime: Infinity,
 	})
 
+	const isOverviewVisible = pathname === '/overview'
+
 	return (
 		<header className="flex h-[88px] items-center justify-between pb-5 pl-6 pr-8 pt-5">
 			<div className="flex items-center justify-center gap-6">
-				{pathname === '/overview' && (
+				{isOverviewVisible && (
 					<span className="text-nowrap text-xl font-bold">
 						Bem vindo,{' '}
 						{isLoading ? (
@@ -36,7 +38,9 @@ export function Header() {
 					</span>
 				)}
 
-				<div className="flex items-center justify-center gap-2 text-muted-foreground">
+				<div
+					className={`${isOverviewVisible ? 'hidden' : 'flex'} items-center justify-center gap-2 text-muted-foreground lg:flex`}
+				>
 					<ChevronsRight />
 					<span className="text-nowrap">
 						{format(new Date(), 'dd MMM, yyyy', {
@@ -45,15 +49,8 @@ export function Header() {
 					</span>
 				</div>
 			</div>
-			<div className="flex h-[416px] items-center justify-between gap-8">
+			<div className="hidden h-[416px] items-center justify-between gap-8 lg:flex">
 				<ThemeSwitch />
-				{/* <Bell />
-				<div className="flex justify-center gap-2">
-					<Input className="w-full rounded bg-card" />
-					<Button type="button" variant="ghost">
-						<Search size={24} className="text-[#999DA3]" />
-					</Button>
-				</div> */}
 			</div>
 		</header>
 	)

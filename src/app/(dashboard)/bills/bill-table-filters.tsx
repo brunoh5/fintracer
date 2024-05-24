@@ -57,7 +57,7 @@ export function BillTableFilters() {
 	return (
 		<form
 			onSubmit={handleSubmit(handleFilter)}
-			className="flex items-center gap-2"
+			className="grid grid-cols-2 gap-2 lg:flex lg:items-center"
 		>
 			<span className="text-sm font-semibold">Filtros</span>
 			<Input

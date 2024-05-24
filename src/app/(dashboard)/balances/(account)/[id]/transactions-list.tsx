@@ -21,6 +21,8 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
 	const transaction_type = params.get('transaction_type')
 	const payment_method = params.get('payment_method')
 	const category = params.get('category')
+	const from = params.get('from')
+	const to = params.get('to')
 
 	const pageIndex = z.coerce
 		.number()
@@ -32,6 +34,8 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
 			'transactions',
 			accountId,
 			pageIndex,
+			from,
+			to,
 			name,
 			transaction_type,
 			payment_method,
@@ -41,6 +45,8 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
 			fetchTransactions({
 				accountId,
 				pageIndex,
+				from,
+				to,
 				name,
 				transaction_type: transaction_type === 'all' ? null : transaction_type,
 				payment_method: payment_method === 'all' ? null : payment_method,

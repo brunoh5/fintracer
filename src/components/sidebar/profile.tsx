@@ -18,21 +18,27 @@ export function Profile() {
 	})
 
 	return (
-		<div className="mt-auto flex items-center gap-4">
-			<UserCircleIcon className="size-6" />
-			<div className="flex flex-col text-ellipsis">
-				{isLoading && <Skeleton className="h-4 w-[80px]" />}
+		<div className="mt-auto space-y-1">
+			<div className="flex items-center gap-4">
+				<UserCircleIcon className="size-6" />
+				<div className="flex flex-col text-ellipsis">
+					{isLoading && <Skeleton className="h-4 w-[80px]" />}
 
-				{user && (
-					<p className="w-[110px] overflow-hidden text-ellipsis text-nowrap text-sm text-foreground">
-						{user.name}
-					</p>
-				)}
-				<Link href="/settings">
-					<Button type="button" variant="ghost" size="xs">
-						Ver Perfil
-					</Button>
-				</Link>
+					{user && (
+						<p className="w-[110px] overflow-hidden text-ellipsis text-nowrap text-sm text-foreground">
+							{user.name}
+						</p>
+					)}
+					<Link href="/settings">
+						<Button type="button" variant="ghost" size="xs">
+							Ver Perfil
+						</Button>
+					</Link>
+				</div>
+			</div>
+			<div className="text-xs">
+				<p>Ficou com alguma duvida ou ocorreu algum erro?</p>
+				<p> Entre em contato: (31) 9 3619-7270</p>
 			</div>
 		</div>
 	)

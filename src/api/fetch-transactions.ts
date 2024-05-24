@@ -56,6 +56,7 @@ export async function fetchTransactions({
 	accountId,
 	category,
 }: FetchTransactionQuery) {
+	console.log({ from, to })
 	const response = await apiClient.get<FetchTransactionsResponse>(
 		'/transactions',
 		{
