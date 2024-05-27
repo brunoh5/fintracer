@@ -5,7 +5,7 @@ import { ChevronRight } from 'lucide-react'
 
 import { deleteAccount } from '@/api/delete-account'
 import { fetchAccounts, FetchAccountsResponse } from '@/api/fetch-accounts'
-import { NavLink } from '@/components/nav-link'
+import { NavButton } from '@/components/nav-button'
 import { Button } from '@/components/ui/button'
 import {
 	Card,
@@ -100,13 +100,13 @@ export function AccountList() {
 									</Button>
 
 									<Button asChild>
-										<NavLink
+										<NavButton
 											href={`/balances/${account.id}`}
 											className="flex items-center gap-2 text-primary-foreground"
 										>
 											Detalhes
 											<ChevronRight size={24} />
-										</NavLink>
+										</NavButton>
 									</Button>
 								</div>
 							</div>

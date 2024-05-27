@@ -4,7 +4,7 @@ interface GetTransactionDetailsParams {
 	transactionId: string
 }
 
-interface GetTransactionDetailsResponse {
+export interface GetTransactionDetailsResponse {
 	transaction: {
 		id: string
 		name: string

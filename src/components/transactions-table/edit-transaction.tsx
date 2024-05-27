@@ -1,10 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { editTransaction } from '@/api/edit-transaction'
 import { fetchAccounts } from '@/api/fetch-accounts'
-import { getTransactionDetails } from '@/api/get-transaction-details'
+import { GetAccountResponse } from '@/api/get-account'
+import {
+	getTransactionDetails,
+	GetTransactionDetailsResponse,
+} from '@/api/get-transaction-details'
 import {
 	DialogClose,
 	DialogContent,
@@ -61,6 +66,8 @@ export function EditTransaction({
 	transactionId,
 	open,
 }: TransactionsDetailsProps) {
+	const queryClient = useQueryClient()
+
 	const { data: transaction } = useQuery({
 		queryKey: ['transaction', transactionId],
 		queryFn: () => getTransactionDetails({ transactionId }),
@@ -90,13 +97,39 @@ export function EditTransaction({
 			},
 		})
 
-	// const { mutateAsync: editTransactionFn } = useMutation({
-	// 	mutationFn: editTransaction,
-	// })
+	const { mutateAsync: editTransactionFn } = useMutation({
+		mutationFn: editTransaction,
+		onSuccess: (data: GetTransactionDetailsResponse) => {
+			console.log(data)
+			const account = queryClient.getQueryData<GetAccountResponse>([
+				'accounts',
+				data.transaction.accountId,
+			])
+
+			let total = 0
+
+			if (account) {
+				switch (data.transaction.transaction_type) {
+					case 'CREDIT':
+						total = (account?.balanceInCents + data.transaction.amount) / 100
+						break
+					case 'DEBIT':
+						total = (account?.balanceInCents - data.transaction.amount) / 100
+						break
+					default:
+						console.log('Um erro ocorreu')
+				}
+
+				queryClient.setQueryData(['accounts', account.id], {
+					...account,
+					balance: total,
+				})
+			}
+		},
+	})
 
 	function handleEditTransaction(data: EditTransactionsSchema) {
-		console.log(data)
-		// editTransactionFn()
+		editTransactionFn(data)
 	}
 
 	return (
