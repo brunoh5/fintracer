@@ -7,6 +7,8 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
+import { useCreateAccount } from '@/features/accounts/api/use-create-account'
+import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 
 import { useEditTransaction } from '../api/use-edit-transaction'
 import { useGetTransaction } from '../api/use-get-transaction'
@@ -17,6 +19,19 @@ type FormValues = z.infer<typeof formSchema>
 
 export function EditTransactionDialog() {
 	const { isOpen, onClose, id } = useOpenTransaction()
+
+	const accountQuery = useFetchAccounts()
+	const accountMutation = useCreateAccount()
+	const onCreateAccount = (bank: string) =>
+		accountMutation.mutate({
+			bank,
+		})
+	const accountOptions = (accountQuery?.data?.accounts ?? []).map(
+		(account) => ({
+			label: account.bank,
+			value: account.id,
+		}),
+	)
 
 	const { data: transactionResponse, isLoading } = useGetTransaction(id)
 	const editMutation = useEditTransaction(id)
@@ -75,6 +90,8 @@ export function EditTransactionDialog() {
 						onSubmit={onSubmit}
 						disabled={isPending}
 						defaultValues={defaultValues}
+						accountOptions={accountOptions}
+						onCreateAccount={onCreateAccount}
 					/>
 				)}
 			</DialogContent>

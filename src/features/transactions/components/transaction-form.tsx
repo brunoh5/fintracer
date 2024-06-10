@@ -42,6 +42,7 @@ export const formSchema = z.object({
 			'ENTERTAINMENT',
 		])
 		.default('OTHERS'),
+	transaction_type: z.enum(['CREDIT', 'DEBIT']).optional(),
 })
 // export const formSchema = z.object({
 // 	name: z.string(),
