@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { apiClient } from '@/lib/axios-client'
 
-export interface FetchAccountsResponse {
+interface ResponseType {
 	accounts: {
 		id: string
 		type:
@@ -21,8 +23,15 @@ export interface FetchAccountsResponse {
 	}
 }
 
-export async function fetchAccounts() {
-	const response = await apiClient.get<FetchAccountsResponse>('/accounts')
+export function useFetchAccounts() {
+	const query = useQuery({
+		queryKey: ['accounts'],
+		queryFn: async () => {
+			const response = await apiClient.get<ResponseType>('/accounts')
 
-	return response.data
+			return response.data
+		},
+	})
+
+	return query
 }

@@ -11,12 +11,15 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { BillsContext } from '@/contexts/BillsContext'
+import { useFetchBills } from '@/features/bills/api/use-fetch-bills'
 
 import { BillTableFilters } from './bill-table-filters'
 import { BillTableRow } from './bill-table-row'
 
 export function BillsTable() {
-	const { bills, handlePaginate, meta, billsStatus } = useContext(BillsContext)
+	const { handlePaginate } = useContext(BillsContext)
+
+	const { data } = useFetchBills()
 
 	return (
 		<div className="space-y-2.5">
@@ -26,8 +29,8 @@ export function BillsTable() {
 					<div className="size-2 rounded-full bg-rose-500" />
 					<span>Não pago:</span>
 					<p>
-						{billsStatus &&
-							(billsStatus?.notPaidInCents / 100).toLocaleString('pt-BR', {
+						{data?.billsStatus &&
+							(data.billsStatus?.notPaidInCents / 100).toLocaleString('pt-BR', {
 								style: 'currency',
 								currency: 'BRL',
 							})}
@@ -51,19 +54,19 @@ export function BillsTable() {
 					</TableHeader>
 
 					<TableBody>
-						{bills &&
-							bills.map((bill) => {
+						{data?.bills &&
+							data.bills.map((bill) => {
 								return <BillTableRow key={bill.id} bill={bill} />
 							})}
 					</TableBody>
 				</Table>
 			</div>
 
-			{meta && (
+			{data?.meta && (
 				<Pagination
-					pageIndex={meta.pageIndex}
-					totalCount={meta.totalCount}
-					perPage={meta.perPage}
+					pageIndex={data.meta.pageIndex}
+					totalCount={data.meta.totalCount}
+					perPage={data.meta.perPage}
 					onPageChange={handlePaginate}
 				/>
 			)}

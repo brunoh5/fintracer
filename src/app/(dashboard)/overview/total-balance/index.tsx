@@ -1,10 +1,8 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
-import { fetchAccounts } from '@/api/fetch-accounts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
 	Carousel,
@@ -13,15 +11,13 @@ import {
 } from '@/components/ui/carousel'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import { AccountTypes } from '@/types'
 
 import { AccountListSkeleton } from './account-list-skeleton'
 
 export function TotalBalance() {
-	const { data: resume, isLoading } = useQuery({
-		queryKey: ['resume-accounts'],
-		queryFn: fetchAccounts,
-	})
+	const { data, isLoading } = useFetchAccounts()
 
 	return (
 		<Card>
@@ -36,9 +32,9 @@ export function TotalBalance() {
 			</CardHeader>
 			<CardContent className="flex flex-col gap-3">
 				<div className="flex items-center justify-between">
-					{resume ? (
+					{data ? (
 						<span className="text-xl font-bold">
-							{(resume.totalBalanceInCents / 100).toLocaleString('pt-BR', {
+							{(data.totalBalanceInCents / 100).toLocaleString('pt-BR', {
 								style: 'currency',
 								currency: 'BRL',
 							})}
@@ -53,8 +49,8 @@ export function TotalBalance() {
 					<CarouselContent>
 						{isLoading && <AccountListSkeleton />}
 
-						{resume ? (
-							resume.accounts.map((account) => (
+						{data ? (
+							data.accounts.map((account) => (
 								<CarouselItem key={account.id}>
 									<div className="flex h-24 items-center justify-between rounded-md bg-primary p-4">
 										<div>

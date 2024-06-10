@@ -1,20 +1,19 @@
-import { Metadata } from 'next'
+'use client'
 
-import { NewBillForm } from '@/components/new-bill-form'
+import { Button } from '@/components/ui/button'
+import { useNewBill } from '@/features/bills/hooks/use-new-bill'
 
 import { BillsTable } from './bills-table'
 
-export const metadata: Metadata = {
-	title: 'Despesas',
-}
-
 export default function Bills() {
-	return (
-		<main className="flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
-			<div className="flex items-center justify-between">
-				<h2 className="text-[22px] text-foreground">Próximas Contas</h2>
+	const { onOpen } = useNewBill()
 
-				<NewBillForm />
+	return (
+		<main className="flex flex-col gap-4 pb-8 pr-8 pt-4">
+			<div className="flex items-center justify-between">
+				<h2 className="text-[22px] text-foreground">Próximas Despesas</h2>
+
+				<Button onClick={() => onOpen()}>Nova Despesa</Button>
 			</div>
 
 			<BillsTable />

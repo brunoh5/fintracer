@@ -1,23 +1,21 @@
-import { Metadata } from 'next'
+'use client'
 
-import { NewAccountForm } from '@/components/new-account-form'
+import { Button } from '@/components/ui/button'
+import { useNewAccount } from '@/features/accounts/hooks/use-new-account'
 
 import { AccountList } from './accounts-list'
 
-export const metadata: Metadata = {
-	title: 'Gerenciamento',
-}
-
 export default function Balances() {
+	const { onOpen } = useNewAccount()
+
 	return (
-		<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
-			<h2 className="text-[22px] text-muted-foreground">Contas</h2>
-
-			<div className="flex w-full flex-col gap-y-6 lg:grid lg:grid-cols-3 lg:grid-rows-[288px] lg:gap-8">
-				<AccountList />
-
-				<NewAccountForm />
+		<main className="relative flex flex-col gap-4 pb-8 pr-8 pt-4">
+			<div className="flex items-center justify-between">
+				<h2 className="text-[22px] text-muted-foreground">Contas</h2>
+				<Button onClick={onOpen}>Criar conta</Button>
 			</div>
+
+			<AccountList />
 		</main>
 	)
 }

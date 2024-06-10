@@ -4,8 +4,6 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { editTransaction } from '@/api/edit-transaction'
-import { fetchAccounts } from '@/api/fetch-accounts'
-import { GetAccountResponse } from '@/api/get-account'
 import {
 	getTransactionDetails,
 	GetTransactionDetailsResponse,
@@ -18,6 +16,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
+import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 
 import { PriceInput } from '../price-input'
 import { Button } from '../ui/button'
@@ -74,11 +73,7 @@ export function EditTransaction({
 		enabled: open,
 	})
 
-	const { data: resume } = useQuery({
-		queryKey: ['resume-accounts'],
-		queryFn: fetchAccounts,
-		enabled: open,
-	})
+	const { data: accountsResponse } = useFetchAccounts()
 
 	const { register, control, reset, handleSubmit } =
 		useForm<EditTransactionsSchema>({
@@ -100,31 +95,9 @@ export function EditTransaction({
 	const { mutateAsync: editTransactionFn } = useMutation({
 		mutationFn: editTransaction,
 		onSuccess: (data: GetTransactionDetailsResponse) => {
-			console.log(data)
-			const account = queryClient.getQueryData<GetAccountResponse>([
-				'accounts',
-				data.transaction.accountId,
-			])
-
-			let total = 0
-
-			if (account) {
-				switch (data.transaction.transaction_type) {
-					case 'CREDIT':
-						total = (account?.balanceInCents + data.transaction.amount) / 100
-						break
-					case 'DEBIT':
-						total = (account?.balanceInCents - data.transaction.amount) / 100
-						break
-					default:
-						console.log('Um erro ocorreu')
-				}
-
-				queryClient.setQueryData(['accounts', account.id], {
-					...account,
-					balance: total,
-				})
-			}
+			queryClient.invalidateQueries({
+				queryKey: ['accounts', data.transaction.accountId],
+			})
 		},
 	})
 
@@ -202,7 +175,7 @@ export function EditTransaction({
 									<SelectValue placeholder="Selecione a conta que a transação pertence" />
 								</SelectTrigger>
 								<SelectContent>
-									{resume?.accounts?.map((account) => (
+									{accountsResponse?.accounts?.map((account) => (
 										<SelectItem key={account.id} value={account.id}>
 											{account.bank}
 										</SelectItem>

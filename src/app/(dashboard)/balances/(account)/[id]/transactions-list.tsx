@@ -1,58 +1,19 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { z } from 'zod'
 
-import { fetchTransactions } from '@/api/fetch-transactions'
 import { TransactionsTable } from '@/components/transactions-table'
+import { useFetchTransactions } from '@/features/transactions/api/use-fetch-transactions'
 
 interface TransactionsListProps {
 	accountId: string
 }
 
 export function TransactionsList({ accountId }: TransactionsListProps) {
+	const { data, isLoading } = useFetchTransactions({ accountId })
 	const searchParams = useSearchParams()
 	const { replace } = useRouter()
 	const pathname = usePathname()
-	const params = new URLSearchParams(searchParams)
-
-	const name = params.get('name')
-	const transaction_type = params.get('transaction_type')
-	const payment_method = params.get('payment_method')
-	const category = params.get('category')
-	const from = params.get('from')
-	const to = params.get('to')
-
-	const pageIndex = z.coerce
-		.number()
-		.transform((page) => page - 1)
-		.parse(params.get('page') ?? '1')
-
-	const { data: result, isLoading: isLoadingTransactions } = useQuery({
-		queryKey: [
-			'transactions',
-			accountId,
-			pageIndex,
-			from,
-			to,
-			name,
-			transaction_type,
-			payment_method,
-			category,
-		],
-		queryFn: () =>
-			fetchTransactions({
-				accountId,
-				pageIndex,
-				from,
-				to,
-				name,
-				transaction_type: transaction_type === 'all' ? null : transaction_type,
-				payment_method: payment_method === 'all' ? null : payment_method,
-				category: category === 'all' ? null : category,
-			}),
-	})
 
 	function handlePaginate(pageIndex: number) {
 		const params = new URLSearchParams(searchParams)
@@ -64,9 +25,9 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
 
 	return (
 		<TransactionsTable
-			data={result}
+			data={data}
 			handlePaginate={handlePaginate}
-			isLoadingTransactions={isLoadingTransactions}
+			isLoadingTransactions={isLoading}
 		/>
 	)
 }

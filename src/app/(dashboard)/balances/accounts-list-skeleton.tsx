@@ -31,15 +31,13 @@ export function AccountsListSkeleton() {
 							Remover
 						</Button>
 
-						<Button asChild>
-							<NavButton
-								href="#"
-								className="flex items-center gap-2 text-primary-foreground"
-							>
-								Detalhes
-								<ChevronRight size={24} />
-							</NavButton>
-						</Button>
+						<NavButton
+							href="#"
+							className="flex items-center gap-2 text-primary-foreground"
+						>
+							Detalhes
+							<ChevronRight size={24} />
+						</NavButton>
 					</div>
 				</div>
 			</CardContent>

@@ -7,17 +7,10 @@ import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ReactNode, useState } from 'react'
 
+import { DialogProvider } from './dialog-provider'
+
 export default function Providers({ children }: { children: ReactNode }) {
-	const [queryClient] = useState(
-		() =>
-			new QueryClient({
-				defaultOptions: {
-					queries: {
-						staleTime: 1000 * 60 * 5, // 5 minutes
-					},
-				},
-			}),
-	)
+	const [queryClient] = useState(() => new QueryClient())
 
 	return (
 		<SessionProvider>
@@ -29,6 +22,7 @@ export default function Providers({ children }: { children: ReactNode }) {
 						enableSystem
 						disableTransitionOnChange
 					>
+						<DialogProvider />
 						{children}
 					</NextThemesProvider>
 				</ReactQueryStreamedHydration>

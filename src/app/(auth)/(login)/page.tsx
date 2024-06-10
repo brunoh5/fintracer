@@ -1,3 +1,4 @@
+import { get } from '@vercel/edge-config'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
@@ -9,8 +10,9 @@ import { LoginForm } from './login-form'
 
 export default async function Home() {
 	const session = await getServerSession(nextAuthOptions)
+	const isInMaintenanceMode = await get('isInMaintenanceMode')
 
-	if (session) {
+	if (!isInMaintenanceMode && session) {
 		redirect('/overview')
 	}
 

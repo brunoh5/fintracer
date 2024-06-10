@@ -1,8 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-import { getTransactionDetails } from '@/api/get-transaction-details'
 import { TransactionCategory } from '@/components/transaction-category'
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import {
@@ -12,6 +10,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { useGetTransaction } from '@/features/transactions/api/use-get-transaction'
 
 import { TransactionDetailsSkeleton } from './details-skeleton'
 
@@ -22,13 +21,8 @@ interface TransactionsDetailsProps {
 
 export function TransactionDetails({
 	transactionId,
-	open,
 }: TransactionsDetailsProps) {
-	const { data: transaction, isLoading: isLoadingTransaction } = useQuery({
-		queryKey: ['transaction', transactionId],
-		queryFn: () => getTransactionDetails({ transactionId }),
-		enabled: open,
-	})
+	const { data, isLoading } = useGetTransaction(transactionId)
 
 	return (
 		<DialogContent>
@@ -38,35 +32,35 @@ export function TransactionDetails({
 			</DialogHeader>
 
 			<Table>
-				{isLoadingTransaction && <TransactionDetailsSkeleton />}
+				{isLoading && <TransactionDetailsSkeleton />}
 
-				{transaction && (
+				{data?.transaction && (
 					<TableBody>
 						<TableRow>
 							<TableCell>Nome</TableCell>
 							<TableCell className="flex justify-end">
-								{transaction.name}
+								{data.transaction.name}
 							</TableCell>
 						</TableRow>
 
 						<TableRow>
 							<TableCell>Estabelecimento</TableCell>
 							<TableCell className="flex justify-end">
-								{transaction.shopName}
+								{data.transaction.shopName}
 							</TableCell>
 						</TableRow>
 
 						<TableRow>
 							<TableCell>Categoria</TableCell>
 							<TableCell className="flex justify-end">
-								<TransactionCategory category={transaction.category} />
+								<TransactionCategory category={data.transaction.category} />
 							</TableCell>
 						</TableRow>
 
 						<TableRow>
 							<TableCell>Realizado</TableCell>
 							<TableCell className="flex justify-end">
-								{format(new Date(transaction.created_at), 'dd/LL/yyyy', {
+								{format(new Date(data.transaction.created_at), 'dd/LL/yyyy', {
 									locale: ptBR,
 								})}
 							</TableCell>
@@ -76,7 +70,7 @@ export function TransactionDetails({
 							<TableCell>Método de pagamento</TableCell>
 							<TableCell className="flex justify-end">
 								<TransactionPaymentMethod
-									paymentMethods={transaction.payment_method}
+									paymentMethods={data.transaction.payment_method}
 								/>
 							</TableCell>
 						</TableRow>
@@ -84,10 +78,13 @@ export function TransactionDetails({
 						<TableRow>
 							<TableCell>Valor</TableCell>
 							<TableCell className="flex justify-end">
-								{transaction.amount.toLocaleString('pt-BR', {
-									style: 'currency',
-									currency: 'BRL',
-								})}
+								{(data.transaction.amountInCents / 100).toLocaleString(
+									'pt-BR',
+									{
+										style: 'currency',
+										currency: 'BRL',
+									},
+								)}
 							</TableCell>
 						</TableRow>
 					</TableBody>

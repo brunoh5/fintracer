@@ -7,16 +7,14 @@ import { Pencil, Search, Trash } from 'lucide-react'
 import { useState } from 'react'
 
 import { deleteTransaction } from '@/api/delete-transaction'
-import { FetchTransactionsResponse } from '@/api/fetch-transactions'
-import { GetAccountResponse } from '@/api/get-account'
 import { TransactionCategory } from '@/components/transaction-category'
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
+import { useOpenTransaction } from '@/features/transactions/hooks/use-open-transaction'
 
 import { TransactionDetails } from './details'
-import { EditTransaction } from './edit-transaction'
 
 export interface TransactionTableRowProps {
 	transaction: {
@@ -50,56 +48,20 @@ const paymentMethodsMap: Record<TransactionPaymentMethod, string> = {
 export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 	const queryClient = useQueryClient()
 
+	const { onOpen } = useOpenTransaction()
+
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false)
-	const [isEditOpen, setIsEditOpen] = useState(false)
 
 	const { mutateAsync: deleteTransactionFn } = useMutation({
 		mutationFn: deleteTransaction,
-		onSuccess(data, transactionId) {
+		onSuccess: () => {
 			const accountId = transaction.accountId
-			const account = queryClient.getQueryData<GetAccountResponse>([
-				'accounts',
-				accountId,
-			])
+			queryClient.invalidateQueries({
+				queryKey: ['accounts', accountId],
+			})
 
-			let total = 0
-
-			if (account) {
-				if (data.transaction_type === 'DEBIT') {
-					total = (account?.balanceInCents + data.amount) * 100
-				}
-
-				if (data.transaction_type === 'CREDIT') {
-					total = (account?.balanceInCents - data.amount) * 100
-				}
-
-				queryClient.setQueryData(['accounts', accountId], {
-					...account,
-					balanceInCents: total,
-				})
-			}
-
-			const accountTransactionsList =
-				queryClient.getQueriesData<FetchTransactionsResponse>({
-					queryKey: ['transactions', accountId],
-				})
-
-			accountTransactionsList.forEach(([cacheKey, cacheData]) => {
-				if (!cacheData) {
-					// eslint-disable-next-line no-useless-return
-					return
-				}
-
-				const filteredTransactions = cacheData.transactions.filter(
-					(transaction) => transaction.id !== transactionId,
-				)
-
-				cacheData.meta.totalCount -= 1
-
-				queryClient.setQueryData(cacheKey, {
-					...cacheData,
-					transactions: filteredTransactions,
-				})
+			queryClient.invalidateQueries({
+				queryKey: ['transactions', accountId],
 			})
 		},
 	})
@@ -158,16 +120,14 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 				)}
 			</TableCell>
 			<TableCell>
-				<Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-					<DialogTrigger asChild>
-						<Button variant="outline" size="xs">
-							<Pencil className="size-3" />
-							<span className="sr-only">Editar transação</span>
-						</Button>
-					</DialogTrigger>
-
-					<EditTransaction transactionId={transaction.id} open={isEditOpen} />
-				</Dialog>
+				<Button
+					variant="outline"
+					size="xs"
+					onClick={() => onOpen(transaction.id)}
+				>
+					<Pencil className="size-3" />
+					<span className="sr-only">Editar transação</span>
+				</Button>
 			</TableCell>
 			<TableCell>
 				<Button

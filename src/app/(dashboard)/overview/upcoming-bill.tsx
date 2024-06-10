@@ -4,13 +4,12 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { useContext } from 'react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { BillsContext } from '@/contexts/BillsContext'
+import { useFetchBills } from '@/features/bills/api/use-fetch-bills'
 
 export function UpcomingBill() {
-	const { bills } = useContext(BillsContext)
+	const { data } = useFetchBills()
 
 	return (
 		<Card className="col-span-2">
@@ -25,8 +24,8 @@ export function UpcomingBill() {
 				</div>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-y-3 lg:grid lg:grid-cols-2 lg:gap-x-2">
-				{bills &&
-					bills.map(
+				{data?.bills &&
+					data.bills.map(
 						(bill, index) =>
 							index < 4 && (
 								<div key={bill.id} className="flex items-center">

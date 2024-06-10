@@ -23,6 +23,7 @@ export const env = createEnv({
 			.default('development'),
 		NEXT_PUBLIC_API_URL: z.string(),
 		NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET: z.string(),
+		NEXT_PUBLIC_MAINTENANCE_MODE: z.string().default('false'),
 	},
 	experimental__runtimeEnv: {
 		NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET:
@@ -32,5 +33,6 @@ export const env = createEnv({
 		NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
 		NODE_ENV: process.env.NODE_ENV,
 		VERCEL_ENV: process.env.VERCEL_ENV,
+		NEXT_PUBLIC_MAINTENANCE_MODE: process.env.NEXT_PUBLIC_MAINTENANCE_MODE,
 	},
 })

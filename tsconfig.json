@@ -23,6 +23,6 @@
     },
 		"baseUrl": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(dashboard)/settings"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(dashboard)/settings", "src/features/transactions/api/use-get-transaction.ts"],
   "exclude": ["node_modules"]
 }

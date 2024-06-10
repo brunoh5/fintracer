@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Search } from 'lucide-react'
@@ -7,7 +6,6 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { fetchAccounts } from '@/api/fetch-accounts'
 import { PriceInput } from '@/components/price-input'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
@@ -29,6 +27,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { TableCell, TableRow } from '@/components/ui/table'
+import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import { AccountProps } from '@/types'
 
 interface BillTableRowProps {
@@ -71,11 +70,7 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 		},
 	})
 
-	const { data: resume } = useQuery({
-		queryKey: ['resume-accounts'],
-		queryFn: fetchAccounts,
-		enabled: isPayOpen,
-	})
+	const { data: accountsResponse } = useFetchAccounts()
 
 	function handlePayBill(data: PayBillSchema) {
 		console.log(data)
@@ -168,11 +163,13 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 												<SelectValue placeholder="Selecione a conta para pagamento" />
 											</SelectTrigger>
 											<SelectContent>
-												{resume?.accounts?.map((account: AccountProps) => (
-													<SelectItem key={account.id} value={account.id}>
-														{account.bank}
-													</SelectItem>
-												))}
+												{accountsResponse?.accounts?.map(
+													(account: AccountProps) => (
+														<SelectItem key={account.id} value={account.id}>
+															{account.bank}
+														</SelectItem>
+													),
+												)}
 											</SelectContent>
 										</Select>
 									)

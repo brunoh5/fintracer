@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { createContext, ReactNode } from 'react'
-import { z } from 'zod'
-
-import { getBill } from '@/api/get-bill'
 
 export type Bill = {
 	id: string
@@ -51,24 +47,6 @@ export function BillsContextProvider({ children }: BillsContextProviderProps) {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 
-	const title = params.get('title')
-	const status = params.get('status')
-
-	const pageIndex = z.coerce
-		.number()
-		.transform((page) => page - 1)
-		.parse(params.get('page') ?? '1')
-
-	const { data: result } = useQuery({
-		queryKey: ['bills', pageIndex, title, status],
-		queryFn: () =>
-			getBill({
-				pageIndex,
-				title,
-				status: status === 'all' ? null : status,
-			}),
-	})
-
 	function handlePaginate(pageIndex: number) {
 		params.set('page', (pageIndex + 1).toString())
 
@@ -96,9 +74,6 @@ export function BillsContextProvider({ children }: BillsContextProviderProps) {
 	return (
 		<BillsContext.Provider
 			value={{
-				bills: result?.bills,
-				billsStatus: result?.billsStatus,
-				meta: result?.meta,
 				handlePaginate,
 				handleFilter,
 			}}

@@ -30,7 +30,6 @@ const transactionFilterSchema = z.object({
 type TransactionFilterSchema = z.infer<typeof transactionFilterSchema>
 
 export function TransactionTableFilters() {
-	console.log(format(new Date().toISOString(), 'yyyy-mm-dd'))
 	const searchParams = useSearchParams()
 	const params = new URLSearchParams(searchParams)
 	const { replace } = useRouter()

@@ -1,14 +1,22 @@
+'use client'
+
 import { MoveLeft } from 'lucide-react'
 import Link from 'next/link'
 
-import { NewTransaction } from '@/components/new-transaction-form'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { useNewTransaction } from '@/features/transactions/hooks/use-new-transaction'
 
 import { ManageAccount } from './manage-account'
 import { TransactionsList } from './transactions-list'
 
-export default function Account({ params }: { params: { id: string } }) {
+export default function Account({
+	params: { id: accountId },
+}: {
+	params: { id: string }
+}) {
+	const { onOpen } = useNewTransaction()
+
 	return (
 		<main className="relative flex flex-col gap-4 pb-8 pl-6 pr-8 pt-4">
 			<div className="mb-2 flex items-center gap-2">
@@ -25,7 +33,7 @@ export default function Account({ params }: { params: { id: string } }) {
 				<h2 className="text-[22px] text-muted-foreground">Detalhes da conta</h2>
 			</div>
 			<Card>
-				<ManageAccount accountId={params.id} />
+				<ManageAccount accountId={accountId} />
 			</Card>
 
 			<div className="flex items-center justify-between">
@@ -33,10 +41,10 @@ export default function Account({ params }: { params: { id: string } }) {
 					Histórico de Transações
 				</h2>
 
-				<NewTransaction accountId={params.id} />
+				<Button onClick={() => onOpen(accountId)}>Nova transação</Button>
 			</div>
 
-			<TransactionsList accountId={params.id} />
+			<TransactionsList accountId={accountId} />
 		</main>
 	)
 }

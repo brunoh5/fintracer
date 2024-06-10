@@ -14,7 +14,7 @@ export function Profile() {
 	const { data: user, isLoading } = useQuery<UserProps>({
 		queryKey: ['profile'],
 		queryFn: getProfile,
-		staleTime: Infinity,
+		staleTime: 60 * 60 * 5,
 	})
 
 	return (

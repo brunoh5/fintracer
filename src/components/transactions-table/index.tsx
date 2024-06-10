@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-
-import { FetchTransactionsResponse } from '@/api/fetch-transactions'
 
 import { Pagination } from '../pagination'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
@@ -10,7 +9,7 @@ import { TransactionsStatus } from './status'
 import { TransactionTableSkeleton } from './table-skeleton'
 
 interface TransactionsTableProps {
-	data: FetchTransactionsResponse | undefined
+	data: any
 	handlePaginate: (pageIndex: number) => void
 	isLoadingTransactions: boolean
 }
@@ -49,7 +48,7 @@ export function TransactionsTable({
 						{isLoadingTransactions && <TransactionTableSkeleton />}
 
 						{data &&
-							data.transactions.map((transaction) => {
+							data.transactions.map((transaction: any) => {
 								return (
 									<TransactionTableRow
 										key={transaction.id}

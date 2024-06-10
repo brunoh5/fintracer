@@ -1,32 +1,27 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-
-import { fetchTransactions } from '@/api/fetch-transactions'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useFetchTransactions } from '@/features/transactions/api/use-fetch-transactions'
 
 import { Transaction } from './components/transaction'
 import { TransactionListSkeleton } from './transaction-list-skeleton'
 
 export function TransactionsList() {
-	const { data: result, isLoading: isLoadingTransactions } = useQuery({
-		queryKey: ['transactions'],
-		queryFn: () => fetchTransactions({}),
-	})
+	const { data, isLoading } = useFetchTransactions({})
 
 	return (
 		<div className="flex flex-1 flex-col divide-y divide-[#F3F3F3] overflow-hidden pb-2">
-			{isLoadingTransactions && <TransactionListSkeleton />}
+			{isLoading && <TransactionListSkeleton />}
 
-			{result?.transactions?.length === 0 && (
+			{data?.transactions?.length === 0 && (
 				<>
 					<p>Nenhuma transação cadastrada</p>
 				</>
 			)}
 
-			{result && (
+			{data && (
 				<ScrollArea className="h-[600px] pr-4">
-					{result.transactions.map((transaction) => (
+					{data.transactions.map((transaction) => (
 						<Transaction key={transaction.id} transaction={transaction} />
 					))}
 				</ScrollArea>
