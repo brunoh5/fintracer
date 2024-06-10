@@ -24,8 +24,8 @@ import {
 } from '@/components/ui/select'
 
 export const formSchema = z.object({
-	name: z.any(),
-	accountId: z.any(),
+	name: z.string(),
+	accountId: z.string(),
 	shopName: z.any().optional(),
 	amount: z.any(),
 	created_at: z.coerce.date().optional(),

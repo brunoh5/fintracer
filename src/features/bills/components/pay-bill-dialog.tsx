@@ -1,5 +1,4 @@
 import { Loader2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 
 import {
@@ -8,68 +7,60 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
-import { useEditAccount } from '@/features/accounts/api/use-edit-account'
-import { useGetAccount } from '@/features/accounts/api/use-get-account'
-import { AccountForm } from '@/features/accounts/components/account-form'
+import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import { useOpenAccount } from '@/features/accounts/hooks/use-open-account'
 
-import { useDeleteAccount } from '../api/use-delete-account'
-import { formSchema } from './bill-form'
+import { usePayBill } from '../api/use-pay-bill'
+import { formSchema, PayBillForm } from './pay-bill-form'
 
 type FormValues = z.infer<typeof formSchema>
 
 export function PayBillDialog() {
-	const router = useRouter()
 	const { isOpen, onClose, id } = useOpenAccount()
 
-	const { data: accountResponse, isLoading } = useGetAccount(id)
-	const editMutation = useEditAccount(id)
-	const deleteMutation = useDeleteAccount(id)
+	const accountQuery = useFetchAccounts()
+	const accountOptions = (accountQuery?.data?.accounts ?? []).map(
+		(account) => ({
+			label: account.bank,
+			value: account.id,
+		}),
+	)
 
-	const isPending = editMutation.isPending || deleteMutation.isPending
+	const payMutation = usePayBill()
+
+	const isLoading = accountQuery.isLoading
+	const isPending = payMutation.isPending
 
 	function onSubmit(values: FormValues) {
-		editMutation.mutate(values, {
-			onSuccess: () => {
-				onClose()
+		payMutation.mutate(
+			{
+				...values,
+				paid_amount: Number(values.paid_amount),
 			},
-		})
+			{
+				onSuccess: () => {
+					onClose()
+				},
+			},
+		)
 	}
-
-	const defaultValues: FormValues = accountResponse?.account
-		? {
-				bank: accountResponse.account.bank,
-				type: accountResponse.account.type,
-			}
-		: {
-				bank: '',
-				type: 'CURRENT_ACCOUNT',
-			}
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Editar Transação</DialogTitle>
+					<DialogTitle>Pagar despesa</DialogTitle>
 				</DialogHeader>
 				{isLoading ? (
 					<div className="absolute inset-0 flex items-center justify-center">
 						<Loader2 className="size-4 animate-spin" />
 					</div>
 				) : (
-					<AccountForm
+					<PayBillForm
 						id={id}
+						accountOptions={accountOptions}
 						onSubmit={onSubmit}
 						disabled={isPending}
-						defaultValues={defaultValues}
-						onDelete={() =>
-							deleteMutation.mutate(undefined, {
-								onSuccess: () => {
-									onClose()
-									router.push('/balances')
-								},
-							})
-						}
 					/>
 				)}
 			</DialogContent>

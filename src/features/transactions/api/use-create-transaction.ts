@@ -32,7 +32,7 @@ interface RequestType {
 	shopName?: string
 	amount: number
 	created_at?: Date
-	transaction_type: 'DEBIT' | 'CREDIT'
+	transaction_type?: 'DEBIT' | 'CREDIT'
 	payment_method:
 		| 'MONEY'
 		| 'PIX'

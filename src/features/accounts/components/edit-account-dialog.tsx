@@ -9,11 +9,11 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { useEditAccount } from '@/features/accounts/api/use-edit-account'
-import { useGetAccount } from '@/features/accounts/api/use-get-account'
 import { AccountForm } from '@/features/accounts/components/account-form'
 import { useOpenAccount } from '@/features/accounts/hooks/use-open-account'
 
 import { useDeleteAccount } from '../api/use-delete-account'
+import { useGetAccount } from '../api/use-get-account'
 
 const formSchema = z.object({
 	type: z
@@ -35,11 +35,12 @@ export function EditAccountDialog() {
 	const router = useRouter()
 	const { isOpen, onClose, id } = useOpenAccount()
 
-	const { data: accountResponse, isLoading } = useGetAccount(id)
+	const accountQuery = useGetAccount(id)
 	const editMutation = useEditAccount(id)
 	const deleteMutation = useDeleteAccount(id)
 
 	const isPending = editMutation.isPending || deleteMutation.isPending
+	const isLoading = accountQuery.isLoading
 
 	function onSubmit(values: FormValues) {
 		editMutation.mutate(values, {
@@ -49,10 +50,10 @@ export function EditAccountDialog() {
 		})
 	}
 
-	const defaultValues: FormValues = accountResponse?.account
+	const defaultValues: FormValues = accountQuery.data?.account
 		? {
-				bank: accountResponse.account.bank,
-				type: accountResponse.account.type,
+				bank: accountQuery.data.account.bank,
+				type: accountQuery.data.account.type,
 			}
 		: {
 				bank: '',
