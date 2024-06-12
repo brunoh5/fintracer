@@ -42,7 +42,7 @@ export function NewTransactionDialog() {
 		createMutation.mutate(
 			{
 				...values,
-				amount: Number(values.amount),
+				amount: Number(values.amount * 100),
 			},
 			{
 				onSuccess: () => {
