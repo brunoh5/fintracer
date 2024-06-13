@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { useOpenTransaction } from '@/features/transactions/hooks/use-open-transaction'
+import { formatCurrency } from '@/lib/price-formatter'
 
 import { TransactionDetails } from './details'
 
@@ -100,22 +101,13 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 			</TableCell>
 			<TableCell>{paymentMethodsMap[transaction.payment_method]}</TableCell>
 			<TableCell className="text-center font-semibold">
-				{transaction.transaction_type === 'CREDIT' && (
+				{transaction.amountInCents >= 0 ? (
 					<span className="text-emerald-500">
-						+
-						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						})}
+						+{formatCurrency(transaction.amountInCents)}
 					</span>
-				)}
-				{transaction.transaction_type === 'DEBIT' && (
+				) : (
 					<span className="text-rose-400">
-						-
-						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						})}
+						{formatCurrency(transaction.amountInCents)}
 					</span>
 				)}
 			</TableCell>

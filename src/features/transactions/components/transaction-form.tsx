@@ -26,9 +26,9 @@ import {
 export const formSchema = z.object({
 	name: z.string(),
 	accountId: z.string(),
-	shopName: z.any().optional(),
+	shopName: z.string().optional(),
 	amount: z.any(),
-	created_at: z.coerce.date().optional(),
+	date: z.coerce.date().optional(),
 	payment_method: z
 		.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
 		.default('MONEY'),
@@ -44,27 +44,6 @@ export const formSchema = z.object({
 		.default('OTHERS'),
 	transaction_type: z.enum(['CREDIT', 'DEBIT']).optional(),
 })
-// export const formSchema = z.object({
-// 	name: z.string(),
-// 	accountId: z.string(),
-// 	shopName: z.string().optional(),
-// 	amount: z.string(),
-// 	created_at: z.coerce.date().optional(),
-// 	transaction_type: z.enum(['DEBIT', 'CREDIT']),
-// 	payment_method: z
-// 		.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
-// 		.default('MONEY'),
-// 	category: z
-// 		.enum([
-// 			'FOOD',
-// 			'HOME',
-// 			'TRANSPORTATION',
-// 			'OTHERS',
-// 			'SHOPPING',
-// 			'ENTERTAINMENT',
-// 		])
-// 		.default('OTHERS'),
-// })
 
 type FormValues = z.infer<typeof formSchema>
 
@@ -250,7 +229,7 @@ export function TransactionForm({
 				/>
 
 				<FormField
-					name="created_at"
+					name="date"
 					control={form.control}
 					render={({ field: { onChange, value } }) => (
 						<FormItem>

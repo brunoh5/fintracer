@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { apiClient } from '@lib/axios-client'
+import { queryClient } from '@lib/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
-
-import { apiClient } from '@/lib/axios-client'
 
 interface ResponseType {
 	transaction: {
@@ -33,7 +33,7 @@ interface RequestType {
 	name: string
 	shopName?: string
 	amount: number
-	created_at?: Date
+	date?: Date
 	transaction_type?: 'DEBIT' | 'CREDIT'
 	payment_method:
 		| 'MONEY'
@@ -51,8 +51,6 @@ interface RequestType {
 }
 
 export function useEditTransaction(id?: string) {
-	const queryClient = useQueryClient()
-
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
 		mutationFn: async (data) => {
 			const response = await apiClient.put(`/transactions/${id}`, data)

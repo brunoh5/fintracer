@@ -61,7 +61,7 @@ export function EditTransactionDialog() {
 				name: transactionResponse.transaction.name,
 				payment_method: transactionResponse.transaction.payment_method,
 				transaction_type: transactionResponse.transaction.transaction_type,
-				created_at: new Date(transactionResponse.transaction.created_at),
+				date: new Date(transactionResponse.transaction.date),
 			}
 		: {
 				shopName: '',
@@ -71,7 +71,6 @@ export function EditTransactionDialog() {
 				name: '',
 				payment_method: 'MONEY',
 				transaction_type: 'DEBIT',
-				created_at: new Date(),
 			}
 
 	return (

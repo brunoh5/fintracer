@@ -7,6 +7,7 @@ type ResponseType = {
 		id: string
 		name: string
 		amountInCents: number
+		date: string
 		created_at: string
 		accountId: string
 		payment_method:

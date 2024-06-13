@@ -1,3 +1,5 @@
+import { formatCurrency } from '@/lib/price-formatter'
+
 import { Skeleton } from '../ui/skeleton'
 
 interface TransactionsStatusProps {
@@ -16,26 +18,14 @@ export function TransactionsStatus({
 				<div className="size-2 rounded-full bg-emerald-500" />
 				<span>Receitas:</span>
 				{!totalRevenueInCents && <Skeleton className="h-2 w-6" />}
-				<p>
-					{totalRevenueInCents &&
-						(totalRevenueInCents / 100).toLocaleString('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						})}
-				</p>
+				<p>{totalRevenueInCents && formatCurrency(totalRevenueInCents)}</p>
 			</div>
 
 			<div className="flex items-center gap-2">
 				<div className="size-2 rounded-full bg-rose-500" />
 				<span>Despesas:</span>
 				{!totalExpenseInCents && <Skeleton className="h-2 w-6" />}
-				<p>
-					{totalExpenseInCents &&
-						(totalExpenseInCents / 100).toLocaleString('pt-BR', {
-							style: 'currency',
-							currency: 'BRL',
-						})}
-				</p>
+				<p>{totalExpenseInCents && formatCurrency(totalExpenseInCents)}</p>
 			</div>
 		</div>
 	)

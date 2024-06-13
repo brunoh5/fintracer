@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { useGetTransaction } from '@/features/transactions/api/use-get-transaction'
+import { formatCurrency } from '@/lib/price-formatter'
 
 import { TransactionDetailsSkeleton } from './details-skeleton'
 
@@ -58,7 +59,16 @@ export function TransactionDetails({
 						</TableRow>
 
 						<TableRow>
-							<TableCell>Realizado</TableCell>
+							<TableCell>Realizado em</TableCell>
+							<TableCell className="flex justify-end">
+								{format(new Date(data.transaction.date), 'dd/LL/yyyy', {
+									locale: ptBR,
+								})}
+							</TableCell>
+						</TableRow>
+
+						<TableRow>
+							<TableCell>Criado em</TableCell>
 							<TableCell className="flex justify-end">
 								{format(new Date(data.transaction.created_at), 'dd/LL/yyyy', {
 									locale: ptBR,
@@ -78,13 +88,7 @@ export function TransactionDetails({
 						<TableRow>
 							<TableCell>Valor</TableCell>
 							<TableCell className="flex justify-end">
-								{(data.transaction.amountInCents / 100).toLocaleString(
-									'pt-BR',
-									{
-										style: 'currency',
-										currency: 'BRL',
-									},
-								)}
+								{formatCurrency(data.transaction.amountInCents)}
 							</TableCell>
 						</TableRow>
 					</TableBody>
