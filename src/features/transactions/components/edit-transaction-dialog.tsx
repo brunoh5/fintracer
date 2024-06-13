@@ -56,7 +56,7 @@ export function EditTransactionDialog() {
 		? {
 				shopName: transactionResponse.transaction.shopName,
 				accountId: transactionResponse.transaction.accountId,
-				amount: String(transactionResponse.transaction.amountInCents),
+				amount: String(transactionResponse.transaction.amountInCents / 100),
 				category: transactionResponse.transaction.category,
 				name: transactionResponse.transaction.name,
 				payment_method: transactionResponse.transaction.payment_method,
