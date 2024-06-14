@@ -31,6 +31,7 @@ export interface TransactionTableRowProps {
 			| 'SHOPPING'
 		transaction_type: string
 		payment_method: TransactionPaymentMethod
+		date: string
 		created_at: string
 		amountInCents: number
 		shopName: string
@@ -94,10 +95,13 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 				{transaction.shopName ? transaction.shopName : 'Não Informado'}
 			</TableCell>
 			<TableCell className="text-nowrap text-center">
-				{formatDistanceToNow(transaction.date, {
-					locale: ptBR,
-					addSuffix: true,
-				})}
+				{formatDistanceToNow(
+					new Date(transaction.date ?? transaction.created_at),
+					{
+						locale: ptBR,
+						addSuffix: true,
+					},
+				)}
 			</TableCell>
 			<TableCell>{paymentMethodsMap[transaction.payment_method]}</TableCell>
 			<TableCell className="text-center font-semibold">
