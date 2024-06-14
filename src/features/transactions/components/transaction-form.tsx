@@ -74,7 +74,7 @@ export function TransactionForm({
 	})
 
 	function handleSubmit(values: FormValues) {
-		onSubmit({ ...values, amount: Number(values.amount) })
+		onSubmit(values)
 	}
 
 	function handleDelete() {

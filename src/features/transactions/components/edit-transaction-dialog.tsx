@@ -40,10 +40,7 @@ export function EditTransactionDialog() {
 
 	function onSubmit(values: FormValues) {
 		editMutation.mutate(
-			{
-				...values,
-				amount: Number(values.amount * 100),
-			},
+			{ ...values, amount: Number(values.amount.replace(',', '.')) * 100 },
 			{
 				onSuccess: () => {
 					onClose()
