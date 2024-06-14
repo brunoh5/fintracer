@@ -64,7 +64,6 @@ export function useEditTransaction(id?: string) {
 			queryClient.invalidateQueries({
 				queryKey: ['account', { id: data.transaction.accountId }],
 			})
-			queryClient.invalidateQueries({ queryKey: ['accounts'] })
 		},
 		onError: () => {
 			toast.error('Erro ao alterar essa transação')
