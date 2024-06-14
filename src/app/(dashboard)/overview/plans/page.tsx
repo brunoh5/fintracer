@@ -13,9 +13,9 @@ export default async function Plans() {
 	return (
 		<main className="relative flex flex-col gap-y-8 pb-8 pl-6 pr-8 pt-4">
 			<div className="overflow-hidden rounded-t-3xl bg-muted">
-				<div className="h-16 w-full  bg-primary/80" />
+				<div className="h-16 w-full bg-primary/80" />
 				<div className="relative space-y-6 overflow-hidden px-12 pb-12 pt-6">
-					<Link href="/overview" prefetch className="absolute left-8 ">
+					<Link href="/overview" prefetch className="absolute left-8">
 						<Button
 							variant="ghost"
 							className="flex items-center justify-center gap-2"

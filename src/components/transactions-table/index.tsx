@@ -37,8 +37,8 @@ export function TransactionsTable({
 							<TableHead className="w-[140px] text-center">
 								Estabelecimento
 							</TableHead>
-							<TableHead className="w-[140px] ">Data</TableHead>
-							<TableHead className="w-[140px] ">Pagamento</TableHead>
+							<TableHead className="w-[140px]">Data</TableHead>
+							<TableHead className="w-[140px]">Pagamento</TableHead>
 							<TableHead className="w-[140px] text-center">Valor</TableHead>
 							<TableHead className="w-9"></TableHead>
 							<TableHead className="w-9"></TableHead>
