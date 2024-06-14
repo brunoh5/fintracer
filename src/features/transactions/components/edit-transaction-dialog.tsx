@@ -64,13 +64,11 @@ export function EditTransactionDialog() {
 				date: new Date(transactionResponse.transaction.date),
 			}
 		: {
-				shopName: '',
 				accountId: '',
 				amount: '',
 				category: 'OTHERS',
 				name: '',
 				payment_method: 'MONEY',
-				transaction_type: 'DEBIT',
 			}
 
 	return (

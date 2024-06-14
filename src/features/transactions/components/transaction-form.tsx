@@ -26,7 +26,7 @@ import {
 export const formSchema = z.object({
 	name: z.string(),
 	accountId: z.string(),
-	shopName: z.string().optional(),
+	shopName: z.any(),
 	amount: z.any(),
 	date: z.coerce.date().optional(),
 	payment_method: z
@@ -94,6 +94,7 @@ export function TransactionForm({
 				<FormField
 					name="accountId"
 					control={form.control}
+					defaultValue={defaultAccountValue?.value}
 					render={({ field: { value, onChange } }) => (
 						<FormItem>
 							<FormLabel>Banco</FormLabel>
@@ -105,7 +106,6 @@ export function TransactionForm({
 									value={value}
 									onChange={onChange}
 									disabled={disabled}
-									defaultValue={defaultAccountValue}
 								/>
 							</FormControl>
 						</FormItem>
