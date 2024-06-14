@@ -58,11 +58,11 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 		onSuccess: () => {
 			const accountId = transaction.accountId
 			queryClient.invalidateQueries({
-				queryKey: ['accounts', accountId],
+				queryKey: ['account', { id: accountId }],
 			})
 
 			queryClient.invalidateQueries({
-				queryKey: ['transactions', accountId],
+				queryKey: ['transaction', { id: transaction.id }],
 			})
 		},
 	})
@@ -94,7 +94,7 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 				{transaction.shopName ? transaction.shopName : 'Não Informado'}
 			</TableCell>
 			<TableCell className="text-nowrap text-center">
-				{formatDistanceToNow(transaction.created_at, {
+				{formatDistanceToNow(transaction.date, {
 					locale: ptBR,
 					addSuffix: true,
 				})}
