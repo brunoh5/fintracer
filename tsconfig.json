@@ -19,14 +19,17 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
 			"@components/*": ["./src/components/*"],
 			"@ui/*": ["./src/components/ui/*"],
 			"@features/*": ["./src/features/*"],
-			"@lib/*": ["./src/lib/*"]
+			"@lib/*": ["./src/lib/*"],
+			"@/*": ["./src/*"]
     },
-		"baseUrl": "."
+		"baseUrl": "./",
+		"types": [
+			"@testing-library/jest-dom"
+		],
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(dashboard)/settings", "src/features/transactions/api/use-get-transaction.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(dashboard)/settings", "jest.setup.ts"],
   "exclude": ["node_modules"]
 }

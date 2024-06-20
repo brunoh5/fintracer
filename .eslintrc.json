@@ -1,14 +1,16 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "@rocketseat/eslint-config/next",
-		"plugin:@tanstack/eslint-plugin-query/recommended"
-  ],
-  "plugins": [
-    "simple-import-sort"
-  ],
-  "rules": {
-    "camelcase": "off",
+	"extends": [
+		"next/core-web-vitals",
+		"@rocketseat/eslint-config/next",
+		"plugin:@tanstack/eslint-plugin-query/recommended",
+		"plugin:testing-library/react",
+		"plugin:jest-dom/recommended"
+	],
+	"plugins": [
+		"simple-import-sort"
+	],
+	"rules": {
+		"camelcase": "off",
 		"simple-import-sort/imports": "error"
-  }
+	}
 }

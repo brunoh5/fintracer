@@ -55,11 +55,11 @@ export function useCreateTransaction() {
 
 			return response.data
 		},
-		onSuccess: (data) => {
+		onSuccess: () => {
 			toast.success('Transação criada')
 			queryClient.invalidateQueries({ queryKey: ['transactions'] })
 			queryClient.invalidateQueries({
-				queryKey: ['account', { id: data.accountId }],
+				queryKey: ['accounts'],
 			})
 		},
 		onError: () => {

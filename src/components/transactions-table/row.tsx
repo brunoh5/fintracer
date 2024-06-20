@@ -1,12 +1,11 @@
 'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useDeleteTransaction } from '@features/transactions/api/use-delete-transaction'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Pencil, Search, Trash } from 'lucide-react'
 import { useState } from 'react'
 
-import { deleteTransaction } from '@/api/delete-transaction'
 import { TransactionCategory } from '@/components/transaction-category'
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import { Button } from '@/components/ui/button'
@@ -48,25 +47,15 @@ const paymentMethodsMap: Record<TransactionPaymentMethod, string> = {
 }
 
 export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
-	const queryClient = useQueryClient()
-
 	const { onOpen } = useOpenTransaction()
 
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false)
 
-	const { mutateAsync: deleteTransactionFn } = useMutation({
-		mutationFn: deleteTransaction,
-		onSuccess: () => {
-			const accountId = transaction.accountId
-			queryClient.invalidateQueries({
-				queryKey: ['account', { id: accountId }],
-			})
+	const deleteMutation = useDeleteTransaction()
 
-			queryClient.invalidateQueries({
-				queryKey: ['transaction', { id: transaction.id }],
-			})
-		},
-	})
+	function handleDeleteTransaction(id: string) {
+		deleteMutation.mutate(id)
+	}
 
 	return (
 		<TableRow>
@@ -129,7 +118,7 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 				<Button
 					variant="outline"
 					size="xs"
-					onClick={() => deleteTransactionFn(transaction.id)}
+					onClick={() => handleDeleteTransaction(transaction.id)}
 				>
 					<Trash className="size-3 text-rose-500" />
 				</Button>
