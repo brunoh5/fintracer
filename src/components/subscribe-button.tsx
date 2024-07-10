@@ -2,7 +2,7 @@
 
 import { toast } from 'sonner'
 
-import { api } from '@/lib/api'
+import { api } from '@lib/axios'
 import { getStripeJs } from '@/lib/stripe-js'
 
 import { Button } from './ui/button'
