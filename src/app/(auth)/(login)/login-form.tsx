@@ -2,14 +2,13 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { signIn } from '@/app/api/sign-in'
 
 const loginForm = z.object({
 	email: z.string().email(),
@@ -21,6 +20,8 @@ type LoginForm = z.infer<typeof loginForm>
 export function LoginForm() {
 	const { replace } = useRouter()
 
+	const signInMutation = signIn()
+
 	const {
 		register,
 		handleSubmit,
@@ -30,24 +31,11 @@ export function LoginForm() {
 	})
 
 	async function handleLogin({ email, password }: LoginForm) {
-		try {
-			const response = await signIn('credentials', {
-				email,
-				password,
-				redirect: false,
-			})
-
-			if (response?.status !== 200) {
-				toast.error('Credenciais invalidas')
-				return
+		signInMutation.mutate({ email, password }, {
+			onSuccess: () => {
+				replace('/overview')
 			}
-
-			toast.success('Login realizado com sucesso')
-
-			replace('/overview')
-		} catch {
-			toast.error('Um erro ocorreu, tente novamente mais tarde')
-		}
+		})
 	}
 
 	return (

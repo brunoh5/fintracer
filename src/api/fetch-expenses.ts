@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface FetchExpensesResponse {
 	metrics: {
@@ -9,7 +9,7 @@ interface FetchExpensesResponse {
 }
 
 export async function fetchExpenses() {
-	const response = await apiClient.get<FetchExpensesResponse>(
+	const response = await api.get<FetchExpensesResponse>(
 		'/transactions/metrics',
 	)
 

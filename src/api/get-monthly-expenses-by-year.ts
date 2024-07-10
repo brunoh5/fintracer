@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface GetMonthlyExpensesByYearResponse {
 	month: string
@@ -6,7 +6,7 @@ interface GetMonthlyExpensesByYearResponse {
 }
 
 export async function getMonthlyExpensesByYear() {
-	const response = await apiClient.get<{
+	const response = await api.get<{
 		monthlyExpenses: GetMonthlyExpensesByYearResponse[]
 	}>('/transactions/monthly-expenses')
 

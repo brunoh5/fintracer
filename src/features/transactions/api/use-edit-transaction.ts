@@ -1,4 +1,4 @@
-import { apiClient } from '@lib/axios-client'
+import { api } from '@lib/axios'
 import { queryClient } from '@lib/react-query'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -53,7 +53,7 @@ interface RequestType {
 export function useEditTransaction(id?: string) {
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
 		mutationFn: async (data) => {
-			const response = await apiClient.put(`/transactions/${id}`, data)
+			const response = await api.put(`/transactions/${id}`, data)
 
 			return response.data
 		},

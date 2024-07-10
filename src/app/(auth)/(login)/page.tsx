@@ -1,19 +1,10 @@
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
 
-import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/options'
 import { Button } from '@/components/ui/button'
 
 import { LoginForm } from './login-form'
 
 export default async function Home() {
-	const session = await getServerSession(nextAuthOptions)
-
-	if (session) {
-		redirect('/overview')
-	}
-
 	return (
 		<div className="p-8">
 			<Button asChild variant="ghost" className="absolute right-8 top-8">

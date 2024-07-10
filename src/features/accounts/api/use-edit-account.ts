@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface ResponseType {
 	account: {
@@ -34,7 +34,7 @@ export function useEditAccount(id?: string) {
 
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
 		mutationFn: async (data) => {
-			const response = await apiClient.put(`/accounts/${id}`, data)
+			const response = await api.put(`/accounts/${id}`, data)
 
 			return response.data
 		},

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface RequestType {
 	accountId: string
@@ -16,7 +16,7 @@ export function usePayBill() {
 
 	const mutation = useMutation<null, AxiosError, RequestType>({
 		mutationFn: async (data) => {
-			const response = await apiClient.patch(`/bills/${data.id}`)
+			const response = await api.patch(`/bills/${data.id}`)
 
 			return response.data
 		},

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface ResponseType {
 	bill: {
@@ -34,7 +34,7 @@ export function useCreateBill() {
 
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
 		mutationFn: async (data) => {
-			const response = await apiClient.post('/bills', data)
+			const response = await api.post('/bills', data)
 
 			return response.data
 		},

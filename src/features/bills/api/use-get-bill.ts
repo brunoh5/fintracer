@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface ResponseType {
 	bill: {
@@ -21,7 +21,7 @@ export function useGetBill(id?: string) {
 		enabled: !!id,
 		queryKey: ['bill', { id }],
 		queryFn: async () => {
-			const response = await apiClient.get<ResponseType>(`/bills/${id}`)
+			const response = await api.get<ResponseType>(`/bills/${id}`)
 
 			return response.data
 		},

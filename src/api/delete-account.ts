@@ -1,9 +1,9 @@
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface DeleteAccountRequest {
 	id: string
 }
 
 export async function deleteAccount({ id }: DeleteAccountRequest) {
-	await apiClient.delete(`/accounts/${id}`)
+	await api.delete(`/accounts/${id}`)
 }

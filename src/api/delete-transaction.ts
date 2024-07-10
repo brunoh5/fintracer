@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface DeleteTransactionResponse {
 	transaction: {
@@ -9,7 +9,7 @@ interface DeleteTransactionResponse {
 }
 
 export async function deleteTransaction(id: string) {
-	const response = await apiClient.delete<DeleteTransactionResponse>(
+	const response = await api.delete<DeleteTransactionResponse>(
 		`/transactions/${id}/delete`,
 	)
 

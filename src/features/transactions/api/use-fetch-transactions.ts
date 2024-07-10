@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface RequestType {
 	accountId?: string | null | undefined
@@ -17,7 +17,7 @@ interface ResponseType {
 		created_at: string
 		accountId: string
 		shopName: string
-		transaction_type: 'CREDIT' | 'DEBIT'
+		type: 'revenue' | 'expense'
 		payment_method:
 			| 'MONEY'
 			| 'PIX'
@@ -50,7 +50,7 @@ export function useFetchTransactions({ accountId }: RequestType) {
 	const from = params.get('from')
 	const to = params.get('to')
 	const name = params.get('name')
-	const transaction_type = params.get('transaction_type')
+	const type = params.get('type')
 	const payment_method = params.get('payment_method')
 	const category = params.get('category')
 
@@ -66,21 +66,20 @@ export function useFetchTransactions({ accountId }: RequestType) {
 			from,
 			to,
 			name,
-			transaction_type,
+			type,
 			payment_method,
 			category,
 		],
 		queryFn: async () => {
 			try {
-				const response = await apiClient.get<ResponseType>('/transactions', {
+				const response = await api.get<ResponseType>('/transactions', {
 					params: {
 						pageIndex,
 						from,
 						to,
 						name,
 						accountId,
-						transaction_type:
-							transaction_type === 'all' ? null : transaction_type,
+						type: type === 'all' ? null : type,
 						payment_method: payment_method === 'all' ? null : payment_method,
 						category: category === 'all' ? null : category,
 					},

@@ -1,6 +1,6 @@
 import { Session } from 'next-auth'
 
-import { apiBackend } from '@/lib/axios-backend'
+import { api } from '@lib/axios'
 
 interface UpdatePasswordRequest {
 	session: Session | null
@@ -9,9 +9,9 @@ interface UpdatePasswordRequest {
 }
 
 export async function updatePassword({ session, data }: UpdatePasswordRequest) {
-	await apiBackend.put('/me/credentials', data, {
-		headers: {
-			Authorization: `Bearer ${session?.access_token}`,
-		},
-	})
+	// await api.put('/me/credentials', data, {
+	// 	headers: {
+	// 		Authorization: `Bearer ${session?.access_token}`,
+	// 	},
+	// })
 }

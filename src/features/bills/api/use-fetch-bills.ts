@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { z } from 'zod'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface ResponseType {
 	bills: {
@@ -41,7 +41,7 @@ export function useFetchBills() {
 	const query = useQuery({
 		queryKey: ['bills', pageIndex, title, status],
 		queryFn: async () => {
-			const response = await apiClient.get<ResponseType>('/bills', {
+			const response = await api.get<ResponseType>('/bills', {
 				params: {
 					pageIndex,
 					title,

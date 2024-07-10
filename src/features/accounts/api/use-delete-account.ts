@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 export function useDeleteAccount(id?: string) {
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation({
 		mutationFn: async () => {
-			const response = await apiClient.delete(`/accounts/${id}`)
+			const response = await api.delete(`/accounts/${id}`)
 
 			return response.data
 		},

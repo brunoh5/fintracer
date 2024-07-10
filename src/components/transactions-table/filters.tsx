@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select'
 
 import { DateRangePicker } from '../date-range-picker'
+import { useMedia } from 'react-use'
 
 const transactionFilterSchema = z.object({
 	date: z.object({
@@ -23,7 +24,7 @@ const transactionFilterSchema = z.object({
 	}),
 	name: z.string().optional(),
 	category: z.string().optional(),
-	transaction_type: z.string().optional(),
+	type: z.string().optional(),
 	payment_method: z.string().optional(),
 })
 
@@ -34,11 +35,12 @@ export function TransactionTableFilters() {
 	const params = new URLSearchParams(searchParams)
 	const { replace } = useRouter()
 	const pathname = usePathname()
+	const isMobile = useMedia('(max-width: 1024px)', false)
 
 	const from = params.get('from')
 	const to = params.get('to')
 	const name = params.get('name')
-	const transaction_type = params.get('transaction_type')
+	const type = params.get('type')
 	const payment_method = params.get('payment_method')
 	const category = params.get('category')
 
@@ -46,7 +48,7 @@ export function TransactionTableFilters() {
 		useForm<TransactionFilterSchema>({
 			defaultValues: {
 				name: name ?? '',
-				transaction_type: transaction_type ?? 'all',
+				type: type ?? 'all',
 				payment_method: payment_method ?? 'all',
 				category: category ?? 'all',
 				date: {
@@ -59,7 +61,7 @@ export function TransactionTableFilters() {
 	function handleFilter({
 		date,
 		name,
-		transaction_type,
+		type,
 		payment_method,
 		category,
 	}: TransactionFilterSchema) {
@@ -78,10 +80,10 @@ export function TransactionTableFilters() {
 		} else {
 			params.delete('name')
 		}
-		if (transaction_type) {
-			params.set('transaction_type', transaction_type)
+		if (type) {
+			params.set('type', type)
 		} else {
-			params.delete('transaction_type')
+			params.delete('type')
 		}
 		if (payment_method) {
 			params.set('payment_method', payment_method)
@@ -99,9 +101,10 @@ export function TransactionTableFilters() {
 		replace(`${pathname}?${params.toString()}`)
 	}
 
+
 	function handleClearFilters() {
 		params.delete('name')
-		params.delete('transaction_type')
+		params.delete('type')
 		params.delete('payment_method')
 		params.delete('category')
 		params.delete('from')
@@ -111,7 +114,7 @@ export function TransactionTableFilters() {
 
 		reset({
 			name: '',
-			transaction_type: 'all',
+			type: 'all',
 			category: 'all',
 			payment_method: 'all',
 			date: {
@@ -120,6 +123,116 @@ export function TransactionTableFilters() {
 			},
 		})
 	}
+
+	if(isMobile) {
+		return (
+			<form
+				onSubmit={handleSubmit(handleFilter)}
+				className="grid grid-cols-2 gap-2 lg:flex lg:items-center"
+			>
+				<span className="col-span-2 text-sm font-semibold">Filtros</span>
+				<DateRangePicker name="date" control={control} />
+				<Input
+					{...register('name')}
+					className="h-8 w-[192px]"
+					placeholder="Nome da compra"
+				/>
+				<Controller
+					name="type"
+					control={control}
+					render={({ field: { name, onChange, value, disabled } }) => {
+						return (
+							<Select
+								defaultValue="all"
+								name={name}
+								onValueChange={onChange}
+								value={value}
+								disabled={disabled}
+							>
+								<SelectTrigger className="h-8 w-[160px]">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="all">Receitas/Despesas</SelectItem>
+									<SelectItem value="revenue">Receitas</SelectItem>
+									<SelectItem value="expense">Despesas</SelectItem>
+								</SelectContent>
+							</Select>
+						)
+					}}
+				/>
+				<Controller
+					name="payment_method"
+					control={control}
+					render={({ field: { name, onChange, value, disabled } }) => {
+						return (
+							<Select
+								defaultValue="all"
+								name={name}
+								onValueChange={onChange}
+								value={value}
+								disabled={disabled}
+							>
+								<SelectTrigger className="h-8 w-[160px]">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="all">Todos métodos</SelectItem>
+									<SelectItem value="MONEY">Dinheiro</SelectItem>
+									<SelectItem value="PIX">PIX</SelectItem>
+									<SelectItem value="DEBIT_CARD">Cartão de débito</SelectItem>
+									<SelectItem value="CREDIT_CARD">Cartão de credito</SelectItem>
+									<SelectItem value="BANK_TRANSFER">TED/DOC</SelectItem>
+								</SelectContent>
+							</Select>
+						)
+					}}
+				/>
+				<Controller
+					name="category"
+					control={control}
+					render={({ field: { name, onChange, value, disabled } }) => {
+						return (
+							<Select
+								defaultValue="all"
+								name={name}
+								onValueChange={onChange}
+								value={value}
+								disabled={disabled}
+							>
+								<SelectTrigger className="h-8 w-[160px]">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="all">Todas categorias</SelectItem>
+									<SelectItem value="FOOD">Alimentação</SelectItem>
+									<SelectItem value="HOME">Moradia</SelectItem>
+									<SelectItem value="ENTERTAINMENT">Entretenimento</SelectItem>
+									<SelectItem value="TRANSPORTATION">Transporte</SelectItem>
+									<SelectItem value="SHOPPING">Compras</SelectItem>
+									<SelectItem value="OTHERS">Outros</SelectItem>
+								</SelectContent>
+							</Select>
+						)
+					}}
+				/>
+				<Button type="submit" variant="secondary" size="xs">
+					<Search className="mr-2 size-4" />
+					Filtrar resultados
+				</Button>
+				<Button
+					onClick={handleClearFilters}
+					type="button"
+					variant="outline"
+					size="xs"
+				>
+					<X className="mr-2 size-4" />
+					Remover filtros
+				</Button>
+			</form>
+		)
+	}
+
 
 	return (
 		<form
@@ -134,7 +247,7 @@ export function TransactionTableFilters() {
 				placeholder="Nome da compra"
 			/>
 			<Controller
-				name="transaction_type"
+				name="type"
 				control={control}
 				render={({ field: { name, onChange, value, disabled } }) => {
 					return (
@@ -150,8 +263,8 @@ export function TransactionTableFilters() {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="all">Receitas/Despesas</SelectItem>
-								<SelectItem value="CREDIT">Receitas</SelectItem>
-								<SelectItem value="DEBIT">Despesas</SelectItem>
+								<SelectItem value="revenue">Receitas</SelectItem>
+								<SelectItem value="expenses">Despesas</SelectItem>
 							</SelectContent>
 						</Select>
 					)

@@ -2,19 +2,21 @@
 
 import { LogOut } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { signOut } from 'next-auth/react'
 
 import { Button } from './ui/button'
+import { signOut } from '@/app/api/sign-out'
 
 export function LogoutButton() {
-	const { push } = useRouter()
+	const { replace } = useRouter()
+
+	const logOutMutation = signOut()
 
 	async function handleLogout() {
-		await signOut({
-			redirect: false,
+		logOutMutation.mutate(undefined, {
+			onSuccess: () => {
+				replace('/')
+			}
 		})
-
-		push('/')
 	}
 
 	return (

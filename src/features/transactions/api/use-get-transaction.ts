@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 type ResponseType = {
 	transaction: {
@@ -33,7 +33,7 @@ export function useGetTransaction(id?: string) {
 		enabled: !!id,
 		queryKey: ['transaction', { id }],
 		queryFn: async () => {
-			const response = await apiClient.get<ResponseType>(`/transactions/${id}`)
+			const response = await api.get<ResponseType>(`/transactions/${id}`)
 
 			return response.data
 		},

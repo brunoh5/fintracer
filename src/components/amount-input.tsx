@@ -49,7 +49,7 @@ export function AmountInput({ value, placeholder, disabled, onChange }: Props) {
 							{isExpense && <MinusCircle className="size-3 text-white" />}
 						</button>
 					</TooltipTrigger>
-					<TooltipContent>
+					<TooltipContent className='text-white'>
 						Use [+] para receitas e [-] para despesas
 					</TooltipContent>
 				</Tooltip>

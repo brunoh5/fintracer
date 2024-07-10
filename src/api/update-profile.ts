@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface UpdateProfileRequest {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -6,5 +6,5 @@ interface UpdateProfileRequest {
 }
 
 export async function updateProfile({ data }: UpdateProfileRequest) {
-	await apiClient.put('/me', data)
+	await api.put('/me', data)
 }

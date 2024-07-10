@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { apiClient } from '@/lib/axios-client'
+import { api } from '@/lib/axios'
 
 interface ResponseType {
 	account: {
@@ -22,7 +22,7 @@ export function useGetAccount(id?: string) {
 		enabled: !!id,
 		queryKey: ['account', { id }],
 		queryFn: async () => {
-			const response = await apiClient.get<ResponseType>(`/accounts/${id}`)
+			const response = await api.get<ResponseType>(`/accounts/${id}`)
 
 			return response.data
 		},

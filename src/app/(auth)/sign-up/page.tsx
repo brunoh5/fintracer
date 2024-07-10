@@ -1,17 +1,15 @@
 'use client'
 
-import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { registerClient } from '@/api/register-client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useRegister } from '@/app/api/register'
+import { signIn } from '@/app/api/sign-in'
 
 const registerForm = z.object({
 	name: z.string(),
@@ -24,33 +22,29 @@ type RegisterForm = z.infer<typeof registerForm>
 export default function SignUp() {
 	const { replace } = useRouter()
 
+	const registerMutation = useRegister()
+	const signInMutation = signIn()
+
 	const {
 		register,
 		handleSubmit,
 		formState: { isSubmitting },
 	} = useForm<RegisterForm>()
 
-	const { mutateAsync: registerClientFn } = useMutation({
-		mutationFn: registerClient,
-	})
-
 	async function handleRegister(data: RegisterForm) {
-		try {
-			await registerClientFn({
-				name: data.name,
-				email: data.email,
-				password: data.password,
-			})
-
-			await signIn('credentials', {
-				...data,
-				redirect: false,
-			})
-
-			replace('/overview')
-		} catch {
-			toast.error('Erro ao se cadastrar, tente novamente')
-		}
+		registerMutation.mutate({
+			name: data.name,
+			email: data.email,
+			password: data.password,
+		}, {
+			onSuccess: () => {
+				signInMutation.mutate({ email: data.email, password: data.password }, {
+					onSuccess: () => {
+						replace('/overview')
+					}
+				})
+			}
+		})
 	}
 
 	return (
