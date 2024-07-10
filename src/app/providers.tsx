@@ -6,6 +6,7 @@ import { ReactNode } from 'react'
 
 import { DialogProvider } from './dialog-provider'
 import { queryClient } from '@lib/react-query'
+import { Toaster } from '@components/ui/sonner'
 
 export default function Providers({ children }: { children: ReactNode }) {
 	return (
@@ -18,6 +19,7 @@ export default function Providers({ children }: { children: ReactNode }) {
 			>
 				<DialogProvider />
 				{children}
+				<Toaster richColors />
 			</NextThemesProvider>
 		</QueryClientProvider>
 	)
