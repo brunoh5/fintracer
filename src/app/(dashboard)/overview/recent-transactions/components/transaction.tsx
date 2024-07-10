@@ -16,7 +16,7 @@ export interface TransactionProps {
 			| 'TRANSPORTATION'
 			| 'ENTERTAINMENT'
 			| 'SHOPPING'
-		transaction_type: string
+		// transaction_type: string
 		payment_method: TransactionPaymentMethod
 		created_at: string
 		amountInCents: number
@@ -35,7 +35,7 @@ export function Transaction({ transaction }: TransactionProps) {
 				</div>
 			</div>
 			<div className="flex flex-col items-end">
-				{transaction.transaction_type === 'CREDIT' && (
+				{transaction.amountInCents >= 0 && (
 					<span className="text-nowrap font-semibold text-emerald-500 text-foreground">
 						+
 						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
@@ -44,7 +44,7 @@ export function Transaction({ transaction }: TransactionProps) {
 						})}
 					</span>
 				)}
-				{transaction.transaction_type === 'DEBIT' && (
+				{transaction.amountInCents < 0 && (
 					<span className="text-nowrap font-semibold text-foreground text-rose-400">
 						{(transaction.amountInCents / 100).toLocaleString('pt-BR', {
 							style: 'currency',
