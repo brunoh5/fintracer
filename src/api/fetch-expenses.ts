@@ -9,9 +9,7 @@ interface FetchExpensesResponse {
 }
 
 export async function fetchExpenses() {
-	const response = await api.get<FetchExpensesResponse>(
-		'/transactions/metrics',
-	)
+	const response = await api.get<FetchExpensesResponse>('/transactions/metrics')
 
 	return response.data.metrics
 }

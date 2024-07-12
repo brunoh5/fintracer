@@ -1,7 +1,8 @@
-import { api } from '@/lib/axios'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
+
+import { api } from '@/lib/axios'
 
 export interface SignInBody {
 	email: string
@@ -9,6 +10,7 @@ export interface SignInBody {
 }
 
 export function signIn() {
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const mutation = useMutation<void, AxiosError, SignInBody>({
 		mutationFn: async (data: SignInBody) => {
 			await api.post('/sessions', data)
@@ -18,7 +20,7 @@ export function signIn() {
 		},
 		onError: () => {
 			toast.error('Credenciais invalidas')
-		}
+		},
 	})
 
 	return mutation

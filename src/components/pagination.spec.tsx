@@ -14,7 +14,7 @@ describe('Pagination', () => {
 	})
 
 	it('should be calculate the right amount of pages', () => {
-		const wrapper = render(
+		const view = render(
 			<Pagination
 				pageIndex={0}
 				totalCount={200}
@@ -23,12 +23,12 @@ describe('Pagination', () => {
 			/>,
 		)
 
-		expect(wrapper.getByText('Página 1 de 20')).toBeInTheDocument()
-		expect(wrapper.getByText('Total de 200 item(s)')).toBeInTheDocument()
+		expect(view.getByText('Página 1 de 20')).toBeInTheDocument()
+		expect(view.getByText('Total de 200 item(s)')).toBeInTheDocument()
 	})
 
 	it('should be able to navigate to the next page', async () => {
-		const wrapper = render(
+		const view = render(
 			<Pagination
 				pageIndex={0}
 				totalCount={200}
@@ -37,7 +37,7 @@ describe('Pagination', () => {
 			/>,
 		)
 
-		const nextPageButton = wrapper.getByRole('button', {
+		const nextPageButton = view.getByRole('button', {
 			name: 'Próxima página',
 		})
 
@@ -47,7 +47,7 @@ describe('Pagination', () => {
 	})
 
 	it('should be able to navigate to the previous page', async () => {
-		const wrapper = render(
+		const view = render(
 			<Pagination
 				pageIndex={5}
 				totalCount={200}
@@ -56,7 +56,7 @@ describe('Pagination', () => {
 			/>,
 		)
 
-		const previousPageButton = wrapper.getByRole('button', {
+		const previousPageButton = view.getByRole('button', {
 			name: 'Página anterior',
 		})
 

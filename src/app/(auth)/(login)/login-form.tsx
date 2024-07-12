@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { signIn } from '@/app/api/sign-in'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { signIn } from '@/app/api/sign-in'
 
 const loginForm = z.object({
 	email: z.string().email(),
@@ -31,11 +31,14 @@ export function LoginForm() {
 	})
 
 	async function handleLogin({ email, password }: LoginForm) {
-		signInMutation.mutate({ email, password }, {
-			onSuccess: () => {
-				replace('/overview')
-			}
-		})
+		signInMutation.mutate(
+			{ email, password },
+			{
+				onSuccess: () => {
+					replace('/overview')
+				},
+			},
+		)
 	}
 
 	return (

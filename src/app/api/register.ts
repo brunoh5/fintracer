@@ -1,7 +1,7 @@
-import { api } from "@lib/axios";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { toast } from "sonner";
+import { api } from '@lib/axios'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 type RegisterBody = {
 	name: string
@@ -19,7 +19,7 @@ export function useRegister() {
 		},
 		onError: () => {
 			toast.error('Erro ao se cadastrar, tente novamente mais tarde')
-		}
+		},
 	})
 
 	return mutation

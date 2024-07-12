@@ -13,18 +13,18 @@ interface ResponseType {
 		amount: number
 		transaction_type: 'DEBIT' | 'CREDIT'
 		payment_method:
-		| 'MONEY'
-		| 'PIX'
-		| 'CREDIT_CARD'
-		| 'DEBIT_CARD'
-		| 'BANK_TRANSFER'
+			| 'MONEY'
+			| 'PIX'
+			| 'CREDIT_CARD'
+			| 'DEBIT_CARD'
+			| 'BANK_TRANSFER'
 		category:
-		| 'FOOD'
-		| 'HOME'
-		| 'TRANSPORTATION'
-		| 'OTHERS'
-		| 'SHOPPING'
-		| 'ENTERTAINMENT'
+			| 'FOOD'
+			| 'HOME'
+			| 'TRANSPORTATION'
+			| 'OTHERS'
+			| 'SHOPPING'
+			| 'ENTERTAINMENT'
 	}
 }
 

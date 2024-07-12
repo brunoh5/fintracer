@@ -2,6 +2,7 @@ import { endOfMonth, format, startOfMonth } from 'date-fns'
 import { Search, X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Controller, useForm } from 'react-hook-form'
+import { useMedia } from 'react-use'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
@@ -15,7 +16,6 @@ import {
 } from '@/components/ui/select'
 
 import { DateRangePicker } from '../date-range-picker'
-import { useMedia } from 'react-use'
 
 const transactionFilterSchema = z.object({
 	date: z.object({
@@ -101,7 +101,6 @@ export function TransactionTableFilters() {
 		replace(`${pathname}?${params.toString()}`)
 	}
 
-
 	function handleClearFilters() {
 		params.delete('name')
 		params.delete('type')
@@ -124,7 +123,7 @@ export function TransactionTableFilters() {
 		})
 	}
 
-	if(isMobile) {
+	if (isMobile) {
 		return (
 			<form
 				onSubmit={handleSubmit(handleFilter)}
@@ -232,7 +231,6 @@ export function TransactionTableFilters() {
 			</form>
 		)
 	}
-
 
 	return (
 		<form

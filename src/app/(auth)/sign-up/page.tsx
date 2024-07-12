@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { useRegister } from '@/app/api/register'
+import { signIn } from '@/app/api/sign-in'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useRegister } from '@/app/api/register'
-import { signIn } from '@/app/api/sign-in'
 
 const registerForm = z.object({
 	name: z.string(),
@@ -32,19 +32,25 @@ export default function SignUp() {
 	} = useForm<RegisterForm>()
 
 	async function handleRegister(data: RegisterForm) {
-		registerMutation.mutate({
-			name: data.name,
-			email: data.email,
-			password: data.password,
-		}, {
-			onSuccess: () => {
-				signInMutation.mutate({ email: data.email, password: data.password }, {
-					onSuccess: () => {
-						replace('/overview')
-					}
-				})
-			}
-		})
+		registerMutation.mutate(
+			{
+				name: data.name,
+				email: data.email,
+				password: data.password,
+			},
+			{
+				onSuccess: () => {
+					signInMutation.mutate(
+						{ email: data.email, password: data.password },
+						{
+							onSuccess: () => {
+								replace('/overview')
+							},
+						},
+					)
+				},
+			},
+		)
 	}
 
 	return (

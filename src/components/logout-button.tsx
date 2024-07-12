@@ -3,8 +3,9 @@
 import { LogOut } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
-import { Button } from './ui/button'
 import { signOut } from '@/app/api/sign-out'
+
+import { Button } from './ui/button'
 
 export function LogoutButton() {
 	const { replace } = useRouter()
@@ -15,7 +16,7 @@ export function LogoutButton() {
 		logOutMutation.mutate(undefined, {
 			onSuccess: () => {
 				replace('/')
-			}
+			},
 		})
 	}
 
