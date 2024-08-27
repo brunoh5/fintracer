@@ -9,10 +9,17 @@ import {
 import { useDeleteTransaction } from '@features/transactions/api/use-delete-transaction'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Ellipsis } from 'lucide-react'
-import { useState } from 'react'
+import {
+	Car,
+	Clapperboard,
+	Ellipsis,
+	Home,
+	LayoutDashboard,
+	ShoppingBag,
+	Utensils,
+} from 'lucide-react'
+import { ReactNode, useState } from 'react'
 
-import { TransactionCategory } from '@/components/transaction-category'
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
@@ -52,6 +59,23 @@ const paymentMethodsMap: Record<TransactionPaymentMethod, string> = {
 	BANK_TRANSFER: 'TED / DOC',
 }
 
+type TransactionCategory =
+	| 'FOOD'
+	| 'OTHERS'
+	| 'HOME'
+	| 'TRANSPORTATION'
+	| 'ENTERTAINMENT'
+	| 'SHOPPING'
+
+const transactionCategoryIconMap: Record<TransactionCategory, ReactNode> = {
+	FOOD: <Utensils className="mx-auto size-5" />,
+	TRANSPORTATION: <Car className="mx-auto size-5" />,
+	ENTERTAINMENT: <Clapperboard className="mx-auto size-5" />,
+	SHOPPING: <ShoppingBag className="mx-auto size-5" />,
+	OTHERS: <LayoutDashboard className="mx-auto size-5" />,
+	HOME: <Home className="mx-auto size-5" />,
+}
+
 export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 	const { onOpen } = useOpenTransaction()
 
@@ -66,11 +90,13 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 	return (
 		<>
 			<TableRow className="text-nowrap">
-				<TableCell className="text-center">
-					{format(transaction.date, 'DD MMM', { locale: ptBR })}
+				<TableCell className="border text-center capitalize">
+					{format(transaction.date, 'dd MMM', { locale: ptBR })}
 				</TableCell>
-				<TableCell className="font-semibold">{transaction.name}</TableCell>
-				<TableCell className="text-center font-semibold">
+				<TableCell className="border font-semibold">
+					{transaction.name}
+				</TableCell>
+				<TableCell className="border text-center font-semibold">
 					{transaction.amountInCents >= 0 ? (
 						<span className="text-emerald-500">
 							{formatCurrency(transaction.amountInCents)}
@@ -81,14 +107,16 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 						</span>
 					)}
 				</TableCell>
-				<TableCell>
-					<TransactionCategory category={transaction.category} />
+				<TableCell className="border text-center">
+					{transactionCategoryIconMap[transaction.category]}
 				</TableCell>
-				<TableCell>{paymentMethodsMap[transaction.payment_method]}</TableCell>
-				<TableCell>
+				<TableCell className="border text-center">
+					{paymentMethodsMap[transaction.payment_method]}
+				</TableCell>
+				<TableCell className="border">
 					<DropdownMenu>
 						<DropdownMenuTrigger>
-							<Button size="icon">
+							<Button variant="outline" size="icon">
 								<Ellipsis className="size-3" />
 							</Button>
 						</DropdownMenuTrigger>

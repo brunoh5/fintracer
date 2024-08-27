@@ -1,7 +1,15 @@
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import {
+	Car,
+	Clapperboard,
+	Home,
+	LayoutDashboard,
+	ShoppingBag,
+	Utensils,
+} from 'lucide-react'
+import { ReactNode } from 'react'
 
-import { TransactionCategory } from '@/components/transaction-category'
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import {
 	DialogContent,
@@ -18,6 +26,23 @@ import { TransactionDetailsSkeleton } from './details-skeleton'
 interface TransactionsDetailsProps {
 	transactionId: string
 	open: boolean
+}
+
+type TransactionCategory =
+	| 'FOOD'
+	| 'OTHERS'
+	| 'HOME'
+	| 'TRANSPORTATION'
+	| 'ENTERTAINMENT'
+	| 'SHOPPING'
+
+const transactionCategoryIconMap: Record<TransactionCategory, ReactNode> = {
+	FOOD: <Utensils className="mx-auto size-5" />,
+	TRANSPORTATION: <Car className="mx-auto size-5" />,
+	ENTERTAINMENT: <Clapperboard className="mx-auto size-5" />,
+	SHOPPING: <ShoppingBag className="mx-auto size-5" />,
+	OTHERS: <LayoutDashboard className="mx-auto size-5" />,
+	HOME: <Home className="mx-auto size-5" />,
 }
 
 export function TransactionDetails({
@@ -54,7 +79,7 @@ export function TransactionDetails({
 						<TableRow>
 							<TableCell>Categoria</TableCell>
 							<TableCell className="flex justify-end">
-								<TransactionCategory category={data.transaction.category} />
+								{transactionCategoryIconMap[data.transaction.category]}
 							</TableCell>
 						</TableRow>
 
