@@ -32,16 +32,12 @@ export function TransactionsTable({
 				<Table>
 					<TableHeader className="font-bold">
 						<TableRow>
-							<TableHead className="w-[80px]"></TableHead>
-							<TableHead>Nome</TableHead>
-							<TableHead className="w-[140px] text-center">
-								Estabelecimento
-							</TableHead>
-							<TableHead className="w-[140px]">Data</TableHead>
-							<TableHead className="w-[140px]">Pagamento</TableHead>
+							<TableHead className="w-[140px] text-center">Data</TableHead>
+							<TableHead>Descrição</TableHead>
 							<TableHead className="w-[140px] text-center">Valor</TableHead>
-							<TableHead className="w-9"></TableHead>
-							<TableHead className="w-9"></TableHead>
+							<TableHead className="w-[140px] text-center">Categoria</TableHead>
+							<TableHead className="text-center">Método</TableHead>
+							<TableHead className="w-[80px]"></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>

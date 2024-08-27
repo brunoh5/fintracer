@@ -1,15 +1,21 @@
 'use client'
 
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@components/ui/dropdown-menu'
 import { useDeleteTransaction } from '@features/transactions/api/use-delete-transaction'
-import { formatDistanceToNow } from 'date-fns'
+import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Pencil, Search, Trash } from 'lucide-react'
+import { Ellipsis } from 'lucide-react'
 import { useState } from 'react'
 
 import { TransactionCategory } from '@/components/transaction-category'
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { useOpenTransaction } from '@/features/transactions/hooks/use-open-transaction'
 import { formatCurrency } from '@/lib/price-formatter'
@@ -58,71 +64,58 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 	}
 
 	return (
-		<TableRow>
-			<TableCell>
-				<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-					<DialogTrigger asChild>
-						<Button variant="outline" size="xs">
-							<Search className="size-3" />
-							<span className="sr-only">Detalhes das transações</span>
-						</Button>
-					</DialogTrigger>
-
-					<TransactionDetails
-						transactionId={transaction.id}
-						open={isDetailsOpen}
-					/>
-				</Dialog>
-			</TableCell>
-			<TableCell>
-				<div className="flex items-center gap-2">
+		<>
+			<TableRow className="text-nowrap">
+				<TableCell className="text-center">
+					{format(transaction.date, 'DD MMM', { locale: ptBR })}
+				</TableCell>
+				<TableCell className="font-semibold">{transaction.name}</TableCell>
+				<TableCell className="text-center font-semibold">
+					{transaction.amountInCents >= 0 ? (
+						<span className="text-emerald-500">
+							{formatCurrency(transaction.amountInCents)}
+						</span>
+					) : (
+						<span className="text-rose-400">
+							{formatCurrency(transaction.amountInCents)}
+						</span>
+					)}
+				</TableCell>
+				<TableCell>
 					<TransactionCategory category={transaction.category} />
-					<span className="text-nowrap font-semibold">{transaction.name}</span>
-				</div>
-			</TableCell>
-			<TableCell>
-				{transaction.shopName ? transaction.shopName : 'Não Informado'}
-			</TableCell>
-			<TableCell className="text-nowrap text-center">
-				{formatDistanceToNow(
-					new Date(transaction.date ?? transaction.created_at),
-					{
-						locale: ptBR,
-						addSuffix: true,
-					},
-				)}
-			</TableCell>
-			<TableCell>{paymentMethodsMap[transaction.payment_method]}</TableCell>
-			<TableCell className="text-center font-semibold">
-				{transaction.amountInCents >= 0 ? (
-					<span className="text-emerald-500">
-						+{formatCurrency(transaction.amountInCents)}
-					</span>
-				) : (
-					<span className="text-rose-400">
-						{formatCurrency(transaction.amountInCents)}
-					</span>
-				)}
-			</TableCell>
-			<TableCell>
-				<Button
-					variant="outline"
-					size="xs"
-					onClick={() => onOpen(transaction.id)}
-				>
-					<Pencil className="size-3" />
-					<span className="sr-only">Editar transação</span>
-				</Button>
-			</TableCell>
-			<TableCell>
-				<Button
-					variant="outline"
-					size="xs"
-					onClick={() => handleDeleteTransaction(transaction.id)}
-				>
-					<Trash className="size-3 text-rose-500" />
-				</Button>
-			</TableCell>
-		</TableRow>
+				</TableCell>
+				<TableCell>{paymentMethodsMap[transaction.payment_method]}</TableCell>
+				<TableCell>
+					<DropdownMenu>
+						<DropdownMenuTrigger>
+							<Button size="icon">
+								<Ellipsis className="size-3" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							<DropdownMenuItem onClick={() => setIsDetailsOpen(true)}>
+								Detalhes
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => onOpen(transaction.id)}>
+								Editar
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								className="text-rose-500"
+								onClick={() => handleDeleteTransaction(transaction.id)}
+							>
+								Deletar
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</TableCell>
+			</TableRow>
+
+			<Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+				<TransactionDetails
+					transactionId={transaction.id}
+					open={isDetailsOpen}
+				/>
+			</Dialog>
+		</>
 	)
 }
