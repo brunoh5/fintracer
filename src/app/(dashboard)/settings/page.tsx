@@ -1,8 +1,16 @@
+import { ThemeSwitch } from '@components/theme-switch'
+import { Button } from '@components/ui/button'
 import { Metadata } from 'next'
 
-import { Card, CardContent } from '@/components/ui/card'
-
-import { ProfileTabs } from './profile-tabs'
+import { ProfileForm } from '@/components/profile-form'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
 
 export const metadata: Metadata = {
 	title: 'Configurações',
@@ -10,13 +18,38 @@ export const metadata: Metadata = {
 
 export default function Settings() {
 	return (
-		<main className="relative flex flex-col gap-y-8 pb-8 pr-8 pt-4">
-			<Card className="pt-6">
-				<h2 className="sr-only">Atualizar perfil ou senha</h2>
+		<div className="space-y-12">
+			<ProfileForm />
+
+			<Card className="rounded-none bg-transparent">
+				<CardHeader>
+					<CardTitle>Aparência</CardTitle>
+					<CardDescription>
+						Customize como o Fintracer aparece no seu dispositivo
+					</CardDescription>
+				</CardHeader>
 				<CardContent>
-					<ProfileTabs />
+					<div className="w-[240px]">
+						<ThemeSwitch />
+					</div>
 				</CardContent>
 			</Card>
-		</main>
+
+			<Card className="rounded-none border-destructive bg-transparent">
+				<CardHeader>
+					<CardTitle>Deletar Conta</CardTitle>
+					<CardDescription>
+						Delete permanentemente seus dados da plataforma Fintracer.Esta ação
+						é irreversível, por favor proceda com cautela.
+					</CardDescription>
+				</CardHeader>
+				<CardFooter className="flex justify-between">
+					<div />
+					<Button variant="destructive" disabled>
+						Deletar
+					</Button>
+				</CardFooter>
+			</Card>
+		</div>
 	)
 }

@@ -15,7 +15,6 @@ import { useMedia } from 'react-use'
 
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
-import { LogoutButton } from '../logout-button'
 import { NavButton } from '../nav-button'
 import { Button } from '../ui/button'
 import { Profile } from './profile'
@@ -61,7 +60,7 @@ const routes = [
 export function Sidebar() {
 	const pathname = usePathname()
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-	const isMobile = useMedia('(max-width: 1024px)', false)
+	const isMobile = useMedia('(max-width: 768px)', false)
 	const router = useRouter()
 
 	function onClick(href: string) {
@@ -71,7 +70,7 @@ export function Sidebar() {
 
 	if (isMobile) {
 		return (
-			<div className="px-3 py-4">
+			<aside className="px-3 py-4">
 				<Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
 					<div className="flex items-center justify-between lg:justify-center">
 						<h1>
@@ -113,12 +112,12 @@ export function Sidebar() {
 						<Profile />
 					</SheetContent>
 				</Sheet>
-			</div>
+			</aside>
 		)
 	}
 
 	return (
-		<div className="fixed flex h-screen flex-col gap-6 bg-card lg:right-auto lg:w-56 lg:border-r lg:border-r-muted lg:px-7 lg:py-12">
+		<aside className="fixed flex h-screen flex-col gap-6 bg-card md:right-auto md:w-56 md:border-r md:border-r-muted md:px-7 md:py-12">
 			<h1>
 				<Link href="/overview" className="flex items-center justify-center">
 					<Receipt className="mr-4 size-6" />
@@ -138,10 +137,6 @@ export function Sidebar() {
 					</NavButton>
 				))}
 			</nav>
-
-			<LogoutButton />
-
-			<Profile />
-		</div>
+		</aside>
 	)
 }

@@ -36,10 +36,6 @@ export function Profile() {
 					</Link>
 				</div>
 			</div>
-			<div className="text-xs">
-				<p>Ficou com alguma duvida ou ocorreu algum erro?</p>
-				<p> Entre em contato: (31) 9 3619-7270</p>
-			</div>
 		</div>
 	)
 }

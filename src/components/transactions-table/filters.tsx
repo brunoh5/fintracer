@@ -35,7 +35,7 @@ export function TransactionTableFilters() {
 	const params = new URLSearchParams(searchParams)
 	const { replace } = useRouter()
 	const pathname = usePathname()
-	const isMobile = useMedia('(max-width: 1024px)', false)
+	const isMobile = useMedia('(max-width: 768px)', false)
 
 	const from = params.get('from')
 	const to = params.get('to')

@@ -1,5 +1,13 @@
 'use client'
 
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@components/ui/card'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -9,13 +17,9 @@ import { getProfile } from '@/api/get-profile'
 import { updateProfile } from '@/api/update-profile'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { TabsContent } from '@/components/ui/tabs'
 
 const profileForm = z.object({
 	name: z.string(),
-	email: z.string().email(),
-	phone: z.string().nullable().default(''),
 })
 
 type ProfileForm = z.infer<typeof profileForm>
@@ -31,10 +35,12 @@ export function ProfileForm() {
 
 	const { register, handleSubmit } = useForm<ProfileForm>({
 		resolver: zodResolver(profileForm),
+		defaultValues: {
+			name: profile?.name ?? '',
+		},
 	})
 
 	const { mutateAsync: updateProfileFn } = useMutation({
-		mutationKey: ['profile', 'update'],
 		mutationFn: updateProfile,
 		onMutate: async () => {
 			await queryClient.cancelQueries({
@@ -48,41 +54,27 @@ export function ProfileForm() {
 	}
 
 	return (
-		<TabsContent value="profile">
-			<form
-				className="w-72 space-y-4"
-				onSubmit={handleSubmit(handleEditProfile)}
-			>
-				<div className="space-y-2">
-					<Label htmlFor="fullName">Nome completo</Label>
-					<Input
-						id="fullName"
-						{...register('name')}
-						defaultValue={profile?.name}
-					/>
-				</div>
-				<div className="space-y-2">
-					<Label htmlFor="fullName">Email</Label>
-					<Input
-						id="email"
-						type="email"
-						{...register('email')}
-						defaultValue={profile?.email}
-					/>
-				</div>
-				<div className="space-y-2">
-					<Label htmlFor="phone">Telefone</Label>
-					<Input
-						id="phone"
-						{...register('phone')}
-						defaultValue={profile?.phone ?? ''}
-					/>
-				</div>
-
-				<Button type="submit" className="text-xs font-bold text-zinc-50">
-					Atualizar perfil
-				</Button>
-			</form>
-		</TabsContent>
+		<Card className="rounded-none bg-transparent">
+			<CardHeader>
+				<CardTitle>Nome exibido</CardTitle>
+				<CardDescription>
+					Por favor digite seu nome completo, ou um nome no qual esteja
+					confortável
+				</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<form
+					id="change-name"
+					className="w-72 space-y-4"
+					onSubmit={handleSubmit(handleEditProfile)}
+				>
+					<Input id="fullName" {...register('name')} />
+				</form>
+			</CardContent>
+			<CardFooter className="flex justify-between">
+				<div />
+				<Button form="change-name">Salvar</Button>
+			</CardFooter>
+		</Card>
 	)
 }
