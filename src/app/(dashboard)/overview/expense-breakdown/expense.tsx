@@ -8,7 +8,7 @@ import {
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import { ExpenseDiff } from './expense-diff'
 

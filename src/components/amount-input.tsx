@@ -17,7 +17,7 @@ type Props = {
 }
 
 export function AmountInput({ value, placeholder, disabled, onChange }: Props) {
-	const parsedValue = parseFloat(value)
+	const parsedValue = Number.parseFloat(value)
 	const isIncome = parsedValue > 0
 	const isExpense = parsedValue < 0
 
@@ -25,7 +25,7 @@ export function AmountInput({ value, placeholder, disabled, onChange }: Props) {
 		if (!value) return
 
 		const numericValue = value.replace(',', '.')
-		const newValue = parseFloat(numericValue) * -1
+		const newValue = Number.parseFloat(numericValue) * -1
 
 		onChange(newValue.toString())
 	}

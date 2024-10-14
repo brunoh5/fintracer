@@ -11,7 +11,7 @@ export function TransactionsList() {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 
-	const { data, isLoading } = useFetchTransactions({})
+	const { data, isLoading } = useFetchTransactions()
 
 	function handlePaginate(pageIndex: number) {
 		params.set('page', (pageIndex + 1).toString())

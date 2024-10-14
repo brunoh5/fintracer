@@ -28,7 +28,8 @@ import {
 } from '@/components/ui/select'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
-import { AccountProps } from '@/types'
+import type { AccountProps } from '@/types'
+import { formatCurrency } from '@/utils/price-formatter'
 
 interface BillTableRowProps {
 	bill: {
@@ -38,7 +39,7 @@ interface BillTableRowProps {
 		title: string
 		description: string
 		lastCharge: string
-		amountInCents: number
+		amount: number
 		userId: string
 		paid_at: string
 	}
@@ -127,10 +128,7 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 				)}
 			</TableCell>
 			<TableCell className="text-center font-extrabold text-muted-foreground">
-				{(bill.amountInCents / 100).toLocaleString('pt-BR', {
-					style: 'currency',
-					currency: 'BRL',
-				})}
+				{formatCurrency(bill.amount)}
 			</TableCell>
 			<TableCell>
 				<Dialog open={isPayOpen} onOpenChange={setIsPayOpen}>
@@ -168,7 +166,7 @@ export function BillTableRow({ bill }: BillTableRowProps) {
 														<SelectItem key={account.id} value={account.id}>
 															{account.bank}
 														</SelectItem>
-													),
+													)
 												)}
 											</SelectContent>
 										</Select>

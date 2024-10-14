@@ -101,7 +101,7 @@ export default function SignUp() {
 						Finalizar cadastro
 					</Button>
 
-					<p className="px-6 text-center text-sm leading-relaxed text-muted-foreground">
+					{/* <p className="px-6 text-center text-sm leading-relaxed text-muted-foreground">
 						Ao continuar voce concorda com os nossos{' '}
 						<a href="#" className="underline underline-offset-4">
 							Termos de serviços
@@ -110,7 +110,7 @@ export default function SignUp() {
 						<a href="#" className="underline underline-offset-4">
 							Politicas de privacidade
 						</a>
-					</p>
+					</p> */}
 				</form>
 			</div>
 		</div>

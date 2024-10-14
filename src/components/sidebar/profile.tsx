@@ -5,7 +5,7 @@ import { UserCircleIcon } from 'lucide-react'
 import Link from 'next/link'
 
 import { getProfile } from '@/api/get-profile'
-import { UserProps } from '@/types'
+import type { UserProps } from '@/types'
 
 import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'

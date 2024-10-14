@@ -1,37 +1,18 @@
-import { api } from '@lib/axios'
-import { queryClient } from '@lib/react-query'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import type { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
+import { api } from '@lib/axios'
+import { queryClient } from '@lib/react-query'
+import type { Transaction } from '../@types/Transaction'
+
 interface ResponseType {
-	transaction: {
-		id: string
-		accountId: string
-		name: string
-		shopName: string
-		amount: number
-		transaction_type: 'DEBIT' | 'CREDIT'
-		payment_method:
-			| 'MONEY'
-			| 'PIX'
-			| 'CREDIT_CARD'
-			| 'DEBIT_CARD'
-			| 'BANK_TRANSFER'
-		category:
-			| 'FOOD'
-			| 'HOME'
-			| 'TRANSPORTATION'
-			| 'OTHERS'
-			| 'SHOPPING'
-			| 'ENTERTAINMENT'
-	}
+	transaction: Transaction
 }
 
 interface RequestType {
 	accountId: string
 	name: string
-	shopName?: string
 	amount: number
 	date?: Date
 	transaction_type?: 'DEBIT' | 'CREDIT'

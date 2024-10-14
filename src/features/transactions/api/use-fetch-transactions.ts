@@ -4,39 +4,17 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { api } from '@/lib/axios'
+import { AxiosError } from 'axios'
+import type { Transaction } from '../@types/Transaction'
 
 interface RequestType {
 	accountId?: string | null | undefined
 }
 
 interface ResponseType {
-	transactions: {
-		id: string
-		name: string
-		amountInCents: number
-		created_at: string
-		accountId: string
-		shopName: string
-		type: 'revenue' | 'expense'
-		payment_method:
-			| 'MONEY'
-			| 'PIX'
-			| 'CREDIT_CARD'
-			| 'DEBIT_CARD'
-			| 'BANK_CHECK'
-			| 'BANK_TRANSFER'
-		category:
-			| 'FOOD'
-			| 'OTHERS'
-			| 'HOME'
-			| 'TRANSPORTATION'
-			| 'ENTERTAINMENT'
-			| 'SHOPPING'
-	}[]
-	transactionsStatus: {
-		totalRevenueInCents: number
-		totalExpenseInCents: number
-	}
+	transactions: Transaction[]
+	totalRevenueInCents: number
+	totalExpenseInCents: number
 	meta: {
 		pageIndex: number
 		perPage: number
@@ -44,7 +22,7 @@ interface ResponseType {
 	}
 }
 
-export function useFetchTransactions({ accountId }: RequestType) {
+export function useFetchTransactions({ accountId }: RequestType = {}) {
 	const params = useSearchParams()
 
 	const from = params.get('from')
@@ -56,7 +34,7 @@ export function useFetchTransactions({ accountId }: RequestType) {
 
 	const pageIndex = z.coerce
 		.number()
-		.transform((page) => page - 1)
+		.transform(page => page - 1)
 		.parse(params.get('page') ?? '1')
 
 	const query = useQuery({
@@ -86,8 +64,9 @@ export function useFetchTransactions({ accountId }: RequestType) {
 				})
 
 				return response.data
-			} catch {
-				toast.error('Failed to fetch transactions')
+			} catch (err) {
+				if (err instanceof AxiosError)
+					toast.error('Failed to fetch transactions')
 			}
 		},
 	})

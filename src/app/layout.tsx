@@ -42,8 +42,8 @@ export default async function RootLayout({
 			<body>
 				<div className="min-h-screen bg-background">
 					<Providers>{children}</Providers>
-					<Analytics />
-					<SpeedInsights />
+					{/* <Analytics />
+					<SpeedInsights /> */}
 				</div>
 			</body>
 		</html>

@@ -16,7 +16,6 @@ type ResponseType = {
 			| 'CREDIT_CARD'
 			| 'DEBIT_CARD'
 			| 'BANK_TRANSFER'
-		shopName: string
 		transaction_type: 'CREDIT' | 'DEBIT'
 		category:
 			| 'FOOD'
@@ -28,9 +27,9 @@ type ResponseType = {
 	}
 }
 
-export function useGetTransaction(id?: string) {
+export function useGetTransaction(id?: string, enabled = false) {
 	const query = useQuery({
-		enabled: !!id,
+		enabled,
 		queryKey: ['transaction', { id }],
 		queryFn: async () => {
 			const response = await api.get<ResponseType>(`/transactions/${id}`)

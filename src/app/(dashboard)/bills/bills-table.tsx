@@ -13,6 +13,7 @@ import {
 import { BillsContext } from '@/contexts/BillsContext'
 import { useFetchBills } from '@/features/bills/api/use-fetch-bills'
 
+import { formatCurrency } from '@/utils/price-formatter'
 import { BillTableFilters } from './bill-table-filters'
 import { BillTableRow } from './bill-table-row'
 
@@ -29,11 +30,7 @@ export function BillsTable() {
 					<div className="size-2 rounded-full bg-rose-500" />
 					<span>Não pago:</span>
 					<p>
-						{data?.billsStatus &&
-							(data.billsStatus?.notPaidInCents / 100).toLocaleString('pt-BR', {
-								style: 'currency',
-								currency: 'BRL',
-							})}
+						{data && formatCurrency(data?.notPaidInCents)}
 					</p>
 				</div>
 			</div>
@@ -44,20 +41,19 @@ export function BillsTable() {
 				<Table>
 					<TableHeader className="font-bold">
 						<TableRow>
-							<TableHead className="w-[80px]"></TableHead>
+							<TableHead className="w-[80px]" />
 							<TableHead className="w-[80px]">Vencimento</TableHead>
 							<TableHead className="w-auto">Descrição</TableHead>
 							<TableHead className="w-[112px] text-center">Status</TableHead>
 							<TableHead className="w-[112px] text-center">Valor</TableHead>
-							<TableHead className="w-[80px]"></TableHead>
+							<TableHead className="w-[80px]" />
 						</TableRow>
 					</TableHeader>
 
 					<TableBody>
-						{data?.bills &&
-							data.bills.map((bill) => {
-								return <BillTableRow key={bill.id} bill={bill} />
-							})}
+						{data?.bills.map(bill => {
+							return <BillTableRow key={bill.id} bill={bill} />
+						})}
 					</TableBody>
 				</Table>
 			</div>

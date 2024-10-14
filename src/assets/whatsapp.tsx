@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react'
+import type { ComponentProps } from 'react'
 
 export function Whatsapp(props: ComponentProps<'svg'>) {
 	return (

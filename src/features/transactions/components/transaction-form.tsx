@@ -26,7 +26,6 @@ import {
 export const formSchema = z.object({
 	name: z.string(),
 	accountId: z.string(),
-	shopName: z.any(),
 	amount: z.any(),
 	date: z.coerce.date().optional(),
 	payment_method: z
@@ -122,23 +121,6 @@ export function TransactionForm({
 								<Input
 									disabled={disabled}
 									placeholder="e.g. Pagamento da fatura"
-									{...field}
-								/>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					name="shopName"
-					control={form.control}
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Local da compra</FormLabel>
-							<FormControl>
-								<Input
-									disabled={disabled}
-									placeholder="e.g. Walmart"
 									{...field}
 								/>
 							</FormControl>

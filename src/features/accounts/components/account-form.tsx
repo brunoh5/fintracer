@@ -20,7 +20,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 
-const formSchema = z.object({
+export const accountFormSchema = z.object({
 	type: z
 		.enum([
 			'CURRENT_ACCOUNT',
@@ -30,16 +30,15 @@ const formSchema = z.object({
 		])
 		.default('CURRENT_ACCOUNT'),
 	bank: z.string(),
-	number: z.string().optional(),
 	initialAmount: z.coerce.number().optional(),
 })
 
-type FormValues = z.infer<typeof formSchema>
+export type AccountFormValues = z.infer<typeof accountFormSchema>
 
 type Props = {
 	id?: string
-	defaultValues?: FormValues
-	onSubmit: (values: FormValues) => void
+	defaultValues?: AccountFormValues
+	onSubmit: (values: AccountFormValues) => void
 	onDelete?: () => void
 	disabled?: boolean
 }
@@ -51,12 +50,12 @@ export function AccountForm({
 	onDelete,
 	disabled,
 }: Props) {
-	const form = useForm<FormValues>({
-		resolver: zodResolver(formSchema),
+	const form = useForm<AccountFormValues>({
+		resolver: zodResolver(accountFormSchema),
 		defaultValues,
 	})
 
-	function handleSubmit(values: FormValues) {
+	function handleSubmit(values: AccountFormValues) {
 		onSubmit(values)
 	}
 

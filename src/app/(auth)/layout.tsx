@@ -1,5 +1,5 @@
 import { Receipt } from 'lucide-react'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export default async function AuthLayout({
 	children,

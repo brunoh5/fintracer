@@ -11,7 +11,7 @@ export default async function DashboardLayout({
 		<div className="min-h-screen gap-6 lg:grid lg:grid-cols-app">
 			<Sidebar />
 
-			<div className="max-w-screen lg:col-start-2 lg:pt-0">
+			<div className="max-w-screen lg:col-start-2 lg:pt-0 lg:pr-6">
 				{/* <SubscribeArea /> */}
 
 				<Header />

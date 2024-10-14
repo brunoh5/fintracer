@@ -64,7 +64,7 @@ export function MonthlyExpensesByYearChart() {
 								tickLine={false}
 								width={80}
 								tickFormatter={(value: number) =>
-									value.toLocaleString('pt-BR', {
+									(value / 100).toLocaleString('pt-BR', {
 										style: 'currency',
 										currency: 'BRL',
 									})
@@ -73,7 +73,7 @@ export function MonthlyExpensesByYearChart() {
 
 							<CartesianGrid vertical={false} className="stroke-muted" />
 
-							<Bar dataKey="total" fill="#16a34a" strokeWidth={2} />
+							<Bar dataKey="totalAmount" fill="#16a34a" strokeWidth={2} />
 						</BarChart>
 					</ResponsiveContainer>
 				)}

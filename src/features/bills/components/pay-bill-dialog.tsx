@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react'
-import { z } from 'zod'
+import type { z } from 'zod'
 
 import {
 	Dialog,
@@ -11,7 +11,7 @@ import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import { useOpenAccount } from '@/features/accounts/hooks/use-open-account'
 
 import { usePayBill } from '../api/use-pay-bill'
-import { formSchema, PayBillForm } from './pay-bill-form'
+import { type formSchema, PayBillForm } from './pay-bill-form'
 
 type FormValues = z.infer<typeof formSchema>
 

@@ -28,7 +28,7 @@ export function Header() {
 	const { data: userData, isLoading } = useQuery({
 		queryKey: ['profile'],
 		queryFn: getProfile,
-		staleTime: Infinity,
+		staleTime: Number.POSITIVE_INFINITY,
 	})
 
 	const isOverviewVisible = pathname === '/overview'
@@ -46,7 +46,7 @@ export function Header() {
 	}
 
 	return (
-		<header className="flex h-16 items-center justify-between pb-5 pr-8 pt-2">
+		<header className="flex h-16 items-center justify-between pb-5 pt-2">
 			<div
 				className={`${isOverviewVisible ? 'hidden' : 'flex'} items-center justify-center gap-2 text-muted-foreground lg:flex`}
 			>

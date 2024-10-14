@@ -9,7 +9,7 @@ import {
 	// ShoppingBag,
 	// LayoutDashboard,
 } from 'lucide-react'
-import { ElementType } from 'react'
+import type { ElementType } from 'react'
 
 interface ExpenseProps {
 	icon: ElementType

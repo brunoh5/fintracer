@@ -4,8 +4,8 @@
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { CalendarIcon } from 'lucide-react'
-import { ComponentProps } from 'react'
-import { Control } from 'react-hook-form'
+import type { ComponentProps } from 'react'
+import type { Control } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'

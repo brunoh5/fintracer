@@ -12,14 +12,12 @@ interface ResponseType {
 		title: string
 		description: string
 		lastCharge: string
-		amountInCents: number
+		amount: number
 		userId: string
 		paid_at: string
 	}[]
 	totalInCents: number
-	billsStatus: {
-		notPaidInCents: number
-	}
+	notPaidInCents: number
 	meta: {
 		perPage: number
 		totalCount: number
@@ -35,7 +33,7 @@ export function useFetchBills() {
 
 	const pageIndex = z.coerce
 		.number()
-		.transform((page) => page - 1)
+		.transform(page => page - 1)
 		.parse(params.get('page') ?? '1')
 
 	const query = useQuery({

@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react'
-import { z } from 'zod'
+import type { z } from 'zod'
 
 import {
 	Dialog,
@@ -13,7 +13,7 @@ import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import { useEditTransaction } from '../api/use-edit-transaction'
 import { useGetTransaction } from '../api/use-get-transaction'
 import { useOpenTransaction } from '../hooks/use-open-transaction'
-import { formSchema, TransactionForm } from './transaction-form'
+import { TransactionForm, type formSchema } from './transaction-form'
 
 type FormValues = z.infer<typeof formSchema>
 
@@ -51,7 +51,6 @@ export function EditTransactionDialog() {
 
 	const defaultValues: FormValues = transactionResponse?.transaction
 		? {
-				shopName: transactionResponse.transaction.shopName,
 				accountId: transactionResponse.transaction.accountId,
 				amount: String(transactionResponse.transaction.amountInCents / 100),
 				category: transactionResponse.transaction.category,

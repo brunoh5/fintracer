@@ -33,7 +33,6 @@ export type TransactionProps = {
 	amount: number
 	created_at: Date
 	payment_method: PaymentMethods
-	shopName: string
 	transaction_type: 'DEBIT' | 'CREDIT'
 	category: CategoryTypes
 	userId: string

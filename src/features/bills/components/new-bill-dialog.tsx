@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import type { z } from 'zod'
 
 import {
 	Dialog,
@@ -7,7 +7,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { useCreateBill } from '@/features/bills/api/use-create-bill'
-import { BillForm, formSchema } from '@/features/bills/components/bill-form'
+import { BillForm, type formSchema } from '@/features/bills/components/bill-form'
 import { useNewBill } from '@/features/bills/hooks/use-new-bill'
 
 type FormValues = z.infer<typeof formSchema>

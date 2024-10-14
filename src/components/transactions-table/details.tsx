@@ -8,7 +8,7 @@ import {
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import {
@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { useGetTransaction } from '@/features/transactions/api/use-get-transaction'
-import { formatCurrency } from '@/lib/price-formatter'
+import { formatCurrency } from '@/utils/price-formatter'
 
 import { TransactionDetailsSkeleton } from './details-skeleton'
 
@@ -70,13 +70,6 @@ export function TransactionDetails({
 						</TableRow>
 
 						<TableRow>
-							<TableCell>Estabelecimento</TableCell>
-							<TableCell className="flex justify-end">
-								{data.transaction.shopName}
-							</TableCell>
-						</TableRow>
-
-						<TableRow>
 							<TableCell>Categoria</TableCell>
 							<TableCell className="flex justify-end">
 								{transactionCategoryIconMap[data.transaction.category]}
@@ -87,15 +80,6 @@ export function TransactionDetails({
 							<TableCell>Realizado em</TableCell>
 							<TableCell className="flex justify-end">
 								{format(new Date(data.transaction.date), 'dd/LL/yyyy', {
-									locale: ptBR,
-								})}
-							</TableCell>
-						</TableRow>
-
-						<TableRow>
-							<TableCell>Criado em</TableCell>
-							<TableCell className="flex justify-end">
-								{format(new Date(data.transaction.created_at), 'dd/LL/yyyy', {
 									locale: ptBR,
 								})}
 							</TableCell>

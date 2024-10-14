@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import { AccountTypes } from '@/types'
 
+import { formatCurrency } from '@/utils/price-formatter'
 import { AccountListSkeleton } from './account-list-skeleton'
 
 export function TotalBalance() {
@@ -34,10 +35,7 @@ export function TotalBalance() {
 				<div className="flex items-center justify-between">
 					{data ? (
 						<span className="text-xl font-bold">
-							{(data.totalBalanceInCents / 100).toLocaleString('pt-BR', {
-								style: 'currency',
-								currency: 'BRL',
-							})}
+							{formatCurrency(data.totalBalanceInCents)}
 						</span>
 					) : (
 						<Skeleton className="h-5 w-[148px]" />
@@ -50,7 +48,7 @@ export function TotalBalance() {
 						{isLoading && <AccountListSkeleton />}
 
 						{data ? (
-							data.accounts.map((account) => (
+							data.accounts.map(account => (
 								<CarouselItem key={account.id}>
 									<div className="flex h-24 items-center justify-between rounded-md bg-primary p-4">
 										<div>
@@ -70,10 +68,7 @@ export function TotalBalance() {
 										</div>
 										<div className="flex items-center justify-between gap-2 self-end">
 											<span className="text-ellipsis text-nowrap font-bold text-white">
-												{(account.balance / 100).toLocaleString('pt-BR', {
-													style: 'currency',
-													currency: 'BRL',
-												})}
+												{formatCurrency(account.balance)}
 											</span>
 											<Link href={`/balances/${account.id}`}>
 												<ArrowUpRight

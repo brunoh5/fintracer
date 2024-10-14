@@ -1,6 +1,5 @@
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { z } from 'zod'
 
 import {
 	Dialog,
@@ -9,27 +8,14 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { useEditAccount } from '@/features/accounts/api/use-edit-account'
-import { AccountForm } from '@/features/accounts/components/account-form'
+import {
+	AccountForm,
+	type AccountFormValues,
+} from '@/features/accounts/components/account-form'
 import { useOpenAccount } from '@/features/accounts/hooks/use-open-account'
 
 import { useDeleteAccount } from '../api/use-delete-account'
 import { useGetAccount } from '../api/use-get-account'
-
-const formSchema = z.object({
-	type: z
-		.enum([
-			'CURRENT_ACCOUNT',
-			'SAVINGS_ACCOUNT',
-			'INVESTMENT_ACCOUNT',
-			'MACHINE_ACCOUNT',
-		])
-		.default('CURRENT_ACCOUNT'),
-	bank: z.string(),
-	number: z.string().optional(),
-	initialAmount: z.coerce.number().optional(),
-})
-
-type FormValues = z.infer<typeof formSchema>
 
 export function EditAccountDialog() {
 	const router = useRouter()
@@ -42,7 +28,7 @@ export function EditAccountDialog() {
 	const isPending = editMutation.isPending || deleteMutation.isPending
 	const isLoading = accountQuery.isLoading
 
-	function onSubmit(values: FormValues) {
+	function onSubmit(values: AccountFormValues) {
 		editMutation.mutate(values, {
 			onSuccess: () => {
 				onClose()
@@ -50,7 +36,7 @@ export function EditAccountDialog() {
 		})
 	}
 
-	const defaultValues: FormValues = accountQuery.data?.account
+	const defaultValues: AccountFormValues = accountQuery.data?.account
 		? {
 				bank: accountQuery.data.account.bank,
 				type: accountQuery.data.account.type,

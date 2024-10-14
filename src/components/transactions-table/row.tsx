@@ -18,36 +18,20 @@ import {
 	ShoppingBag,
 	Utensils,
 } from 'lucide-react'
-import { ReactNode, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
-import { TransactionPaymentMethod } from '@/components/transaction-payment-method'
+import type { TransactionPaymentMethod } from '@/components/transaction-payment-method'
 import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { useOpenTransaction } from '@/features/transactions/hooks/use-open-transaction'
-import { formatCurrency } from '@/lib/price-formatter'
+import { formatCurrency } from '@/utils/price-formatter'
 
+import type { Transaction } from '@features/transactions/@types/Transaction'
 import { TransactionDetails } from './details'
 
 export interface TransactionTableRowProps {
-	transaction: {
-		id: string
-		name: string
-		accountId: string
-		category:
-			| 'FOOD'
-			| 'OTHERS'
-			| 'HOME'
-			| 'TRANSPORTATION'
-			| 'ENTERTAINMENT'
-			| 'SHOPPING'
-		transaction_type: string
-		payment_method: TransactionPaymentMethod
-		date: string
-		created_at: string
-		amountInCents: number
-		shopName: string
-	}
+	transaction: Transaction
 }
 
 const paymentMethodsMap: Record<TransactionPaymentMethod, string> = {
@@ -97,15 +81,18 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 					{transaction.name}
 				</TableCell>
 				<TableCell className="border text-center font-semibold">
-					{transaction.amountInCents >= 0 ? (
+					{transaction.amount >= 0 ? (
 						<span className="text-emerald-500">
-							{formatCurrency(transaction.amountInCents)}
+							{formatCurrency(transaction.amount)}
 						</span>
 					) : (
 						<span className="text-rose-400">
-							{formatCurrency(transaction.amountInCents)}
+							{formatCurrency(transaction.amount)}
 						</span>
 					)}
+				</TableCell>
+				<TableCell className="border text-center">
+					{transaction.bank}
 				</TableCell>
 				<TableCell className="border text-center">
 					{transactionCategoryIconMap[transaction.category]}

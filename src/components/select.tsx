@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useMemo } from 'react'
-import { SingleValue } from 'react-select'
+import type { SingleValue } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 
 type Props = {

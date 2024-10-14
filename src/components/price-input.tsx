@@ -1,7 +1,8 @@
 'use client'
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Controller } from 'react-hook-form'
 
+import { formatCurrency } from '@/utils/price-formatter'
 import { Input } from './ui/input'
 
 type PriceInputProps = {
@@ -10,17 +11,6 @@ type PriceInputProps = {
 }
 
 export function PriceInput({ ...rest }: PriceInputProps) {
-	function formatCurrency(value: any) {
-		if (!value) {
-			return
-		}
-		const numberValue = value.replace(/[^\d]/g, '')
-		return (numberValue / 100).toLocaleString('pt-BR', {
-			style: 'currency',
-			currency: 'BRL',
-		})
-	}
-
 	return (
 		<Controller
 			{...rest}
@@ -29,7 +19,7 @@ export function PriceInput({ ...rest }: PriceInputProps) {
 					name={name}
 					id={name}
 					value={formatCurrency(value)}
-					onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ''))}
+					onChange={e => onChange(e.target.value.replace(/[^\d]/g, ''))}
 				/>
 			)}
 		/>

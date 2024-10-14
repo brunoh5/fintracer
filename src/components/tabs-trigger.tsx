@@ -1,6 +1,6 @@
 'use client'
 
-import { ComponentProps } from 'react'
+import type { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 import { TabsTrigger as TabsTriggerPrimitive } from './ui/tabs'

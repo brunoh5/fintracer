@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import type { z } from 'zod'
 
 import {
 	Dialog,
@@ -9,7 +9,7 @@ import {
 import { useCreateAccount } from '@/features/accounts/api/use-create-account'
 import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import {
-	formSchema,
+	type formSchema,
 	TransactionForm,
 } from '@/features/transactions/components/transaction-form'
 

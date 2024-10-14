@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/price-formatter'
+import { formatCurrency } from '@/utils/price-formatter'
 
 import { Skeleton } from '../ui/skeleton'
 
@@ -17,7 +17,6 @@ export function TransactionsStatus({
 }: TransactionsStatusProps) {
 	return (
 		<div className="space-y-1 lg:flex lg:items-center lg:gap-2">
-			<span className="col-span-2 text-sm font-semibold">Status</span>
 			<div className="flex items-center gap-2">
 				<div className="size-2 rounded-full bg-emerald-500" />
 				<span>Receitas:</span>

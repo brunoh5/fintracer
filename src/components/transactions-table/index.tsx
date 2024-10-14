@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { ListX } from 'lucide-react'
 
+import type { Transaction } from '@features/transactions/@types/Transaction'
+import { TransactionsActions } from '@features/transactions/components/transactions-actions'
 import { Pagination } from '../pagination'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
 import { TransactionTableFilters } from './filters'
@@ -11,7 +12,16 @@ import { TransactionsStatus } from './status'
 import { TransactionTableSkeleton } from './table-skeleton'
 
 interface TransactionsTableProps {
-	data: any
+	data?: {
+		transactions: Transaction[]
+		totalExpenseInCents: number
+		totalRevenueInCents: number
+		meta: {
+			pageIndex: number
+			perPage: number
+			totalCount: number
+		}
+	}
 	handlePaginate: (pageIndex: number) => void
 	isLoadingTransactions: boolean
 }
@@ -25,14 +35,17 @@ export function TransactionsTable({
 
 	return (
 		<div className="space-y-2.5">
+			<div className="flex items-center justify-between">
+				<TransactionTableFilters />
+				<TransactionsActions />
+			</div>
+
 			<TransactionsStatus
 				isLoading={isLoadingTransactions}
 				isEmpty={isEmpty}
-				totalExpenseInCents={data?.transactionsStatus.totalExpenseInCents}
-				totalRevenueInCents={data?.transactionsStatus.totalRevenueInCents}
+				totalExpenseInCents={data?.totalExpenseInCents}
+				totalRevenueInCents={data?.totalRevenueInCents}
 			/>
-
-			<TransactionTableFilters />
 
 			{isEmpty ? (
 				<div className="relative h-[calc(100vh-200px)] overflow-hidden">
@@ -53,6 +66,9 @@ export function TransactionsTable({
 								Valor
 							</TableHead>
 							<TableHead className="w-[144px] border text-center">
+								Conta
+							</TableHead>
+							<TableHead className="w-[144px] border text-center">
 								Categoria
 							</TableHead>
 							<TableHead className="w-[144px] border text-center">
@@ -65,15 +81,17 @@ export function TransactionsTable({
 					</TableHeader>
 					<TableBody>
 						{isLoadingTransactions && <TransactionTableSkeleton />}
-						{data &&
-							data.transactions.map((transaction: any) => {
+
+						{
+							data.transactions.map((transaction) => {
 								return (
 									<TransactionTableRow
 										key={transaction.id}
 										transaction={transaction}
 									/>
 								)
-							})}
+							})
+						}
 					</TableBody>
 				</Table>
 			)}
