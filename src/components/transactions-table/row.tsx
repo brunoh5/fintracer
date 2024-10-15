@@ -75,7 +75,9 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 		<>
 			<TableRow className="text-nowrap">
 				<TableCell className="border text-center capitalize">
-					{format(transaction.date, 'dd MMM', { locale: ptBR })}
+					{transaction.date
+						? format(transaction.date, 'dd MMM', { locale: ptBR })
+						: 'Não Preenchido'}
 				</TableCell>
 				<TableCell className="border font-semibold">
 					{transaction.name}
@@ -91,9 +93,7 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
 						</span>
 					)}
 				</TableCell>
-				<TableCell className="border text-center">
-					{transaction.bank}
-				</TableCell>
+				<TableCell className="border text-center">{transaction.bank}</TableCell>
 				<TableCell className="border text-center">
 					{transactionCategoryIconMap[transaction.category]}
 				</TableCell>
