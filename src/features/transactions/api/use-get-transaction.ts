@@ -27,9 +27,9 @@ type ResponseType = {
 	}
 }
 
-export function useGetTransaction(id?: string, enabled = false) {
+export function useGetTransaction(id?: string) {
 	const query = useQuery({
-		enabled,
+		enabled: !!id,
 		queryKey: ['transaction', { id }],
 		queryFn: async () => {
 			const response = await api.get<ResponseType>(`/transactions/${id}`)
