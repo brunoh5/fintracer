@@ -37,8 +37,8 @@ pnpm start
 
 👤 **Bruno Henrique**
 
-* Github: [@brunoh5](https://github.com/brunoh5)
-* LinkedIn: [@brunoh5](https://linkedin.com/in/brunoh5)
+- Github: [@brunoh5](https://github.com/brunoh5)
+- LinkedIn: [@brunoh5](https://linkedin.com/in/brunoh5)
 
 ## Show your support
 
@@ -49,12 +49,12 @@ Give a ⭐️ if this project helped you!
 Copyright © 2024 [Bruno Henrique](https://github.com/brunoh5).<br />
 This project is [MIT](https://github.com/brunoh5/fintracer/blob/master/LICENSE) licensed.
 
-***
+---
+
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
 
 ### To-Do
 
-- [ ] Integrar com o Stripe e MariaDB para pagamentos
 - [ ] Corrigir area de login
 - [ ] Adicionar rolagem nas transações recentes
 - [ ] Retirar Notificações e busca
