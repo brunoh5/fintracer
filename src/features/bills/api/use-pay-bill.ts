@@ -15,7 +15,7 @@ export function usePayBill() {
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation<null, AxiosError, RequestType>({
-		mutationFn: async (data) => {
+		mutationFn: async data => {
 			const response = await api.patch(`/bills/${data.id}`)
 
 			return response.data

@@ -37,7 +37,7 @@ export function LoginForm() {
 				onSuccess: () => {
 					replace('/overview')
 				},
-			},
+			}
 		)
 	}
 

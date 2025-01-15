@@ -11,7 +11,7 @@ type RegisterBody = {
 
 export function useRegister() {
 	const mutation = useMutation<void, AxiosError, RegisterBody>({
-		mutationFn: async (data) => {
+		mutationFn: async data => {
 			await api.post('/users', data)
 		},
 		onSuccess: () => {

@@ -9,8 +9,8 @@ import {
 import { useCreateAccount } from '@/features/accounts/api/use-create-account'
 import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import {
-	type formSchema,
 	TransactionForm,
+	type formSchema,
 } from '@/features/transactions/components/transaction-form'
 
 import { useCreateTransaction } from '../api/use-create-transaction'
@@ -29,12 +29,10 @@ export function NewTransactionDialog() {
 		accountMutation.mutate({
 			bank,
 		})
-	const accountOptions = (accountQuery?.data?.accounts ?? []).map(
-		(account) => ({
-			label: account.bank,
-			value: account.id,
-		}),
-	)
+	const accountOptions = (accountQuery?.data?.accounts ?? []).map(account => ({
+		label: account.bank,
+		value: account.id,
+	}))
 
 	const isPending = createMutation.isPending || accountMutation.isPending
 
@@ -45,7 +43,7 @@ export function NewTransactionDialog() {
 				onSuccess: () => {
 					onClose()
 				},
-			},
+			}
 		)
 	}
 

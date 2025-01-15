@@ -7,7 +7,7 @@ type PayBillState = {
 	onClose: () => void
 }
 
-export const usePayBill = create<PayBillState>((set) => ({
+export const usePayBill = create<PayBillState>(set => ({
 	id: undefined,
 	isOpen: false,
 	onOpen: (id: string) => set({ isOpen: true, id }),

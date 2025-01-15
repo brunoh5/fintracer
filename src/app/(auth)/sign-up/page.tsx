@@ -46,10 +46,10 @@ export default function SignUp() {
 							onSuccess: () => {
 								replace('/overview')
 							},
-						},
+						}
 					)
 				},
-			},
+			}
 		)
 	}
 

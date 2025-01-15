@@ -32,12 +32,12 @@ interface RequestType {
 
 export function useEditTransaction(id?: string) {
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
-		mutationFn: async (data) => {
+		mutationFn: async data => {
 			const response = await api.put(`/transactions/${id}`, data)
 
 			return response.data
 		},
-		onSuccess: (data) => {
+		onSuccess: data => {
 			toast.success('Alterações realizadas com sucesso')
 			queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
 			queryClient.invalidateQueries({ queryKey: ['transactions'] })

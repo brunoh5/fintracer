@@ -1,6 +1,6 @@
 export function formatCurrency(
 	price: number | string = 0,
-	options: { currency?: string; locale?: string } = {},
+	options: { currency?: string; locale?: string } = {}
 ) {
 	const { currency = 'BRL', locale = 'pt-BR' } = options
 

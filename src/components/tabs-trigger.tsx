@@ -15,7 +15,7 @@ export function TabsTrigger({ className, ...props }: TabsTriggerProps) {
 			className={twMerge(
 				'rounded-none border-y-2 border-transparent p-2 shadow-none',
 				'data-[state=active]:border-b-primary data-[state=active]:bg-transparent data-[state=active]:text-primary',
-				className,
+				className
 			)}
 			{...props}
 		/>

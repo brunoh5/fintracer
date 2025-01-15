@@ -31,7 +31,7 @@ export function Select({
 	}
 
 	const formattedValue = useMemo(() => {
-		return options.find((option) => option.value === value)
+		return options.find(option => option.value === value)
 	}, [options, value])
 
 	return (
@@ -43,10 +43,10 @@ export function Select({
 			options={options}
 			onCreateOption={onCreate}
 			isDisabled={disabled}
-			formatCreateLabel={(inputText) => `Criar "${inputText}"`}
+			formatCreateLabel={inputText => `Criar "${inputText}"`}
 			className="h-10 text-sm text-white"
 			styles={{
-				control: (base) => ({
+				control: base => ({
 					...base,
 					backgroundColor: 'transparent',
 					borderColor: resolvedTheme === 'dark' ? '#27272a' : '#e4e4e7',
@@ -57,7 +57,7 @@ export function Select({
 					borderRadius: 4,
 					outline: 'none',
 				}),
-				option: (base) => ({
+				option: base => ({
 					...base,
 					backgroundColor: resolvedTheme === 'dark' ? '#171717' : '#ffffff',
 					color: resolvedTheme === 'dark' ? '#f2f2f2' : '#09090b',
@@ -71,7 +71,7 @@ export function Select({
 						backgroundColor: resolvedTheme === 'dark' ? '#292524' : '#18181b',
 					},
 				}),
-				input: (base) => ({
+				input: base => ({
 					...base,
 					'& input': {
 						boxShadow: 'none !important',
@@ -79,18 +79,18 @@ export function Select({
 					},
 					color: resolvedTheme === 'dark' ? '#ffffff' : '#171717',
 				}),
-				menu: (base) => ({
+				menu: base => ({
 					...base,
 					backgroundColor: resolvedTheme === 'dark' ? '#171717' : '#ffffff',
 					borderRadius: '6px',
 					paddingLeft: '6px',
 					paddingRight: '6px',
 				}),
-				placeholder: (base) => ({
+				placeholder: base => ({
 					...base,
 					color: resolvedTheme === 'dark' ? '#ffffff' : '#171717',
 				}),
-				singleValue: (base) => ({
+				singleValue: base => ({
 					...base,
 					color: resolvedTheme === 'dark' ? '#ffffff' : '#171717',
 				}),

@@ -24,7 +24,7 @@ export function AccountList() {
 			{isLoading ? (
 				<AccountsListSkeleton />
 			) : (
-				data?.accounts?.map((account) => (
+				data?.accounts?.map(account => (
 					<Card key={account.id} className="h-72">
 						<CardHeader className="flex flex-row items-center justify-between">
 							<CardTitle className="inline-block">

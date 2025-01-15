@@ -10,7 +10,7 @@ interface DeleteTransactionResponse {
 
 export async function deleteTransaction(id: string) {
 	const response = await api.delete<DeleteTransactionResponse>(
-		`/transactions/${id}/delete`,
+		`/transactions/${id}/delete`
 	)
 
 	return response.data.transaction

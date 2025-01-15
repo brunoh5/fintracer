@@ -61,7 +61,7 @@ export default function Accounts() {
 							</Button>
 						</li>
 					) : (
-						data?.accounts?.map((account) => (
+						data?.accounts?.map(account => (
 							<li
 								key={account.id}
 								className="flex items-center justify-between"
@@ -74,8 +74,7 @@ export default function Accounts() {
 										{accountTypeMapper[account.type]}
 									</p>
 									<p className="text-sm text-muted-foreground">
-										Saldo Atual:{' '}
-										{formatCurrency(account.balance)}
+										Saldo Atual: {formatCurrency(account.balance)}
 									</p>
 								</div>
 

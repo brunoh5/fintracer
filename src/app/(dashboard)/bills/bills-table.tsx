@@ -29,9 +29,7 @@ export function BillsTable() {
 				<div className="flex items-center gap-2">
 					<div className="size-2 rounded-full bg-rose-500" />
 					<span>Não pago:</span>
-					<p>
-						{data && formatCurrency(data?.notPaidInCents)}
-					</p>
+					<p>{data && formatCurrency(data?.notPaidInCents)}</p>
 				</div>
 			</div>
 

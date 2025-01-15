@@ -26,12 +26,10 @@ export function EditTransactionDialog() {
 		accountMutation.mutate({
 			bank,
 		})
-	const accountOptions = (accountQuery?.data?.accounts ?? []).map(
-		(account) => ({
-			label: account.bank,
-			value: account.id,
-		}),
-	)
+	const accountOptions = (accountQuery?.data?.accounts ?? []).map(account => ({
+		label: account.bank,
+		value: account.id,
+	}))
 
 	const { data: transactionResponse, isLoading } = useGetTransaction(id)
 	const editMutation = useEditTransaction(id)
@@ -45,7 +43,7 @@ export function EditTransactionDialog() {
 				onSuccess: () => {
 					onClose()
 				},
-			},
+			}
 		)
 	}
 

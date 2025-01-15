@@ -33,7 +33,7 @@ export function useEditAccount(id?: string) {
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
-		mutationFn: async (data) => {
+		mutationFn: async data => {
 			const response = await api.put(`/accounts/${id}`, data)
 
 			return response.data

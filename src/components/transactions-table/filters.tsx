@@ -146,7 +146,7 @@ export function TransactionTableFilters() {
 				className="grid grid-cols-2 gap-2 lg:flex lg:items-center w-full"
 			>
 				<div className="flex items-center gap-2 rounded-md border border-input px-2 max-w-[288px]">
-					<Search className='size-4' />
+					<Search className="size-4" />
 					<input
 						{...register('name')}
 						className="bg-transparent border-none placeholder:text-muted-foreground focus-visible:outline-none w-full"

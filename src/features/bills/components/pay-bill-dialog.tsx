@@ -11,7 +11,7 @@ import { useFetchAccounts } from '@/features/accounts/api/use-fetch-accounts'
 import { useOpenAccount } from '@/features/accounts/hooks/use-open-account'
 
 import { usePayBill } from '../api/use-pay-bill'
-import { type formSchema, PayBillForm } from './pay-bill-form'
+import { PayBillForm, type formSchema } from './pay-bill-form'
 
 type FormValues = z.infer<typeof formSchema>
 
@@ -19,12 +19,10 @@ export function PayBillDialog() {
 	const { isOpen, onClose, id } = useOpenAccount()
 
 	const accountQuery = useFetchAccounts()
-	const accountOptions = (accountQuery?.data?.accounts ?? []).map(
-		(account) => ({
-			label: account.bank,
-			value: account.id,
-		}),
-	)
+	const accountOptions = (accountQuery?.data?.accounts ?? []).map(account => ({
+		label: account.bank,
+		value: account.id,
+	}))
 
 	const payMutation = usePayBill()
 
@@ -41,7 +39,7 @@ export function PayBillDialog() {
 				onSuccess: () => {
 					onClose()
 				},
-			},
+			}
 		)
 	}
 

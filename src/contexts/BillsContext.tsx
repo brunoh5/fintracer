@@ -2,7 +2,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { createContext, type ReactNode } from 'react'
+import { type ReactNode, createContext } from 'react'
 
 export type Bill = {
 	id: string

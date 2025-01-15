@@ -41,7 +41,7 @@ export function AmountInput({ value, placeholder, disabled, onChange }: Props) {
 							className={cn(
 								'absolute left-1.5 top-1.5 flex items-center justify-center rounded-md bg-slate-400 p-2 transition hover:bg-slate-500',
 								isIncome && 'bg-emerald-500 hover:bg-emerald-600',
-								isExpense && 'bg-rose-500 hover:bg-rose-600',
+								isExpense && 'bg-rose-500 hover:bg-rose-600'
 							)}
 						>
 							{!parsedValue && <Info className="size-3 text-white" />}

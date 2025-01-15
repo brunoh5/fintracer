@@ -96,7 +96,7 @@ export function Sidebar() {
 					</div>
 					<SheetContent className="flex flex-1 flex-col" side="left">
 						<nav className="flex flex-col gap-y-2 pt-6">
-							{routes.map((route) => (
+							{routes.map(route => (
 								<Button
 									variant={route.href === pathname ? 'secondary' : 'ghost'}
 									key={route.href}
@@ -125,7 +125,7 @@ export function Sidebar() {
 				</Link>
 			</h1>
 			<nav className="flex flex-col gap-4">
-				{routes.map((route) => (
+				{routes.map(route => (
 					<NavButton
 						key={route.href}
 						href={route.href}

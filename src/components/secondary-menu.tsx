@@ -17,7 +17,7 @@ export function SecondaryMenu({ items }: Props) {
 	return (
 		<nav className="py-4">
 			<ul className="scrollbar-hide flex space-x-6 overflow-auto text-sm">
-				{items.map((item) => (
+				{items.map(item => (
 					<Link
 						prefetch
 						key={item.path}
@@ -25,7 +25,7 @@ export function SecondaryMenu({ items }: Props) {
 						className={cn(
 							'text-[#606060]',
 							pathname === item.path &&
-								'font-medium text-primary underline underline-offset-8',
+								'font-medium text-primary underline underline-offset-8'
 						)}
 					>
 						<span>{item.label}</span>

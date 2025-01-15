@@ -10,7 +10,7 @@ export function useDeleteTransaction() {
 
 			return response.data
 		},
-		onSuccess: (data) => {
+		onSuccess: data => {
 			toast.success('Transação deletada com sucesso')
 			queryClient.invalidateQueries({
 				queryKey: ['account', { id: data.transaction.accountId }],

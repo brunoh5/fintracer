@@ -44,7 +44,7 @@ export function ThemeSwitch() {
 				</SelectTrigger>
 				<SelectContent>
 					<SelectGroup>
-						{themes.map((theme) => (
+						{themes.map(theme => (
 							<SelectItem key={theme} value={theme} className="capitalize">
 								{theme}
 							</SelectItem>

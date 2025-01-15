@@ -7,7 +7,7 @@ type OpenBillState = {
 	onClose: () => void
 }
 
-export const useOpenBill = create<OpenBillState>((set) => ({
+export const useOpenBill = create<OpenBillState>(set => ({
 	id: undefined,
 	isOpen: false,
 	onOpen: (id: string) => set({ isOpen: true, id }),

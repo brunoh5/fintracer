@@ -33,7 +33,7 @@ export function useCreateAccount() {
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
-		mutationFn: async (data) => {
+		mutationFn: async data => {
 			const response = await api.post('/accounts', data)
 
 			return response.data

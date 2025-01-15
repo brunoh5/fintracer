@@ -81,7 +81,7 @@ export function TransactionForm({
 	}
 
 	const defaultAccountValue = accountOptions.find(
-		(account) => account.value === accountId,
+		account => account.value === accountId
 	)
 
 	return (

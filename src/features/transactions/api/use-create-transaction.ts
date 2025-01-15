@@ -33,12 +33,12 @@ interface RequestType {
 
 export function useCreateTransaction() {
 	const mutation = useMutation<ResponseType, AxiosError, RequestType>({
-		mutationFn: async (data) => {
+		mutationFn: async data => {
 			const response = await api.post('/transactions', data)
 
 			return response.data
 		},
-		onSuccess: (data) => {
+		onSuccess: data => {
 			toast.success('Transação criada com sucesso')
 
 			queryClient.invalidateQueries({ queryKey: ['transactions'] })

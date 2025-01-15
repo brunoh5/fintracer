@@ -17,7 +17,7 @@ export function NavButton({ href, isActive, children }: Props) {
 			variant="ghost"
 			className={cn(
 				'flex w-full justify-start gap-2 rounded px-3 py-2 font-normal text-muted-foreground transition-colors hover:bg-white/[0.08] lg:w-auto',
-				isActive ? 'bg-primary text-white' : '',
+				isActive ? 'bg-primary text-white' : ''
 			)}
 		>
 			<Link href={href}>{children}</Link>

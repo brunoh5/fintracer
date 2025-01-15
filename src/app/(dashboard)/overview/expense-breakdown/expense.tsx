@@ -61,7 +61,7 @@ export function Expense({ title, expense }: ExpenseProps) {
 							{
 								style: 'currency',
 								currency: 'BRL',
-							},
+							}
 						)}
 					</p>
 					<ExpenseDiff diffBetweenMonth={diffBetweenMonth} />

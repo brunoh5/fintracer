@@ -82,16 +82,14 @@ export function TransactionsTable({
 					<TableBody>
 						{isLoadingTransactions && <TransactionTableSkeleton />}
 
-						{
-							data.transactions.map((transaction) => {
-								return (
-									<TransactionTableRow
-										key={transaction.id}
-										transaction={transaction}
-									/>
-								)
-							})
-						}
+						{data.transactions.map(transaction => {
+							return (
+								<TransactionTableRow
+									key={transaction.id}
+									transaction={transaction}
+								/>
+							)
+						})}
 					</TableBody>
 				</Table>
 			)}
