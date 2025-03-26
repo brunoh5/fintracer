@@ -8,7 +8,6 @@ export default function robots(): MetadataRoute.Robots {
 			disallow: [
 				'/overview/',
 				'/balances/',
-				'/bills/',
 				'/transactions/',
 				'/settings/',
 			],

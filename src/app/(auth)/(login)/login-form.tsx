@@ -65,7 +65,7 @@ export function LoginForm() {
 			</div>
 
 			<Button
-				className="w-full"
+				className="w-full cursor-pointer"
 				aria-label="login submit"
 				type="submit"
 				disabled={isSubmitting}

@@ -1,6 +1,5 @@
 import { Header } from '@/components/header'
 import { Sidebar } from '@/components/sidebar'
-import { BillsContextProvider } from '@/contexts/BillsContext'
 
 export default async function DashboardLayout({
 	children,
@@ -12,11 +11,9 @@ export default async function DashboardLayout({
 			<Sidebar />
 
 			<div className="max-w-screen lg:col-start-2 lg:pt-0 lg:pr-6">
-				{/* <SubscribeArea /> */}
-
 				<Header />
 
-				<BillsContextProvider>{children}</BillsContextProvider>
+				{children}
 			</div>
 		</div>
 	)

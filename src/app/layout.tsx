@@ -1,7 +1,5 @@
 import './globals.css'
 
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
@@ -34,7 +32,6 @@ export default async function RootLayout({
 		<html
 			className={`${inter.variable} antialiased`}
 			lang="pt"
-			suppressHydrationWarning
 		>
 			<head>
 				<link rel="icon" href="/favicon.svg" type="image/svg" sizes="any" />
@@ -42,8 +39,6 @@ export default async function RootLayout({
 			<body>
 				<div className="min-h-screen bg-background">
 					<Providers>{children}</Providers>
-					{/* <Analytics />
-					<SpeedInsights /> */}
 				</div>
 			</body>
 		</html>

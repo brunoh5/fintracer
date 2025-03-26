@@ -36,21 +36,6 @@ const routes = [
 		icon: <ArrowRightLeft className="size-5" />,
 	},
 	{
-		href: '/bills',
-		label: 'Despesas',
-		icon: <Receipt className="size-5" />,
-	},
-	// {
-	// 	href: '/expenses',
-	// 	label: 'Gastos',
-	// 	icon: <CreditCard className="size-5" />,
-	// },
-	// {
-	// 	href: '/goals',
-	// 	label: 'Objetivos',
-	// 	icon: <Crosshair className="size-5" />,
-	// },
-	{
 		href: '/settings',
 		label: 'Configurações',
 		icon: <Settings className="size-5" />,
@@ -60,7 +45,7 @@ const routes = [
 export function Sidebar() {
 	const pathname = usePathname()
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-	const isMobile = useMedia('(max-width: 768px)', false)
+	const isMobile = useMedia('(max-width: 1024px)', false)
 	const router = useRouter()
 
 	function onClick(href: string) {
