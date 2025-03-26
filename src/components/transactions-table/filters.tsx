@@ -149,7 +149,7 @@ export function TransactionTableFilters() {
 					<Search className="size-4" />
 					<input
 						{...register('name')}
-						className="bg-transparent border-none placeholder:text-muted-foreground focus-visible:outline-none w-full"
+						className="bg-transparent border-none placeholder:text-muted-foreground focus-visible:outline-hidden w-full"
 						placeholder="Nome da compra"
 					/>
 					<DropdownMenuTrigger>

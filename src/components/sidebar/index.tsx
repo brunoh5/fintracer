@@ -88,7 +88,7 @@ export function Sidebar() {
 							<Button
 								variant="ghost"
 								size="sm"
-								className="border-none bg-white/10 font-normal outline-none hover:bg-white/20 hover:text-white"
+								className="border-none bg-white/10 font-normal outline-hidden hover:bg-white/20 hover:text-white"
 							>
 								<MenuIcon className="size-4" />
 							</Button>

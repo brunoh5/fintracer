@@ -58,7 +58,7 @@ export function Header() {
 				</span>
 			</div>
 			<DropdownMenu>
-				<DropdownMenuTrigger className="outline-none">
+				<DropdownMenuTrigger className="outline-hidden">
 					<UserCircleIcon className="size-8" />
 				</DropdownMenuTrigger>
 				<DropdownMenuContent

@@ -39,7 +39,7 @@ export function ThemeSwitch() {
 				defaultValue={theme}
 				onValueChange={(value: Theme) => setTheme(value)}
 			>
-				<SelectTrigger className="h-[32px] w-full rounded-none bg-transparent py-1.5 pl-6 pr-3 text-xs capitalize outline-none">
+				<SelectTrigger className="h-[32px] w-full rounded-none bg-transparent py-1.5 pl-6 pr-3 text-xs capitalize outline-hidden">
 					<SelectValue placeholder="Selecione o tema" />
 				</SelectTrigger>
 				<SelectContent>
