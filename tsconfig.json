@@ -1,7 +1,11 @@
 {
 	"compilerOptions": {
-		"target": "ES2022",
-		"lib": ["dom", "dom.iterable", "esnext"],
+		"target": "ES2023",
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,
@@ -19,11 +23,21 @@
 			}
 		],
 		"paths": {
-			"@components/*": ["./src/components/*"],
-			"@ui/*": ["./src/components/ui/*"],
-			"@features/*": ["./src/features/*"],
-			"@lib/*": ["./src/lib/*"],
-			"@/*": ["./src/*"]
+			"@components/*": [
+				"./src/components/*"
+			],
+			"@ui/*": [
+				"./src/components/ui/*"
+			],
+			"@features/*": [
+				"./src/features/*"
+			],
+			"@lib/*": [
+				"./src/lib/*"
+			],
+			"@/*": [
+				"./src/*"
+			]
 		},
 		"baseUrl": "./"
 	},
@@ -34,5 +48,7 @@
 		".next/types/**/*.ts",
 		"src/app/(dashboard)/settings"
 	],
-	"exclude": ["node_modules"]
+	"exclude": [
+		"node_modules"
+	]
 }

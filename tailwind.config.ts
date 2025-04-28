@@ -80,6 +80,6 @@ const config: Config = {
 			},
 		},
 	},
-	plugins: [require('@tailwindcss/forms'), require('tailwindcss-animate')],
+	plugins: [require('@tailwindcss/forms')],
 }
 export default config

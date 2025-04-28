@@ -29,7 +29,7 @@ export function useFetchTransactions({ accountId }: RequestType = {}) {
 	const to = params.get('to')
 	const name = params.get('name')
 	const type = params.get('type')
-	const payment_method = params.get('payment_method')
+	const paymentMethod = params.get('payment_method')
 	const category = params.get('category')
 
 	const pageIndex = z.coerce
@@ -45,7 +45,7 @@ export function useFetchTransactions({ accountId }: RequestType = {}) {
 			to,
 			name,
 			type,
-			payment_method,
+			paymentMethod,
 			category,
 		],
 		queryFn: async () => {
@@ -58,7 +58,7 @@ export function useFetchTransactions({ accountId }: RequestType = {}) {
 						name,
 						accountId,
 						type: type === 'all' ? null : type,
-						payment_method: payment_method === 'all' ? null : payment_method,
+						payment_method: paymentMethod === 'all' ? null : paymentMethod,
 						category: category === 'all' ? null : category,
 					},
 				})

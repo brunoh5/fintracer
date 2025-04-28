@@ -27,7 +27,7 @@ export function TransactionsActions() {
 					</Button>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Button disabled type="button" onClick={() => {}}>
+					<Button disabled type="button" onClick={() => { }}>
 						Transferência entre contas
 					</Button>
 				</DropdownMenuItem>

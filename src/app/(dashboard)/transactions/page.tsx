@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { Suspense } from 'react'
 import { TransactionsList } from './transactions-list'
 
 export const metadata: Metadata = {
@@ -9,7 +10,9 @@ export const metadata: Metadata = {
 export default async function Transactions() {
 	return (
 		<main className="mb-8">
-			<TransactionsList />
+			<Suspense>
+				<TransactionsList />
+			</Suspense>
 		</main>
 	)
 }

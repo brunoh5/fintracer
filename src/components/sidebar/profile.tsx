@@ -30,7 +30,7 @@ export function Profile() {
 						</p>
 					)}
 					<Link href="/settings">
-						<Button type="button" variant="ghost" size="xs">
+						<Button type="button" variant="ghost" size="sm">
 							Ver Perfil
 						</Button>
 					</Link>

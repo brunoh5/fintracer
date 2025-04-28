@@ -10,11 +10,12 @@ import { useNewTransaction } from '@/features/transactions/hooks/use-new-transac
 import { ManageAccount } from './manage-account'
 import { TransactionsList } from './transactions-list'
 
-export default function Account({
-	params: { id: accountId },
+export default async function Account({
+	params
 }: {
-	params: { id: string }
+	params: Promise<{ id: string }>
 }) {
+	const { id: accountId } = await params
 	const { onOpen } = useNewTransaction()
 
 	return (

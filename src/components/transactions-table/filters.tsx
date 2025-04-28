@@ -57,7 +57,7 @@ export function TransactionTableFilters() {
 	const to = params.get('to')
 	const name = params.get('name')
 	const type = params.get('type')
-	const payment_method = params.get('payment_method')
+	const paymentMethod = params.get('payment_method')
 	const category = params.get('category')
 
 	const { register, handleSubmit, control, reset } =
@@ -65,7 +65,7 @@ export function TransactionTableFilters() {
 			defaultValues: {
 				name: name ?? '',
 				type: type ?? 'all',
-				payment_method: payment_method ?? 'all',
+				payment_method: paymentMethod ?? 'all',
 				category: category ?? 'all',
 				date: {
 					from: from ? new Date(from) : startOfMonth(new Date()),
@@ -308,7 +308,7 @@ export function TransactionTableFilters() {
 					</DropdownMenuGroup>
 				</DropdownMenuContent>
 
-				<Button type="submit" variant="secondary" size="xs">
+				<Button type="submit" variant="secondary" size="sm">
 					<Search className="mr-2 size-4" />
 					Filtrar resultados
 				</Button>
@@ -316,7 +316,7 @@ export function TransactionTableFilters() {
 					onClick={handleClearFilters}
 					type="button"
 					variant="outline"
-					size="xs"
+					size="sm"
 				>
 					<X className="mr-2 size-4" />
 					Remover filtros
