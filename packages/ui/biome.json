@@ -1,0 +1,10 @@
+{
+  "root": false,
+  "extends": "//",
+  "html": {
+    "formatter": {
+      "indentScriptAndStyle": false,
+      "selfCloseVoidElements": "always"
+    }
+  }
+}
